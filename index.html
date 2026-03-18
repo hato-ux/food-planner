@@ -2,8 +2,16 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>⚾ KGF野球メシ PLANNER</title>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0e1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KGF野球メシ">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="description" content="関東学園大学附属高校野球部 保護者向け献立プランナー。4500kcal目標の献立を自動提案。">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Bebas+Neue&family=Black+Ops+One&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -1366,6 +1374,15 @@ function showRecipe(name){
 }
 function recipeOvClose(e){if(e.target===document.getElementById('recipe-ov'))recipeOvHide();}
 function recipeOvHide(){document.getElementById('recipe-ov').classList.remove('open');}
+
+// ========== PWA Service Worker登録 ==========
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('service-worker.js')
+      .then(function(reg){ console.log('SW登録完了:', reg.scope); })
+      .catch(function(err){ console.log('SW登録失敗:', err); });
+  });
+}
 </script>
 </body>
 </html>

@@ -1,0 +1,32 @@
+{
+  "name": "KGF野球メシ PLANNER",
+  "short_name": "KGF野球メシ",
+  "description": "関東学園大学附属高校野球部 保護者向け献立プランナー。4500kcal目標の献立を自動提案。",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0e1117",
+  "theme_color": "#0e1117",
+  "orientation": "portrait",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
