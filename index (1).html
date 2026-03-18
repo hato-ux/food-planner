@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚾ KGF野球メシ PLANNER</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Bebas+Neue&family=Black+Ops+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1117;--bg2:#161b25;--bg3:#1e2535;
+  --red:#e83030;--red2:#ff5252;
+  --gold:#f0c040;--gold2:#ffe580;
+  --green:#3ec97a;--blue:#4a9eff;
+  --gray:#8899aa;--light:#ccd6e0;--white:#f0f4f8;
+  --border:rgba(255,255,255,.07);--card:rgba(255,255,255,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--light);font-family:'Noto Sans JP',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+header{
+  background:linear-gradient(135deg,#050a14 0%,#0e0505 60%,#1a0a00 100%);
+  border-bottom:3px solid var(--red);
+  padding:14px 18px;
+  display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 4px 32px rgba(0,0,0,.8), 0 0 60px rgba(232,48,48,.08);
+  overflow:hidden;
+}
+header::before{
+  content:'';
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(255,255,255,.012) 40px,rgba(255,255,255,.012) 41px);
+  pointer-events:none;
+}
+.logo-wrap{position:relative;z-index:1;}
+.logo-kgf{
+  font-family:'Black Ops One',sans-serif;
+  font-size:1rem;
+  letter-spacing:6px;
+  color:var(--red2);
+  text-shadow:0 0 12px rgba(255,82,82,.6), 0 2px 4px rgba(0,0,0,.8);
+  display:block;
+  line-height:1;
+  margin-bottom:2px;
+}
+.logo-main{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem;
+  letter-spacing:4px;
+  color:var(--gold);
+  text-shadow:0 0 20px rgba(240,192,64,.4), 2px 2px 0 rgba(0,0,0,.8);
+  display:block;
+  line-height:1;
+}
+.logo-main em{
+  font-style:normal;
+  color:#fff;
+  text-shadow:0 0 16px rgba(255,255,255,.3), 2px 2px 0 rgba(0,0,0,.8);
+}
+.logo-sub{font-size:.6rem;color:var(--gray);letter-spacing:2px;margin-top:3px;display:block;}
+.logo-ball{
+  font-size:2.2rem;
+  filter:drop-shadow(0 0 8px rgba(255,200,100,.4));
+  animation:ballspin 8s linear infinite;
+  flex-shrink:0;
+}
+@keyframes ballspin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+.kcal-badge{margin-left:auto;background:rgba(240,192,64,.12);border:1px solid rgba(240,192,64,.3);border-radius:20px;padding:5px 14px;font-size:.8rem;font-weight:700;color:var(--gold);white-space:nowrap;}
+
+.tabs{display:flex;background:var(--bg2);border-bottom:2px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:1;min-width:70px;padding:13px 6px;text-align:center;font-size:.72rem;font-weight:700;cursor:pointer;color:var(--gray);border-bottom:3px solid transparent;transition:.2s;white-space:nowrap;}
+.tab .ti{font-size:1.1rem;display:block;margin-bottom:2px;}
+.tab.on{color:var(--gold);border-bottom-color:var(--gold);}
+.tab:hover:not(.on){color:var(--white);background:rgba(255,255,255,.03);}
+
+.page{display:none;padding:18px;max-width:720px;margin:0 auto;}
+.page.on{display:block;}
+
+.filter-panel{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px;}
+.panel-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--gold);margin-bottom:14px;}
+.row{margin-bottom:12px;}
+label.lbl{font-size:.72rem;color:var(--gray);display:block;margin-bottom:6px;}
+select{width:100%;padding:9px 12px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--light);font-family:inherit;font-size:.88rem;outline:none;transition:border .2s;}
+select:focus{border-color:var(--gold);}
+select option{background:#1a2030;}
+.chip-group{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{padding:5px 13px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:16px;font-size:.75rem;cursor:pointer;color:var(--gray);transition:.15s;user-select:none;}
+.chip.on{background:var(--red);border-color:var(--red2);color:#fff;}
+
+.btn-main{width:100%;padding:15px;background:linear-gradient(135deg,var(--red) 0%,#990000 100%);border:none;border-radius:12px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;cursor:pointer;transition:.2s;box-shadow:0 4px 20px rgba(232,48,48,.3);margin-top:4px;}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(232,48,48,.45);}
+
+/* DAY PACKAGE */
+.day-pkg{background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:16px;animation:fadeUp .35s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.pkg-header{background:linear-gradient(90deg,rgba(232,48,48,.15) 0%,rgba(240,192,64,.08) 100%);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.pkg-title{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:2px;color:var(--white);}
+.pkg-badge{font-size:.68rem;padding:3px 10px;border-radius:12px;font-weight:700;}
+.pkg-badge.normal{background:var(--bg3);color:var(--gray);}
+.pkg-badge.game-pre{background:var(--gold);color:#000;}
+.pkg-badge.game-day{background:var(--red);color:#fff;}
+.pkg-badge.recovery{background:var(--green);color:#000;}
+
+.kcal-summary{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border);}
+.kcal-cell{padding:10px 8px;text-align:center;border-right:1px solid var(--border);}
+.kcal-cell:last-child{border-right:none;}
+.kc-label{font-size:.62rem;color:var(--gray);margin-bottom:2px;}
+.kc-val{font-size:1rem;font-weight:900;color:var(--gold);}
+.kc-unit{font-size:.58rem;color:var(--gray);}
+.kc-total .kc-val{color:var(--red2);font-size:1.15rem;}
+
+/* SLOT GROUP HEADER */
+.slot-group-header{background:rgba(255,255,255,.025);padding:9px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.sg-icon{font-size:1rem;}
+.sg-label{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:1px;color:var(--gold);}
+.sg-count{font-size:.65rem;color:var(--gray);margin-left:auto;}
+
+/* MEAL OPTION CARDS */
+.meal-options{padding:10px 12px;display:flex;flex-direction:column;gap:7px;border-bottom:1px solid var(--border);}
+.meal-options:last-child{border-bottom:none;}
+.opt-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.opt-card-header{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background .15s;}
+.opt-card-header:hover{background:rgba(255,255,255,.03);}
+.opt-num{font-size:.65rem;font-weight:700;color:var(--gray);background:rgba(255,255,255,.07);border-radius:10px;padding:2px 7px;flex-shrink:0;}
+.opt-name{font-size:.9rem;font-weight:700;color:var(--white);flex:1;}
+.bento-tag{font-size:.6rem;padding:2px 7px;background:rgba(74,158,255,.2);border:1px solid rgba(74,158,255,.25);border-radius:4px;color:var(--blue);}
+.opt-kcal{font-size:.75rem;color:var(--gray);}
+.price-tag{font-size:.72rem;font-weight:700;color:var(--green);background:rgba(62,201,122,.12);border:1px solid rgba(62,201,122,.25);border-radius:5px;padding:1px 7px;white-space:nowrap;}
+.btn-recipe{padding:7px 14px;background:rgba(74,158,255,.12);border:1px solid rgba(74,158,255,.3);border-radius:7px;color:var(--blue);font-size:.76rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap;}
+.btn-recipe:hover{background:rgba(74,158,255,.22);}
+.recipe-section{margin-bottom:14px;}
+.recipe-section-title{font-size:.72rem;font-weight:700;color:var(--gold);border-left:3px solid var(--red);padding-left:8px;margin-bottom:8px;letter-spacing:.5px;}
+.recipe-ing-list{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px;}
+.recipe-ing{font-size:.72rem;padding:3px 9px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;color:var(--light);}
+.recipe-steps{display:flex;flex-direction:column;gap:7px;}
+.recipe-step{display:flex;gap:10px;align-items:flex-start;}
+.step-num{flex-shrink:0;width:22px;height:22px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;color:#fff;margin-top:1px;}
+.step-text{font-size:.78rem;color:var(--light);line-height:1.6;}
+.recipe-point{margin-top:10px;font-size:.73rem;color:#aaa;line-height:1.55;padding:7px 10px;background:rgba(240,192,64,.06);border-left:2px solid var(--gold);border-radius:0 5px 5px 0;}
+.recipe-servings{font-size:.68rem;color:var(--gray);margin-bottom:10px;}
+.opt-arrow{font-size:.65rem;color:var(--gray);transition:.2s;}
+.opt-card-header.open .opt-arrow{transform:rotate(180deg);}
+
+.opt-body{display:none;padding:0 14px 12px;}
+.opt-body.open{display:block;}
+.dish-list{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.dish-tag{font-size:.7rem;padding:3px 9px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;color:var(--light);}
+.nut-row{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:8px;}
+.nut-box{background:rgba(0,0,0,.2);border-radius:6px;padding:6px;text-align:center;}
+.nb-lbl{font-size:.58rem;color:var(--gray);margin-bottom:1px;}
+.nb-val{font-size:.86rem;font-weight:900;color:var(--gold2);}
+.nb-unit{font-size:.54rem;color:var(--gray);}
+.meal-note{font-size:.74rem;color:var(--gray);line-height:1.55;padding:7px 10px;background:rgba(255,255,255,.02);border-left:2px solid var(--red);border-radius:0 5px 5px 0;margin-bottom:8px;}
+.bento-section{margin-top:6px;padding:9px 10px;background:rgba(74,158,255,.04);border:1px solid rgba(74,158,255,.12);border-radius:7px;}
+.bento-title{font-size:.68rem;font-weight:700;color:var(--blue);margin-bottom:5px;}
+.bento-items{font-size:.73rem;color:var(--light);line-height:1.7;}
+.btn-cal{width:100%;margin-top:8px;padding:7px;background:rgba(62,201,122,.1);border:1px solid rgba(62,201,122,.25);border-radius:7px;color:var(--green);font-size:.76rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;}
+.btn-cal:hover{background:rgba(62,201,122,.18);}
+
+/* CALENDAR */
+.cal-nav-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.cal-nav{background:none;border:1px solid var(--border);color:var(--light);padding:7px 14px;border-radius:7px;cursor:pointer;font-size:.9rem;transition:.15s;}
+.cal-nav:hover{background:var(--card);}
+.cal-month-lbl{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:2px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-dow{text-align:center;font-size:.65rem;color:var(--gray);padding:5px 0;font-weight:700;}
+.cal-dow:first-child{color:#ff8080;}
+.cal-dow:last-child{color:#80aaff;}
+.cal-day{min-height:58px;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:4px;cursor:pointer;transition:border-color .15s;}
+.cal-day:hover{border-color:rgba(240,192,64,.4);}
+.cal-day.today{border-color:var(--gold);}
+.cal-day.other{opacity:.3;}
+.cal-day.sun .dn{color:#ff8080;}
+.cal-day.sat .dn{color:#80aaff;}
+.dn{font-size:.68rem;font-weight:700;margin-bottom:2px;}
+.cc{font-size:.56rem;border-radius:2px;padding:1px 3px;margin-bottom:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.cc.b{background:rgba(240,192,64,.18);color:#ffe080;}
+.cc.l{background:rgba(74,158,255,.18);color:#9dd0ff;}
+.cc.d{background:rgba(62,201,122,.18);color:#a0ffce;}
+.cc.s{background:rgba(232,48,48,.18);color:#ffb0b0;}
+
+/* MODAL */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;}
+.ov.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px;width:100%;max-width:400px;animation:fadeUp .22s ease;}
+.modal h3{font-family:'Bebas Neue',sans-serif;color:var(--gold);letter-spacing:2px;margin-bottom:14px;}
+.close-x{float:right;background:none;border:none;color:var(--gray);font-size:1.1rem;cursor:pointer;}
+.m-meal-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.m-timing-tag{font-size:.65rem;padding:2px 8px;border-radius:10px;font-weight:700;}
+.btn-save{width:100%;padding:10px;background:rgba(232,48,48,.2);border:1px solid var(--red);border-radius:8px;color:#ffaaaa;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px;transition:.15s;}
+.btn-save:hover{background:rgba(232,48,48,.32);}
+
+/* NUTRITION */
+.n-intro{font-size:.8rem;color:var(--gray);margin-bottom:16px;line-height:1.65;}
+.n-cat{margin-bottom:20px;}
+.n-cat-title{font-size:.8rem;font-weight:700;color:var(--gold);border-left:3px solid var(--red);padding-left:9px;margin-bottom:10px;}
+.n-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;gap:12px;margin-bottom:7px;}
+.ni{font-size:1.5rem;flex-shrink:0;}
+.nb h4{font-size:.86rem;font-weight:900;color:var(--white);margin-bottom:2px;}
+.nb p{font-size:.74rem;color:#aaa;line-height:1.5;}
+.nb .fd{margin-top:4px;font-size:.7rem;color:var(--gold);}
+
+/* SHOPPING */
+.shop-ctrl{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
+.btn-s{padding:7px 13px;background:var(--card);border:1px solid var(--border);border-radius:7px;color:var(--light);font-size:.75rem;cursor:pointer;font-family:inherit;transition:.15s;}
+.btn-s:hover{background:rgba(255,255,255,.08);}
+.btn-s.red{background:rgba(232,48,48,.12);border-color:var(--red);color:#ffaaaa;}
+.s-sec{margin-bottom:14px;}
+.s-cat{font-size:.68rem;font-weight:700;color:var(--gray);letter-spacing:1px;padding:6px 0;border-bottom:1px solid var(--border);margin-bottom:6px;}
+.s-item{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--card);border:1px solid var(--border);border-radius:7px;margin-bottom:5px;cursor:pointer;transition:opacity .15s;}
+.s-item.done{opacity:.38;text-decoration:line-through;}
+.s-cb{width:17px;height:17px;border:2px solid var(--gray);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.75rem;}
+.s-item.done .s-cb{background:var(--green);border-color:var(--green);color:#000;}
+.s-n{flex:1;font-size:.84rem;}
+.s-a{font-size:.73rem;color:var(--gold);}
+.empty{text-align:center;padding:36px 16px;color:var(--gray);font-size:.82rem;}
+.empty-i{font-size:2.5rem;margin-bottom:8px;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-ball">⚾</div>
+  <div class="logo-wrap">
+    <span class="logo-kgf">K G F</span>
+    <span class="logo-main">野球メシ <em>PLANNER</em></span>
+    <span class="logo-sub">関東学園大学附属高校野球部 · 食卓サポート</span>
+  </div>
+  <div class="kcal-badge">🔥 4,500 kcal/日</div>
+</header>
+
+<div class="tabs">
+  <div class="tab on" data-tab="plan"><span class="ti">🍱</span>献立提案</div>
+  <div class="tab" data-tab="nut"><span class="ti">💪</span>栄養知識</div>
+</div>
+
+<!-- 献立提案 -->
+<div class="page on" id="page-plan">
+  <div class="filter-panel">
+    <div class="panel-title">🎯 条件を選ぶ</div>
+    <div class="row">
+      <label class="lbl">スケジュール</label>
+      <select id="sched">
+        <option value="normal">通常練習日</option>
+        <option value="game_pre">試合前日</option>
+        <option value="game_day">試合当日</option>
+        <option value="recovery">試合翌日（疲労回復）</option>
+        <option value="off">休養日</option>
+      </select>
+    </div>
+    <div class="row">
+      <label class="lbl">避けたい食材・アレルギー（複数選択可）</label>
+      <div class="chip-group" id="allergy-chips">
+        <div class="chip" data-v="えび">えび</div>
+        <div class="chip" data-v="かに">かに</div>
+        <div class="chip" data-v="小麦">小麦</div>
+        <div class="chip" data-v="乳製品">乳製品</div>
+        <div class="chip" data-v="卵">卵</div>
+        <div class="chip" data-v="そば">そば</div>
+        <div class="chip" data-v="ピーナッツ">ピーナッツ</div>
+        <div class="chip" data-v="魚介">魚介</div>
+      </div>
+    </div>
+    <button class="btn-main" onclick="generatePlan()">⚾ 1日分の献立候補を提案する</button>
+  </div>
+  <div id="plan-result"></div>
+</div>
+
+<!-- 栄養知識 -->
+<div class="page" id="page-nut">
+  <p class="n-intro">1日4,500kcalを達成するための栄養戦略。野球選手の身体づくりに必要な知識をまとめました。タップで詳細を展開できます。</p>
+
+  <!-- 1日の配分 -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:20px;">
+    <div style="background:rgba(240,192,64,.1);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(240,192,64,.2);">
+      <div style="font-size:.6rem;color:var(--gold);font-weight:700;margin-bottom:3px;">🌅 朝食</div>
+      <div style="font-size:1rem;font-weight:900;color:var(--white);">1,000</div>
+      <div style="font-size:.55rem;color:var(--gray);">kcal</div>
+    </div>
+    <div style="background:rgba(74,158,255,.1);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(74,158,255,.2);">
+      <div style="font-size:.6rem;color:#9dd0ff;font-weight:700;margin-bottom:3px;">☀️ 昼食</div>
+      <div style="font-size:1rem;font-weight:900;color:var(--white);">1,200</div>
+      <div style="font-size:.55rem;color:var(--gray);">kcal</div>
+    </div>
+    <div style="background:rgba(232,48,48,.1);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(232,48,48,.2);">
+      <div style="font-size:.6rem;color:#ffb0b0;font-weight:700;margin-bottom:3px;">⚡ 補食</div>
+      <div style="font-size:1rem;font-weight:900;color:var(--white);">600</div>
+      <div style="font-size:.55rem;color:var(--gray);">kcal</div>
+    </div>
+    <div style="background:rgba(62,201,122,.1);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(62,201,122,.2);">
+      <div style="font-size:.6rem;color:#a0ffce;font-weight:700;margin-bottom:3px;">🌙 夕食</div>
+      <div style="font-size:1rem;font-weight:900;color:var(--white);">1,700</div>
+      <div style="font-size:.55rem;color:var(--gray);">kcal</div>
+    </div>
+  </div>
+
+  <!-- PFCバランス -->
+  <div class="n-cat">
+    <div class="n-cat-title">📊 4,500kcalのPFCバランス目安</div>
+    <div class="n-card" style="flex-direction:column;gap:10px;">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        <div style="background:rgba(240,192,64,.12);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:.62rem;color:var(--gold);font-weight:700;">炭水化物 55〜60%</div>
+          <div style="font-size:1.1rem;font-weight:900;color:var(--white);margin:4px 0;">約620g</div>
+          <div style="font-size:.6rem;color:var(--gray);">2,480kcal相当</div>
+        </div>
+        <div style="background:rgba(232,48,48,.12);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:.62rem;color:#ffb0b0;font-weight:700;">タンパク質 15〜20%</div>
+          <div style="font-size:1.1rem;font-weight:900;color:var(--white);margin:4px 0;">約170g</div>
+          <div style="font-size:.6rem;color:var(--gray);">680kcal相当</div>
+        </div>
+        <div style="background:rgba(74,158,255,.12);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:.62rem;color:#9dd0ff;font-weight:700;">脂質 25〜30%</div>
+          <div style="font-size:1.1rem;font-weight:900;color:var(--white);margin:4px 0;">約125g</div>
+          <div style="font-size:.6rem;color:var(--gray);">1,125kcal相当</div>
+        </div>
+      </div>
+      <div style="font-size:.74rem;color:var(--gray);line-height:1.6;padding:8px 10px;background:rgba(255,255,255,.02);border-left:2px solid var(--gold);border-radius:0 6px 6px 0;">
+        💡 試合前日は炭水化物を65〜70%まで増やし、脂質を20%以下に下げる「カーボローディング」が効果的。逆に休養日は炭水化物を50%程度に下げて体脂肪の過剰な蓄積を防ぐ。
+      </div>
+    </div>
+  </div>
+
+  <!-- 炭水化物 -->
+  <div class="n-cat">
+    <div class="n-cat-title">🍚 炭水化物 ― エネルギーの柱</div>
+    <div class="n-card n-accordion" onclick="toggleN(this)">
+      <div class="ni">🌾</div>
+      <div class="nb" style="flex:1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h4>白米・もち・うどん（主食）</h4><span class="n-arr">▼</span>
+        </div>
+        <p>練習・試合のメインエネルギー源。白米1杯（150g）≒約240kcal。1日3〜4杯/食が基本量。</p>
+        <div class="n-detail">
+          <div class="n-detail-body">
+            <div class="n-detail-row"><span class="nd-label">白米（茶碗1杯150g）</span><span class="nd-val">約240kcal・糖質54g</span></div>
+            <div class="n-detail-row"><span class="nd-label">もち（1個50g）</span><span class="nd-val">約120kcal・糖質27g</span></div>
+            <div class="n-detail-row"><span class="nd-label">うどん（1玉200g）</span><span class="nd-val">約210kcal・糖質42g</span></div>
+            <div class="n-detail-row"><span class="nd-label">パスタ（乾100g）</span><span class="nd-val">約380kcal・糖質71g</span></div>
+            <div class="n-tip">⚡ もちは白米の約1.5倍の糖質密度。試合前日のカーボローディングに最適。うどんは消化が最も速く、試合3時間前の食事に向いている。</div>
+          </div>
+        </div>
+        <div class="fd">🌾 白米・もち・うどん・パスタ・食パン・そうめん</div>
+      </div>
+    </div>
+    <div class="n-card n-accordion" onclick="toggleN(this)">
+      <div class="ni">🍌</div>
+      <div class="nb" style="flex:1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h4>バナナ・果物（素早い補給）</h4><span class="n-arr">▼</span>
+        </div>
+        <p>果糖とブドウ糖が含まれ、血糖値を緩やかに上げる。練習前後の補食に最適。</p>
+        <div class="n-detail">
+          <div class="n-detail-body">
+            <div class="n-detail-row"><span class="nd-label">バナナ（1本100g）</span><span class="nd-val">約87kcal・糖質21g</span></div>
+            <div class="n-detail-row"><span class="nd-label">みかん（1個80g）</span><span class="nd-val">約38kcal・ビタミンC 35mg</span></div>
+            <div class="n-detail-row"><span class="nd-label">キウイ（1個100g）</span><span class="nd-val">約54kcal・ビタミンC 69mg</span></div>
+            <div class="n-tip">💡 バナナはカリウムも豊富で筋肉のけいれん予防に効果的。練習中のこむら返り対策にも毎日食べたい。</div>
+          </div>
+        </div>
+        <div class="fd">🍌 バナナ・みかん・キウイ・りんご・いちご</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- タンパク質 -->
+  <div class="n-cat">
+    <div class="n-cat-title">💪 タンパク質 ― 筋肉の材料</div>
+    <div class="n-card n-accordion" onclick="toggleN(this)">
+      <div class="ni">🍗</div>
+      <div class="nb" style="flex:1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h4>1日の目標量と摂取タイミング</h4><span class="n-arr">▼</span>
+        </div>
+        <p>体重×1.5〜2g/日が目安。70kgなら105〜140g/日。毎食30〜40gに分散して摂るのが筋肉合成の鉄則。</p>
+        <div class="n-detail">
+          <div class="n-detail-body">
+            <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-bottom:6px;">⏰ 摂取タイミング</div>
+            <div class="n-detail-row"><span class="nd-label">練習後30分以内</span><span class="nd-val">✅ 最優先ゴールデンタイム</span></div>
+            <div class="n-detail-row"><span class="nd-label">就寝前30分</span><span class="nd-val">成長ホルモン分泌と相乗効果</span></div>
+            <div class="n-detail-row"><span class="nd-label">朝食</span><span class="nd-val">1日の筋肉合成スイッチON</span></div>
+            <div class="n-tip">🏋️ 一度に大量摂取しても吸収できるのは約40gまで。残りは体脂肪や尿素に変換されてしまうので分散摂取が重要。</div>
+          </div>
+        </div>
+        <div class="fd">🐓 鶏むね・卵・サバ・豆腐・納豆・牛乳・豚もも</div>
+      </div>
+    </div>
+    <div class="n-card n-accordion" onclick="toggleN(this)">
+      <div class="ni">🥚</div>
+      <div class="nb" style="flex:1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h4>食材別タンパク質量</h4><span class="n-arr">▼</span>
+        </div>
+        <p>鶏むね肉はコスパ最強の高タンパク食材。卵は必須アミノ酸がすべて揃った完全栄養食。</p>
+        <div class="n-detail">
+          <div class="n-detail-body">
+            <div class="n-detail-row"><span class="nd-label">鶏むね肉（100g）</span><span class="nd-val">タンパク質 23g・105kcal</span></div>
+            <div class="n-detail-row"><span class="nd-label">卵（1個60g）</span><span class="nd-val">タンパク質 7.5g・91kcal</span></div>
+            <div class="n-detail-row"><span class="nd-label">サバ缶（190g）</span><span class="nd-val">タンパク質 40g・DHA豊富</span></div>
+            <div class="n-detail-row"><span class="nd-label">豆腐（木綿1丁300g）</span><span class="nd-val">タンパク質 21g・220kcal</span></div>
+            <div class="n-detail-row"><span class="nd-label">牛乳（200ml）</span><span class="nd-val">タンパク質 6.6g・カルシウム220mg</span></div>
+            <div class="n-detail-row"><span class="nd-label">納豆（1パック50g）</span><span class="nd-val">タンパク質 8.3g・ビタミンK豊富</span></div>
+            <div class="n-tip">💡 植物性（豆腐・納豆）と動物性（肉・卵・乳）を組み合わせるとアミノ酸の補完効果でより効率的に筋肉が合成される。</div>
+          </div>
+        </div>
+        <div class="fd">🐓 鶏むね・卵・サバ缶・豆腐・納豆・豚もも・牛乳</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- カルシウム -->
+  <div class="n-cat">
+    <div class="n-cat-title">🦴 カルシウム ― 骨と筋肉の強化</div>
+    <div class="n-card n-accordion" onclick="toggleN(this)">
+      <div class="ni">🥛</div>
+      <div class="nb" style="flex:1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h4>1日の目標量と吸収を高めるコツ</h4><span class="n-arr">▼</span>
+        </div>
+        <p>高校生の目安は1日800〜1000mg。牛乳200ml（約220mg）を毎食飲む習慣をつけると達成しやすい。</p>
+        <div class="n-detail">
+          <div class="n-detail-body">
+            <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-bottom:6px;">🔬 吸収率を上げる組み合わせ</div>
+            <div class="n-detail-row"><span class="nd-label">カルシウム＋ビタミンD</span><span class="nd-val">吸収率が約2倍UP</span></div>
+            <div class="n-detail-row"><span class="nd-label">カルシウム＋ビタミンK</span><span class="nd-val">骨への定着率UP</span></div>
+            <div class="n-detail-row"><span class="nd-label">カルシウム＋タンパク質</span><span class="nd-val">骨の強度UP</span></div>
+            <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin:8px 0 4px;">食材別カルシウム量</div>
+            <div class="n-detail-row"><span class="nd-label">牛乳（200ml）</span><span class="nd-val">220mg</span></div>
+            <div class="n-detail-row"><span class="nd-label">ヨーグルト（100g）</span><span class="nd-val">120mg</span></div>
+            <div class="n-detail-row"><span class="nd-label">ちりめんじゃこ（大さじ1）</span><span class="nd-val">66mg</span></div>
+            <div class="n-detail-row"><span class="nd-label">ひじき（乾10g）</span><span class="nd-val">140mg</span></div>
+            <div class="n-tip">☀️ ビタミンDは日光浴（1日15〜30分の日光を浴びる）で体内合成できる。屋外練習の多い野球選手は自然に合成されていることが多い。</div>
+          </div>
+        </div>
+        <div class="fd">🥛 牛乳・ヨーグルト・チーズ・ちりめんじゃこ・ひじき・豆腐</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 鉄分 -->
+  <div class="n-cat">
+    <div class="n-cat-title">🩸 鉄分 ― 貧血を防ぎ持久力を守る</div>
+    <div class="n-card n-accordion" onclick="toggleN(this)">
+      <div class="ni">💪</div>
+      <div class="nb" style="flex:1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h4>スポーツ貧血とは？予防法は？</h4><span class="n-arr">▼</span>
+        </div>
+        <p>激しい運動で赤血球が破壊されやすい。持久力低下・だるさ・めまいが代表的な症状。男子選手でも油断禁物。</p>
+        <div class="n-detail">
+          <div class="n-detail-body">
+            <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-bottom:6px;">⚠️ スポーツ貧血のサイン</div>
+            <div class="n-detail-row"><span class="nd-label">疲れやすい・だるい</span><span class="nd-val">要注意</span></div>
+            <div class="n-detail-row"><span class="nd-label">走ると息切れが早い</span><span class="nd-val">要注意</span></div>
+            <div class="n-detail-row"><span class="nd-label">顔色が悪い・爪が白い</span><span class="nd-val">要注意</span></div>
+            <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin:8px 0 4px;">🔬 吸収率を上げるコツ</div>
+            <div class="n-detail-row"><span class="nd-label">ヘム鉄（肉・魚）</span><span class="nd-val">吸収率15〜25%</span></div>
+            <div class="n-detail-row"><span class="nd-label">非ヘム鉄（野菜・豆）</span><span class="nd-val">吸収率2〜5%</span></div>
+            <div class="n-detail-row"><span class="nd-label">非ヘム鉄＋ビタミンC</span><span class="nd-val">吸収率が2〜3倍UP！</span></div>
+            <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin:8px 0 4px;">食材別鉄分量</div>
+            <div class="n-detail-row"><span class="nd-label">豚レバー（50g）</span><span class="nd-val">6.5mg（目標の半分）</span></div>
+            <div class="n-detail-row"><span class="nd-label">あさり（50g）</span><span class="nd-val">1.5mg＋タウリン豊富</span></div>
+            <div class="n-detail-row"><span class="nd-label">ほうれん草（1束200g）</span><span class="nd-val">4.0mg</span></div>
+            <div class="n-detail-row"><span class="nd-label">ひじき（乾10g）</span><span class="nd-val">5.5mg</span></div>
+            <div class="n-tip">❌ 紅茶・緑茶のタンニンは鉄の吸収を阻害する。食事中はお茶を避け、食後1時間以上あけてから飲むのが理想的。</div>
+          </div>
+        </div>
+        <div class="fd">🥦 豚レバー・あさり・ほうれん草・小松菜・ひじき・納豆</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ビタミン -->
+  <div class="n-cat">
+    <div class="n-cat-title">🌿 ビタミン ― 代謝と回復のサポーター</div>
+    <div class="n-card n-accordion" onclick="toggleN(this)">
+      <div class="ni">🍊</div>
+      <div class="nb" style="flex:1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h4>ビタミンC（疲労回復・免疫力）</h4><span class="n-arr">▼</span>
+        </div>
+        <p>激しい運動で消耗するビタミン。疲労物質の除去・コラーゲン生成・免疫力アップに必須。</p>
+        <div class="n-detail">
+          <div class="n-detail-body">
+            <div class="n-detail-row"><span class="nd-label">1日の目標</span><span class="nd-val">100mg以上（運動時は200mg推奨）</span></div>
+            <div class="n-detail-row"><span class="nd-label">ブロッコリー（50g）</span><span class="nd-val">60mg</span></div>
+            <div class="n-detail-row"><span class="nd-label">ピーマン（1個40g）</span><span class="nd-val">48mg</span></div>
+            <div class="n-detail-row"><span class="nd-label">キウイ（1個100g）</span><span class="nd-val">69mg</span></div>
+            <div class="n-detail-row"><span class="nd-label">みかん（1個80g）</span><span class="nd-val">28mg</span></div>
+            <div class="n-tip">💡 ビタミンCは水溶性で体に蓄積できないため、毎食少しずつ摂ることが大切。加熱で壊れやすいので生食や短時間調理がおすすめ。</div>
+          </div>
+        </div>
+        <div class="fd">🍋 ブロッコリー・ピーマン・キウイ・みかん・いちご・パプリカ</div>
+      </div>
+    </div>
+    <div class="n-card n-accordion" onclick="toggleN(this)">
+      <div class="ni">🐷</div>
+      <div class="nb" style="flex:1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h4>ビタミンB群（エネルギー代謝）</h4><span class="n-arr">▼</span>
+        </div>
+        <p>糖質・脂質・タンパク質をエネルギーに変える「変換酵素」の役割。不足すると疲れが抜けにくくなる。</p>
+        <div class="n-detail">
+          <div class="n-detail-body">
+            <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-bottom:6px;">主なビタミンB群の役割</div>
+            <div class="n-detail-row"><span class="nd-label">B1（チアミン）</span><span class="nd-val">糖質→エネルギー変換。豚肉に豊富。</span></div>
+            <div class="n-detail-row"><span class="nd-label">B2（リボフラビン）</span><span class="nd-val">脂質代謝・成長促進。レバー・卵に豊富。</span></div>
+            <div class="n-detail-row"><span class="nd-label">B6（ピリドキシン）</span><span class="nd-val">タンパク質→筋肉変換。鶏むね・マグロに豊富。</span></div>
+            <div class="n-detail-row"><span class="nd-label">B12</span><span class="nd-val">赤血球生成・神経機能。貝類・レバーに豊富。</span></div>
+            <div class="n-tip">⚡ 炭水化物をたくさん食べる野球選手はB1が特に不足しやすい。豚肉を週3〜4回食べると効率的に補える。</div>
+          </div>
+        </div>
+        <div class="fd">🥩 豚肉・レバー・卵・マグロ・サバ・枝豆・玄米</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 水分補給 -->
+  <div class="n-cat">
+    <div class="n-cat-title">💧 水分補給 ― パフォーマンスを守る</div>
+    <div class="n-card n-accordion" onclick="toggleN(this)">
+      <div class="ni">🥤</div>
+      <div class="nb" style="flex:1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h4>脱水とパフォーマンスの関係</h4><span class="n-arr">▼</span>
+        </div>
+        <p>体重の2%の脱水でパフォーマンスが約20%低下。70kgの選手なら1.4kgの水分を失うだけで動きが鈍る。</p>
+        <div class="n-detail">
+          <div class="n-detail-body">
+            <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-bottom:6px;">📏 脱水チェック方法</div>
+            <div class="n-detail-row"><span class="nd-label">練習前後の体重差</span><span class="nd-val">＝失った水分量の目安</span></div>
+            <div class="n-detail-row"><span class="nd-label">尿の色が濃い黄色</span><span class="nd-val">水分不足のサイン</span></div>
+            <div class="n-detail-row"><span class="nd-label">尿の色が薄い黄色</span><span class="nd-val">適切な水分量</span></div>
+            <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin:8px 0 4px;">⏰ 水分補給のタイミング</div>
+            <div class="n-detail-row"><span class="nd-label">練習2時間前</span><span class="nd-val">500ml程度を事前補給</span></div>
+            <div class="n-detail-row"><span class="nd-label">練習中</span><span class="nd-val">15〜20分ごとに150〜250ml</span></div>
+            <div class="n-detail-row"><span class="nd-label">練習後</span><span class="nd-val">失った体重×1.5倍の水分を補給</span></div>
+            <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin:8px 0 4px;">🧂 電解質（塩分）の重要性</div>
+            <div class="n-tip">汗で失われるナトリウム・カリウムは水だけでは補給できない。1時間以上の練習にはスポーツドリンクか、水＋塩飴の組み合わせが推奨。</div>
+          </div>
+        </div>
+        <div class="fd">💦 水・スポーツドリンク・麦茶・味噌汁・牛乳・塩飴</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 食事タイミング -->
+  <div class="n-cat">
+    <div class="n-cat-title">⏰ 食事タイミング早見表</div>
+    <div class="n-card" style="flex-direction:column;gap:8px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="background:rgba(240,192,64,.08);border-radius:8px;padding:10px;border:1px solid rgba(240,192,64,.15);">
+          <div style="font-size:.65rem;color:var(--gold);font-weight:700;margin-bottom:5px;">⚾ 試合3時間前</div>
+          <div style="font-size:.74rem;color:var(--light);line-height:1.5;">糖質中心・消化の良い食事。脂質・食物繊維は少なめに。量は8割程度に抑える。</div>
+        </div>
+        <div style="background:rgba(74,158,255,.08);border-radius:8px;padding:10px;border:1px solid rgba(74,158,255,.15);">
+          <div style="font-size:.65rem;color:#9dd0ff;font-weight:700;margin-bottom:5px;">🏃 練習後30分以内</div>
+          <div style="font-size:.74rem;color:var(--light);line-height:1.5;">タンパク質＋糖質で筋肉合成ゴールデンタイム。おにぎり＋牛乳が最もコスパ良い。</div>
+        </div>
+        <div style="background:rgba(62,201,122,.08);border-radius:8px;padding:10px;border:1px solid rgba(62,201,122,.15);">
+          <div style="font-size:.65rem;color:var(--green);font-weight:700;margin-bottom:5px;">🌙 就寝2時間前</div>
+          <div style="font-size:.74rem;color:var(--light);line-height:1.5;">夕食を消化してから就寝。成長ホルモンが最も分泌される時間帯。カルシウムを摂ると効果的。</div>
+        </div>
+        <div style="background:rgba(232,48,48,.08);border-radius:8px;padding:10px;border:1px solid rgba(232,48,48,.15);">
+          <div style="font-size:.65rem;color:#ffb0b0;font-weight:700;margin-bottom:5px;">☀️ 朝食は必ず食べる</div>
+          <div style="font-size:.74rem;color:var(--light);line-height:1.5;">朝食を抜くと午前中の練習のパフォーマンスが大幅ダウン。起床後1時間以内が理想。</div>
+        </div>
+        <div style="background:rgba(128,100,255,.08);border-radius:8px;padding:10px;border:1px solid rgba(128,100,255,.15);">
+          <div style="font-size:.65rem;color:#c0b0ff;font-weight:700;margin-bottom:5px;">🌛 試合前日の夜</div>
+          <div style="font-size:.74rem;color:var(--light);line-height:1.5;">就寝3時間前までに夕食を済ませる。炭水化物多め・脂質少なめでグリコーゲン最大化。</div>
+        </div>
+        <div style="background:rgba(255,160,50,.08);border-radius:8px;padding:10px;border:1px solid rgba(255,160,50,.15);">
+          <div style="font-size:.65rem;color:#ffca80;font-weight:700;margin-bottom:5px;">🔄 試合翌日（回復日）</div>
+          <div style="font-size:.74fem;color:var(--light);line-height:1.5;">抗酸化食材（青魚・レバー・野菜）を多めに。炎症を抑え筋肉修復を最優先に。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 避けるべき食習慣 -->
+  <div class="n-cat">
+    <div class="n-cat-title">⚠️ 避けるべき食習慣</div>
+    <div class="n-card" style="flex-direction:column;gap:6px;">
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:rgba(232,48,48,.06);border-radius:7px;border-left:3px solid var(--red);">
+          <span style="font-size:1rem;flex-shrink:0;">❌</span>
+          <div><div style="font-size:.8rem;font-weight:700;color:#ffb0b0;margin-bottom:2px;">朝食抜き</div><div style="font-size:.73rem;color:#aaa;line-height:1.5;">血糖値が下がったまま練習すると筋肉が分解される。試合・練習前は特に厳禁。</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:rgba(232,48,48,.06);border-radius:7px;border-left:3px solid var(--red);">
+          <span style="font-size:1rem;flex-shrink:0;">❌</span>
+          <div><div style="font-size:.8rem;font-weight:700;color:#ffb0b0;margin-bottom:2px;">偏った食事（肉だけ・ご飯だけ）</div><div style="font-size:.73rem;color:#aaa;line-height:1.5;">PFCバランスが崩れると代謝が落ち、疲労回復が遅れる。主食・主菜・副菜の基本を守る。</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:rgba(232,48,48,.06);border-radius:7px;border-left:3px solid var(--red);">
+          <span style="font-size:1rem;flex-shrink:0;">❌</span>
+          <div><div style="font-size:.8rem;font-weight:700;color:#ffb0b0;margin-bottom:2px;">試合直前の大食い</div><div style="font-size:.73rem;color:#aaa;line-height:1.5;">消化に血液が使われ、筋肉への血流が減少。試合パフォーマンスが著しく低下する。</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:rgba(232,48,48,.06);border-radius:7px;border-left:3px solid var(--red);">
+          <span style="font-size:1rem;flex-shrink:0;">❌</span>
+          <div><div style="font-size:.8rem;font-weight:700;color:#ffb0b0;margin-bottom:2px;">炭酸飲料・甘いジュースの大量摂取</div><div style="font-size:.73rem;color:#aaa;line-height:1.5;">液体の糖質は血糖値を急上昇させた後に急降下させ、かえってパフォーマンスを落とす。</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:rgba(232,48,48,.06);border-radius:7px;border-left:3px solid var(--red);">
+          <span style="font-size:1rem;flex-shrink:0;">❌</span>
+          <div><div style="font-size:.8rem;font-weight:700;color:#ffb0b0;margin-bottom:2px;">食事と一緒にお茶を大量に飲む</div><div style="font-size:.73rem;color:#aaa;line-height:1.5;">お茶のタンニンが鉄分の吸収を阻害する。食事中は麦茶か水が推奨。食後1時間あけてからお茶を飲む習慣を。</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.n-accordion{cursor:pointer;}
+.n-accordion:hover{background:rgba(255,255,255,.06);}
+.n-arr{font-size:.6rem;color:var(--gray);transition:.2s;flex-shrink:0;}
+.n-accordion.open .n-arr{transform:rotate(180deg);}
+.n-detail{display:none;margin-top:8px;}
+.n-accordion.open .n-detail{display:block;}
+.n-detail-body{background:rgba(0,0,0,.2);border-radius:8px;padding:10px 12px;}
+.n-detail-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.73rem;}
+.n-detail-row:last-of-type{border-bottom:none;}
+.nd-label{color:var(--gray);}
+.nd-val{color:var(--gold2);font-weight:700;text-align:right;max-width:55%;}
+.n-tip{margin-top:8px;font-size:.72rem;color:#aaa;line-height:1.55;padding:7px 9px;background:rgba(240,192,64,.06);border-left:2px solid var(--gold);border-radius:0 5px 5px 0;}
+</style>
+
+<!-- レシピモーダル -->
+<div class="ov" id="recipe-ov" onclick="recipeOvClose(event)">
+  <div class="modal" style="max-width:500px;max-height:85vh;overflow-y:auto;">
+    <button class="close-x" onclick="recipeOvHide()">✕</button>
+    <h3 id="recipe-title" style="margin-bottom:4px;">📖 レシピ</h3>
+    <div id="recipe-body"></div>
+  </div>
+</div>
+
+<script>
+// ========== データベース ==========
+const DB = {
+  normal:{
+    breakfast:[
+      {name:"がっつり和食セット",dishes:["白米3杯","鮭の塩焼き","卵焼き(2個分)","納豆","わかめ味噌汁","牛乳200ml"],cal:1050,p:55,c:155,f:22,note:"消化の良いタンパク質と炭水化物でパワーON。牛乳でカルシウムも朝から確保。"},
+      {name:"鯖みそ定食",dishes:["白米3杯","鯖の味噌煮","ほうれん草おひたし","卵スープ","牛乳200ml"],cal:980,p:52,c:145,f:24,note:"鯖のDHAで脳を活性化。ほうれん草で鉄分補給。週2〜3回食べたい優秀メニュー。"},
+      {name:"洋食朝食セット",dishes:["食パン3枚","スクランブルエッグ(3個)","ソーセージ3本","野菜サラダ","牛乳コップ2杯"],cal:1020,p:50,c:140,f:28,note:"手軽に作れる高エネルギー朝食。卵で良質なタンパク質をしっかり確保。"},
+      {name:"親子丼セット",dishes:["親子丼(大盛)","豆腐の味噌汁","バナナ2本","牛乳200ml"],cal:1100,p:58,c:160,f:20,note:"親子丼で炭水化物＋タンパク質を一皿で。バナナで素早いエネルギー補給も完璧。"},
+      {name:"おにぎり4個セット",dishes:["おにぎり4個(鮭・ツナ・梅・おかか)","目玉焼き2個","野菜スープ","ヨーグルト","バナナ"],cal:990,p:45,c:158,f:18,note:"前日にまとめて作れる。ヨーグルトで腸内環境も整えながら高カロリーを確保。"},
+      {name:"チャーハン朝食",dishes:["具だくさんチャーハン(大盛)","わかめスープ","冷奴","牛乳200ml"],cal:1030,p:48,c:152,f:26,note:"前日の残りご飯を活用できる節約メニュー。卵とご飯でエネルギー満点の朝。"},
+      {name:"豚丼朝食",dishes:["豚丼(大盛)","きのこの味噌汁","ゆで卵2個","牛乳200ml"],cal:1060,p:54,c:158,f:24,note:"豚肉のビタミンB1で朝から代謝アップ。丼ものは手軽に大量のご飯が食べられる。"},
+      {name:"ハムエッグトースト朝食",dishes:["厚切りトースト3枚","ハムエッグ(卵2個)","ポテトサラダ","コーンスープ","牛乳200ml"],cal:1010,p:48,c:148,f:26,note:"洋食で気分転換。コーンスープで野菜と糖質を同時補給。朝から満腹感を得られる。"},
+      {name:"納豆ご飯定食",dishes:["白米3杯","納豆2パック","卵かけご飯","焼き海苔","味噌汁","バナナ2本"],cal:970,p:50,c:150,f:20,note:"納豆の大豆タンパクと卵の動物性タンパクを組み合わせてアミノ酸バランス抜群。"},
+      {name:"鶏雑炊セット",dishes:["鶏雑炊(ご飯3杯分)","卵焼き","ほうれん草炒め","牛乳200ml","バナナ"],cal:960,p:52,c:148,f:18,note:"消化に優しい雑炊は胃腸を整えながら高カロリー補給ができる。鶏肉でタンパクも◎。"},
+      {name:"ツナマヨ丼セット",dishes:["ツナマヨ丼(大盛)","豆腐の冷奴","わかめスープ","牛乳200ml","みかん"],cal:1000,p:50,c:152,f:24,note:"子どもに大人気のツナマヨ丼。DHA豊富なツナ缶で脳の働きをサポート。"},
+      {name:"肉うどん朝食",dishes:["肉うどん(大盛2玉)","温泉卵2個","おにぎり2個","牛乳200ml"],cal:1040,p:52,c:158,f:20,note:"うどんは消化が早く胃に優しい。肉でタンパク質も確保できる朝の優秀メニュー。"},
+      {name:"焼きそばパン朝食",dishes:["焼きそばパン2個","目玉焼き2個","野菜スープ","牛乳200ml","バナナ"],cal:1020,p:46,c:155,f:25,note:"子どもが大好きな焼きそばパンで楽しく食べる。卵と牛乳でタンパク質もしっかり。"},
+    ],
+    lunch:[
+      {name:"チキン南蛮弁当",dishes:["白米3杯","チキン南蛮(むね肉200g)","卵焼き","ブロッコリー","ミニトマト"],cal:1200,p:65,c:175,f:28,note:"高タンパク低脂肪の鶏むね肉をメインに。揚げ物でエネルギーも確保できる人気弁当。",bento:true,bentoItems:["鶏むね肉200g","卵2個","ブロッコリー4房","ミニトマト3個","タルタルソース(市販)","白米3杯分"]},
+      {name:"牛肉炒め弁当",dishes:["白米3杯","牛肉と野菜炒め","ゆで卵","きんぴらごぼう","みかん"],cal:1180,p:60,c:170,f:30,note:"牛肉の鉄分と亜鉛で筋肉修復をサポート。甘い味付けで食欲アップ。",bento:true,bentoItems:["牛こま切れ150g","ピーマン1個","にんじん1/2本","ごぼう1/2本","卵1個","みかん1個","白米3杯分"]},
+      {name:"鮭弁当(定番)",dishes:["白米3杯","鮭の塩焼き","ひじきの煮物","卵焼き","きゅうりの漬物"],cal:1100,p:58,c:165,f:22,note:"鮭のEPAで疲労回復。ひじきで鉄分・カルシウム補給。どの選手にも食べやすい定番。",bento:true,bentoItems:["鮭切り身1枚","乾燥ひじき10g","卵2個","きゅうり1/2本","白米3杯分"]},
+      {name:"豚ロース生姜焼き弁当",dishes:["白米3杯","豚ロース生姜焼き(180g)","もやしナムル","枝豆50g","ゆで卵"],cal:1250,p:68,c:172,f:33,note:"豚肉のビタミンB1で糖質代謝UP。生姜の効果で血流促進・疲労回復にも効果的。",bento:true,bentoItems:["豚ロース薄切り180g","もやし1/2袋","枝豆(冷凍)50g","卵1個","生姜・醤油・みりん","白米3杯分"]},
+      {name:"鶏そぼろ丼弁当",dishes:["白米3杯(そぼろのせ)","炒り卵","ほうれん草のおひたし","みかん"],cal:1150,p:62,c:168,f:25,note:"鶏そぼろ＋炒り卵で彩りよく食欲増進。前日の夜に仕込んでおける手間いらず弁当。",bento:true,bentoItems:["鶏ひき肉200g","卵2個","ほうれん草1/2束","みかん1個","醤油・砂糖・みりん","白米3杯分"]},
+      {name:"和風ハンバーグ弁当",dishes:["白米3杯","和風ハンバーグ","ポテトサラダ","ブロッコリー","ゆでにんじん"],cal:1280,p:65,c:175,f:36,note:"子どもに大人気の定番メニュー。合いびき肉で鉄分・亜鉛を豊富に摂取できる。",bento:true,bentoItems:["合いびき肉200g","玉ねぎ1/2個","卵1個","じゃがいも1個","ブロッコリー3房","白米3杯分"]},
+      {name:"鶏むね照り焼き弁当",dishes:["白米3杯","鶏もも照り焼き(200g)","卵焼き","きゅうりの浅漬け","ブロッコリー"],cal:1180,p:66,c:168,f:27,note:"照り焼きの甘辛タレで食欲増進。鶏もも肉は脂がのって食べ応えあり。",bento:true,bentoItems:["鶏もも肉200g","卵2個","きゅうり1本","ブロッコリー4房","醤油・砂糖・みりん・酒","白米3杯分"]},
+      {name:"豚バラ白菜炒め弁当",dishes:["白米3杯","豚バラ白菜炒め","ゆで卵","ほうれん草のごま和え","バナナ"],cal:1230,p:60,c:170,f:35,note:"豚バラの脂でカロリーUP。白菜でビタミンCも補給できる栄養バランスの良い弁当。",bento:true,bentoItems:["豚バラ薄切り150g","白菜1/4個","卵1個","ほうれん草1/2束","バナナ1本","白米3杯分"]},
+      {name:"サバ竜田揚げ弁当",dishes:["白米3杯","サバの竜田揚げ","ひじきの煮物","小松菜炒め","牛乳200ml"],cal:1220,p:65,c:168,f:32,note:"DHAたっぷりのサバを揚げることでカロリーUP。ひじきで鉄分・カルシウムも補給。",bento:true,bentoItems:["サバ切り身2切れ","乾燥ひじき10g","小松菜1/2束","片栗粉・醤油・生姜","白米3杯分"]},
+      {name:"豚みそ漬け弁当",dishes:["白米3杯","豚ロースのみそ漬け焼き","きんぴらごぼう","卵焼き","大根の漬物"],cal:1200,p:62,c:170,f:30,note:"みそ漬けは前日に仕込んでおけば朝は焼くだけ。味が染みて食べやすい。",bento:true,bentoItems:["豚ロース厚切り2枚","ごぼう1/2本","卵2個","みそ・みりん・酒","白米3杯分"]},
+      {name:"牛すき焼き風弁当",dishes:["白米3杯","牛すき焼き風炒め","温泉卵","ほうれん草おひたし","みかん"],cal:1260,p:65,c:172,f:34,note:"甘辛の牛肉でご飯が進む。卵をからめて食べると一体感があり食欲増進。",bento:true,bentoItems:["牛こま切れ180g","玉ねぎ1/2個","卵1個","ほうれん草1/2束","醤油・砂糖・みりん","白米3杯分"]},
+      {name:"鶏むね蒸しチキン弁当",dishes:["白米3杯","鶏むね蒸しチキン(200g)","塩昆布キャベツ","卵焼き","プチトマト"],cal:1130,p:70,c:162,f:20,note:"ダイエット筋肉飯の定番。低脂質・高タンパクで筋肉合成に最適な組み合わせ。",bento:true,bentoItems:["鶏むね肉200g","キャベツ1/4個","塩昆布10g","卵2個","ミニトマト5個","白米3杯分"]},
+      {name:"メンチカツ弁当",dishes:["白米3杯","メンチカツ2個","コールスロー","卵焼き","ミニトマト"],cal:1300,p:62,c:178,f:38,note:"揚げ物の中でもタンパク質が豊富なメンチカツ。ボリューム満点で満足感が高い。",bento:true,bentoItems:["合いびき肉200g","キャベツ1/4個","玉ねぎ1/4個","卵2個","パン粉・小麦粉","白米3杯分"]},
+    ],
+    snack:[
+      {name:"おにぎり3個＋バナナセット",dishes:["おにぎり3個(鮭・昆布・おかか)","バナナ2本","スポーツドリンク500ml"],cal:600,p:20,c:115,f:5,note:"練習前後の素早いエネルギー補給に最適。朝に作って持参できる。"},
+      {name:"あんぱん＋バナナ",dishes:["あんぱん2個","バナナ2本","牛乳200ml"],cal:620,p:22,c:112,f:10,note:"甘い物で疲れた体を回復。牛乳のタンパク質で筋肉回復もサポート。"},
+      {name:"カステラ＆スポーツゼリー",dishes:["カステラ2切れ","スポーツゼリー2個","バナナ1本","牛乳200ml"],cal:580,p:18,c:108,f:8,note:"素早く吸収できる糖質が中心。練習中の中間補給にも使いやすいセット。"},
+      {name:"おにぎり＆ヨーグルト",dishes:["おにぎり3個","ギリシャヨーグルト100g","バナナ1本","麦茶"],cal:590,p:28,c:100,f:7,note:"ヨーグルトのプロテインで筋肉回復を促進。腸内環境を整える効果も期待できる。"},
+      {name:"焼きもち3個セット",dishes:["焼きもち3個(醤油)","バナナ2本","牛乳200ml"],cal:610,p:20,c:118,f:6,note:"もちは消化が速く即効性の高いエネルギー源。試合前の最終補給にも最適。"},
+      {name:"肉まん補食",dishes:["肉まん3個","バナナ1本","牛乳200ml"],cal:630,p:24,c:112,f:14,note:"肉まんは糖質とタンパク質の両方が摂れる優秀補食。寒い時期の練習後に特におすすめ。"},
+      {name:"バナナ＆プロテインミルク",dishes:["バナナ3本","プロテイン入り牛乳300ml","チーズ2個"],cal:560,p:30,c:95,f:10,note:"バナナの糖質＋牛乳のタンパク質で練習後30分以内の補給に最適なコンビ。"},
+      {name:"おむすびころりんセット",dishes:["大きめおにぎり4個","ゆで卵2個","麦茶500ml"],cal:610,p:28,c:108,f:10,note:"シンプルだが糖質とタンパク質のバランスが良い。遠征や移動時にも持参しやすい。"},
+      {name:"カップ麺＋プラスα補食",dishes:["カップヌードル(大)","おにぎり2個","バナナ1本"],cal:650,p:22,c:118,f:16,note:"疲れた日のご褒美補食。塩分補給にもなる。たまにはこういう日があってもOK！"},
+      {name:"クリームパン補食",dishes:["クリームパン2個","バナナ2本","牛乳200ml","ゆで卵"],cal:610,p:25,c:105,f:14,note:"卵クリームでタンパク質も補給。甘いパンで疲れた体と心を同時に回復。"},
+      {name:"スイートポテト補食",dishes:["スイートポテト2個","バナナ2本","牛乳200ml"],cal:580,p:18,c:108,f:10,note:"さつまいもの食物繊維で腸内環境も整える。甘さが疲労回復をサポート。"},
+      {name:"おにぎり＆サラダチキン",dishes:["おにぎり3個","サラダチキン1袋","スポーツドリンク500ml"],cal:600,p:38,c:105,f:6,note:"コンビニで揃えられる高タンパク補食の組み合わせ。練習後のゴールデンタイムに。"},
+    ],
+    dinner:[
+      {name:"唐揚げ定食",dishes:["白米4杯","鶏の唐揚げ(大)","キャベツの千切り","豆腐と油揚げの味噌汁","牛乳200ml"],cal:1700,p:78,c:248,f:38,note:"王道の高カロリー夕食。練習後の疲れた身体に元気を与える定番メニュー。"},
+      {name:"豚カツ定食",dishes:["白米4杯","豚ロースカツ","キャベツ","具だくさん豚汁","牛乳200ml"],cal:1750,p:80,c:252,f:40,note:"豚肉のビタミンB1で疲労回復。豚汁で野菜・塩分・水分を一度に補給できる。"},
+      {name:"牛丼(特盛)定食",dishes:["牛丼(特盛)","温泉卵","赤だし味噌汁","ほうれん草ごま和え","牛乳200ml"],cal:1680,p:72,c:245,f:36,note:"牛肉の鉄分・亜鉛で回復促進。外食利用時も高カロリーが確保できるメニュー。"},
+      {name:"さんま塩焼き定食",dishes:["白米4杯","さんまの塩焼き","大根おろし","ひじきの煮物","けんちん汁","牛乳200ml"],cal:1620,p:75,c:240,f:32,note:"さんまのDHA・EPAで脳と関節のケア。和食で消化も良く睡眠の質アップに。"},
+      {name:"麻婆豆腐定食",dishes:["白米4杯","麻婆豆腐(大)","ほうれん草炒め","わかめスープ","牛乳200ml"],cal:1650,p:76,c:242,f:34,note:"豆腐の植物性タンパクで筋肉回復。辛さで食欲増進。食べやすく大量摂取できる。"},
+      {name:"カレーライス",dishes:["カレーライス(ご飯4杯分)","福神漬け","グリーンサラダ","牛乳200ml","ヨーグルト"],cal:1720,p:68,c:258,f:35,note:"スパイスで代謝UP。大量に作り置きできるため保護者の負担が少ない定番メニュー。"},
+      {name:"鶏もも肉ステーキ定食",dishes:["白米4杯","鶏もも肉ステーキ200g","ポテトサラダ","オニオンスープ","牛乳200ml"],cal:1680,p:80,c:242,f:36,note:"大ボリュームのチキンで満足感と高タンパクを両立。ポテトで炭水化物も充実。"},
+      {name:"豚しゃぶ定食",dishes:["白米4杯","豚しゃぶ(たっぷり)","ポン酢野菜","冷奴","味噌汁","牛乳200ml"],cal:1640,p:79,c:240,f:32,note:"さっぱり食べやすく野菜も多く摂れる。夏場の食欲が落ちた時にも向いている。"},
+      {name:"ラーメン定食",dishes:["醤油ラーメン(大盛)","白米2杯","唐揚げ2個","ほうれん草おひたし","牛乳200ml"],cal:1710,p:70,c:258,f:36,note:"ラーメン＋ライスで炭水化物を大量補給。スープの塩分で電解質も補える。"},
+      {name:"スタミナ焼き肉定食",dishes:["白米4杯","牛カルビ焼き肉(200g)","ナムル盛合せ","わかめスープ","牛乳200ml"],cal:1780,p:78,c:248,f:42,note:"牛カルビのカロリーと鉄分で練習後の大量消耗を一気に回復。テンション上がる夕食。"},
+      {name:"回鍋肉定食",dishes:["白米4杯","回鍋肉(豚バラ＋キャベツ)","卵スープ","冷奴","牛乳200ml"],cal:1650,p:72,c:244,f:38,note:"キャベツでビタミンCと食物繊維を補給。豚バラの脂でカロリーもしっかり確保。"},
+      {name:"鮭ムニエル定食",dishes:["白米4杯","鮭のムニエル","ほうれん草ソテー","コーンポタージュ","牛乳200ml"],cal:1630,p:76,c:240,f:32,note:"鮭のEPAで関節・脳のケア。バターソテーでカロリーUP。洋食で気分転換にも。"},
+      {name:"豚の角煮定食",dishes:["白米4杯","豚の角煮(150g)","小松菜炒め","味噌汁","牛乳200ml"],cal:1760,p:72,c:248,f:44,note:"脂がのった角煮で高カロリー摂取。疲れた日に食べたいご褒美系の夕食メニュー。"},
+      {name:"天ぷら定食",dishes:["白米4杯","海老天・野菜天盛合せ","大根おろし","そば汁","味噌汁","牛乳200ml"],cal:1700,p:68,c:252,f:38,note:"海老でタンパク質と亜鉛を補給。天ぷらでカロリーUP。たまには豪華な夕食を。"},
+      {name:"鶏鍋定食",dishes:["白米4杯","鶏鍋(鶏もも・野菜たっぷり)","雑炊用ご飯(1杯追加)","牛乳200ml"],cal:1660,p:80,c:245,f:30,note:"鍋で野菜もたっぷり食べられる。〆の雑炊まで食べて炭水化物を追加補給。"},
+      {name:"エビチリ定食",dishes:["白米4杯","エビチリ(エビ大盛)","中華スープ","きゅうりのたたき","牛乳200ml"],cal:1640,p:75,c:245,f:30,note:"エビの高タンパク・低脂質で筋肉修復をサポート。辛さで食欲と代謝をUP。"},
+      {name:"すき焼き定食",dishes:["白米4杯","すき焼き(牛肉・豆腐・野菜)","卵","けんちん汁","牛乳200ml"],cal:1730,p:80,c:247,f:40,note:"牛肉と豆腐でダブルタンパク。割り下の甘みでご飯が進む。特別な日の夕食にも。"},
+      {name:"マーボーナス定食",dishes:["白米4杯","麻婆茄子","卵スープ","ほうれん草おひたし","牛乳200ml"],cal:1600,p:68,c:242,f:34,note:"茄子のポリフェノールで疲労回復をサポート。ご飯が進む辛旨の夕食メニュー。"},
+      {name:"豚骨風ラーメン定食",dishes:["豚骨ラーメン(大盛)","白米2杯","煮卵2個","野菜炒め","牛乳200ml"],cal:1720,p:72,c:256,f:38,note:"濃厚スープでカロリーUP。煮卵でタンパク質を追加。コラーゲン豊富で疲労回復にも。"},
+      {name:"チキンカツ定食",dishes:["白米4杯","チキンカツ(鶏むね)","キャベツ","豚汁","牛乳200ml"],cal:1720,p:82,c:248,f:36,note:"鶏むねカツで高タンパク・中程度の脂質。ボリューム満点でガッツリ食べたい日に。"},
+      {name:"ぶり照り焼き定食",dishes:["白米4杯","ぶりの照り焼き","大根のそぼろ煮","きのこの味噌汁","牛乳200ml"],cal:1640,p:76,c:242,f:32,note:"ぶりのDHA・EPAで脳と疲労のケア。照り焼きの甘辛タレでご飯が進む。"},
+      {name:"ガパオライス定食",dishes:["白米4杯","鶏ひきのガパオ炒め","目玉焼き","スープ","牛乳200ml"],cal:1680,p:74,c:246,f:36,note:"エスニック風で気分転換。鶏ひき肉とバジルでさっぱり食べやすい高カロリー夕食。"},
+      {name:"ミックスフライ定食",dishes:["白米4杯","エビフライ・コロッケ・白身魚フライ","キャベツ","味噌汁","牛乳200ml"],cal:1740,p:72,c:255,f:42,note:"揚げ物盛合せでカロリーUP。魚介のタンパク質と野菜で栄養バランスも確保。"},
+      {name:"肉じゃが定食",dishes:["白米4杯","肉じゃが(大)","ほうれん草のおひたし","わかめ味噌汁","牛乳200ml"],cal:1640,p:70,c:245,f:33,note:"じゃがいもと牛肉でエネルギー＋タンパク質を確保。家庭の味で心の疲れも癒やす。"},
+      {name:"豚バラ大根定食",dishes:["白米4杯","豚バラ大根の煮物","小松菜の炒め物","豆腐の味噌汁","牛乳200ml"],cal:1650,p:72,c:242,f:36,note:"大根のジアスターゼで消化をサポート。豚バラの脂でカロリーUP。疲労回復にも◎。"},
+    ]
+  },
+  game_pre:{
+    breakfast:[
+      {name:"試合前日の炭水化物朝食",dishes:["白米4杯","卵焼き(2個分)","焼き鮭","わかめ味噌汁","バナナ2本","牛乳200ml"],cal:1100,p:52,c:175,f:20,note:"試合前日はいつも以上にご飯多め。脂肪少なめ・消化の良い食材を中心に。"},
+      {name:"うどん朝食(カーボローディング)",dishes:["うどん大盛2玉","温泉卵2個","鮭おにぎり2個","牛乳200ml","バナナ"],cal:1080,p:50,c:178,f:16,note:"消化が早く胃に優しいうどんで試合前のカーボローディング開始。"},
+      {name:"フレンチトースト朝食",dishes:["フレンチトースト4枚","ヨーグルト","バナナ2本","牛乳200ml"],cal:1050,p:46,c:172,f:22,note:"甘くて食べやすく炭水化物が豊富。試合前日の朝に食欲がない時も食べやすい。"},
+      {name:"もち入り雑炊",dishes:["もち入り雑炊(ご飯4杯分+もち2個)","卵焼き","バナナ2本","牛乳200ml"],cal:1120,p:48,c:185,f:16,note:"もちで糖質密度を上げたカーボローディング向け雑炊。消化にも優しい。"},
+      {name:"パスタ朝食",dishes:["パスタ(200g)","ツナトマトソース","食パン1枚","バナナ2本","牛乳200ml"],cal:1090,p:50,c:178,f:18,note:"パスタは低GIでエネルギーが長持ち。試合前日の朝から糖質ローディング開始。"},
+    ],
+    lunch:[
+      {name:"試合前日高炭水化物弁当",dishes:["白米4杯","鶏むね照り焼き(200g)","卵焼き","ブロッコリー","バナナ"],cal:1300,p:68,c:195,f:22,note:"翌日の試合に向けて糖質を蓄えるため炭水化物多め。脂質は控えめに。",bento:true,bentoItems:["鶏むね肉200g","卵2個","ブロッコリー4房","バナナ1本","照り焼きのたれ","白米4杯分"]},
+      {name:"おにぎり多めのお弁当",dishes:["おにぎり5個(各種)","鶏むねサラダチキン","ゆで卵","バナナ"],cal:1250,p:65,c:190,f:18,note:"試合前日はとにかくご飯の量を増やす。消化しやすいシンプルなおかずで胃腸に負担をかけない。",bento:true,bentoItems:["おにぎり用米5合分","サラダチキン1袋","卵1個","バナナ1本"]},
+      {name:"うどん弁当(炭水化物重視)",dishes:["うどん大盛2玉(弁当箱)","鶏むね塩焼き","卵焼き","バナナ2本"],cal:1270,p:62,c:196,f:18,note:"弁当にうどんを入れる試合前日スタイル。消化が良くグリコーゲン補充に最適。",bento:true,bentoItems:["うどん2玉","鶏むね肉150g","卵2個","バナナ2本","塩・醤油"]},
+      {name:"混ぜご飯弁当",dishes:["混ぜご飯(鶏ひき・にんじん・4杯分)","ゆで卵2個","ブロッコリー","バナナ"],cal:1280,p:65,c:192,f:20,note:"味付きご飯で食欲UP。具と一緒に食べやすく大量の炭水化物を摂取できる。",bento:true,bentoItems:["白米4杯分","鶏ひき肉150g","にんじん1/2本","卵2個","ブロッコリー4房","白だし・醤油・みりん"]},
+      {name:"ロールパン＆パスタ弁当",dishes:["ロールパン4個","パスタサラダ(150g)","鶏むねハム","バナナ2本","スポーツドリンク"],cal:1250,p:58,c:192,f:22,note:"炭水化物を2種類で補給。洋食スタイルで気分も上がる試合前日の昼食。",bento:true,bentoItems:["ロールパン4個","パスタ150g","鶏むねハム3枚","バナナ2本","マヨネーズ・塩こしょう"]},
+    ],
+    snack:[
+      {name:"カーボローディング補食",dishes:["おにぎり4個","バナナ2本","スポーツゼリー","スポーツドリンク500ml"],cal:680,p:20,c:138,f:4,note:"試合前日の夕方補食。糖質貯蔵を最大化する最後のチャンス。水分もたっぷり。"},
+      {name:"あんこ系補食",dishes:["あんぱん3個","バナナ2本","牛乳200ml"],cal:660,p:22,c:130,f:8,note:"あんこの糖質でグリコーゲンを蓄積。消化も良く試合前日に最適な補食。"},
+      {name:"もち補食",dishes:["焼きもち4個(醤油・海苔)","バナナ2本","スポーツドリンク"],cal:700,p:18,c:142,f:4,note:"もちは最も糖質密度が高い食品のひとつ。試合前日の糖質蓄積に最適。"},
+      {name:"カステラ＆バナナ",dishes:["カステラ3切れ","バナナ3本","牛乳200ml"],cal:670,p:20,c:132,f:8,note:"カステラとバナナで素早く大量の糖質を補給。食べやすく胃に優しいのも魅力。"},
+      {name:"くず湯&おにぎり補食",dishes:["おにぎり3個","くずゆ1杯","バナナ2本","スポーツドリンク"],cal:640,p:18,c:128,f:4,note:"胃に優しいくずゆで身体を温めながら糖質補給。試合前日夜の最終補給に。"},
+    ],
+    dinner:[
+      {name:"試合前日パスタ定食",dishes:["パスタ大盛(乾300g)","ミートソース","サラダ","食パン1枚","牛乳2杯"],cal:1800,p:75,c:275,f:35,note:"カーボローディングの定番。パスタは消化が良く翌朝のエネルギーにしっかり変換。"},
+      {name:"試合前日カレー",dishes:["カレーライス(ご飯5杯分)","ヨーグルト","サラダ","牛乳200ml"],cal:1850,p:72,c:285,f:34,note:"大量のご飯でグリコーゲンを最大限に貯める。スパイスで食欲UP。"},
+      {name:"試合前日うどん定食",dishes:["うどん大盛3玉","おにぎり3個","温泉卵","鶏むねの焼き物","牛乳200ml"],cal:1780,p:70,c:278,f:28,note:"うどんは消化吸収が最も早い炭水化物。胃腸に優しく翌朝スッキリ起きられる。"},
+      {name:"試合前日中華丼定食",dishes:["中華丼(ご飯5杯分)","春雨スープ","バナナ2本","牛乳200ml"],cal:1820,p:68,c:282,f:32,note:"とろみのある中華丼は消化しやすく大量の炭水化物を確保。翌日のスタミナ源に。"},
+      {name:"試合前日チャーハン定食",dishes:["卵チャーハン(大盛)","白米2杯追加","鶏むね炒め","中華スープ","牛乳200ml"],cal:1790,p:72,c:276,f:34,note:"チャーハン＋白米の合わせ技で炭水化物を大量確保。食欲がある試合前日に最適。"},
+    ]
+  },
+  game_day:{
+    breakfast:[
+      {name:"試合当日の朝食(3時間前)",dishes:["白米3杯","うどん1玉","卵焼き","バナナ2本","スポーツドリンク500ml"],cal:1050,p:40,c:185,f:12,note:"試合3時間前は消化の良い食事を。脂質・食物繊維少なめで胃腸の負担を最小化。"},
+      {name:"試合朝おにぎりセット",dishes:["おにぎり5個","バナナ2本","スポーツゼリー","スポーツドリンク500ml"],cal:980,p:32,c:190,f:8,note:"移動が多い試合当日に最適。手軽に食べられて消化も抜群。"},
+      {name:"試合日うどん朝食",dishes:["うどん大盛2玉","温泉卵2個","白米2杯","バナナ2本","スポーツドリンク"],cal:1020,p:38,c:192,f:10,note:"試合3時間前の朝食はうどんが最適解。消化が最も早く胃に優しい。"},
+      {name:"試合朝パン食",dishes:["ロールパン4個","バナナ2本","ヨーグルト","ゼリー飲料","スポーツドリンク"],cal:960,p:28,c:186,f:10,note:"遠征バスの中でも食べやすいパン食。脂質少なめのシンプルな組み合わせ。"},
+      {name:"試合当日ふりかけご飯",dishes:["白米3杯(ふりかけ)","卵スープ","バナナ2本","スポーツドリンク500ml"],cal:990,p:36,c:188,f:10,note:"シンプルなふりかけご飯で胃に負担をかけない。スープで水分と塩分も補給。"},
+    ],
+    lunch:[
+      {name:"試合当日弁当(消化重視)",dishes:["白米3杯","鶏むね照り焼き","卵焼き","バナナ","スポーツドリンク"],cal:1100,p:60,c:165,f:18,note:"揚げ物・生もの・乳製品を避けた試合当日弁当。試合2時間以上前に食べきること。",bento:true,bentoItems:["鶏むね肉200g(塩こうじ)","卵2個","バナナ1本","白米3杯分"]},
+      {name:"おにぎり弁当(試合当日)",dishes:["おにぎり5個(各種)","鶏むねサラダチキン","バナナ2本","スポーツドリンク"],cal:1080,p:55,c:175,f:12,note:"食べやすいおにぎりで試合2時間前まで少しずつ補給。脂質を徹底的に排除。",bento:true,bentoItems:["おにぎり5個分の米","サラダチキン1袋","バナナ2本"]},
+      {name:"試合当日シンプル弁当",dishes:["白米3杯","焼き鮭","卵焼き","バナナ","スポーツドリンク"],cal:1050,p:56,c:162,f:18,note:"シンプルな和食弁当で胃腸を安定させる。試合前は食べ慣れたものが一番。",bento:true,bentoItems:["鮭切り身1枚","卵2個","バナナ1本","白米3杯分"]},
+      {name:"パスタ弁当(試合当日)",dishes:["パスタ(200g)","鶏むねのせトマトソース","バナナ2本","スポーツドリンク"],cal:1060,p:55,c:168,f:14,note:"消化が良いパスタで試合前の糖質補給。トマトソースのリコピンで抗酸化効果も。",bento:true,bentoItems:["パスタ200g","鶏むね肉150g","トマト缶1/2個","バナナ2本","塩こしょう・オリーブ油少量"]},
+      {name:"うどん弁当(試合当日)",dishes:["うどん2玉(つゆ付き)","鶏むね塩焼き","バナナ2本","スポーツドリンク"],cal:1020,p:52,c:172,f:12,note:"消化最優先のうどん。冷たいつけ麺スタイルで夏場でも食べやすい。",bento:true,bentoItems:["うどん2玉","鶏むね肉150g","バナナ2本","めんつゆ(希釈)"]},
+    ],
+    snack:[
+      {name:"イニング間補食",dishes:["バナナ2本","スポーツゼリー2個","スポーツドリンク500ml","塩飴3〜4粒"],cal:450,p:8,c:100,f:2,note:"試合中・試合間の補給。素早く吸収できる糖質と塩分(電解質)が最重要。"},
+      {name:"試合前最終補食",dishes:["おにぎり2個","バナナ1本","スポーツドリンク"],cal:480,p:12,c:100,f:3,note:"試合1〜1.5時間前の最終チャージ。量は少なめで消化しやすいものだけ。"},
+      {name:"試合中チャージ",dishes:["スポーツゼリー3個","塩飴5粒","スポーツドリンク1L"],cal:400,p:5,c:92,f:0,note:"試合中は固形物を避けてゼリーと飲料で補給。熱中症予防に塩分補給を忘れずに。"},
+      {name:"ベンチ待機中の補食",dishes:["バナナ3本","スポーツドリンク500ml","塩タブレット"],cal:440,p:6,c:102,f:1,note:"バナナは試合中も食べやすく即効性が高い。試合の合間に少しずつ食べる。"},
+      {name:"延長試合対策補食",dishes:["おにぎり3個","スポーツゼリー2個","スポーツドリンク1L","塩飴"],cal:550,p:14,c:115,f:3,note:"試合が長引く可能性がある時は多めに準備。電解質と糖質を切らさないことが最重要。"},
+    ],
+    dinner:[
+      {name:"試合後リカバリー夕食",dishes:["白米4杯","鶏むね肉の蒸し物","豆腐の冷奴","ほうれん草炒め","けんちん汁","牛乳2杯"],cal:1700,p:85,c:248,f:28,note:"試合後は30分以内にタンパク質と糖質を補給。消耗した筋肉の回復を最優先に。"},
+      {name:"試合後ガッツリ定食",dishes:["白米4杯","唐揚げ(大)","豚汁","ほうれん草おひたし","牛乳200ml"],cal:1750,p:82,c:252,f:40,note:"試合で消耗したカロリーを一気に補充。好物のメニューで精神的な回復も促進。"},
+      {name:"試合後勝利ご褒美飯",dishes:["白米4杯","焼き肉盛合せ","サムギョプサル風","わかめスープ","牛乳200ml"],cal:1800,p:84,c:248,f:44,note:"勝利の日は焼き肉で盛大にお祝い！鉄分・亜鉛たっぷりで筋肉修復も完璧。"},
+      {name:"試合後サバ味噌定食",dishes:["白米4杯","サバの味噌煮","ほうれん草おひたし","なめこ汁","牛乳200ml"],cal:1650,p:80,c:244,f:32,note:"サバのEPA/DHAで炎症を素早く抑制。和食でゆっくり消化しながら回復を促進。"},
+      {name:"試合後中華定食",dishes:["白米4杯","八宝菜","卵スープ","冷奴","牛乳200ml"],cal:1680,p:74,c:248,f:34,note:"たっぷりの野菜とタンパク質で試合後の栄養補給。ビタミンCも豊富に摂れる。"},
+    ]
+  },
+  recovery:{
+    breakfast:[
+      {name:"回復朝食(炎症抑制)",dishes:["白米3杯","サバの塩焼き","ほうれん草おひたし","豆腐の味噌汁","牛乳200ml","キウイ1個"],cal:980,p:55,c:148,f:22,note:"サバのEPA/DHAで筋肉の炎症を抑える。ビタミンCのキウイで疲労物質を除去。"},
+      {name:"鮭とキノコの朝食",dishes:["白米3杯","鮭の塩焼き","きのこの味噌汁","納豆","ヨーグルト","みかん"],cal:950,p:52,c:145,f:20,note:"鮭のアスタキサンチンが強力な抗酸化作用を発揮。キノコのビタミンDで骨の回復も。"},
+      {name:"回復朝食(鉄分補給)",dishes:["白米3杯","豚レバー炒め","ほうれん草のおひたし","あさりの味噌汁","牛乳200ml"],cal:970,p:58,c:146,f:20,note:"試合で消耗した鉄分をレバーで一気に補給。あさりのタウリンで疲労回復にも◎。"},
+      {name:"豆腐と卵の朝食",dishes:["白米3杯","揚げ出し豆腐","温泉卵2個","小松菜炒め","なめこ汁","牛乳200ml"],cal:940,p:54,c:143,f:20,note:"豆腐と卵で植物性・動物性タンパクを両方補給。消化に優しく疲れた消化器を休める。"},
+      {name:"回復スープ朝食",dishes:["白米3杯","鶏肉と野菜の具だくさんスープ","卵焼き","バナナ","牛乳200ml"],cal:960,p:54,c:146,f:18,note:"スープで水分と電解質を同時補給。試合翌日は水分補給がとても重要。"},
+    ],
+    lunch:[
+      {name:"回復弁当(高タンパク)",dishes:["白米3杯","サバの味噌煮","小松菜炒め","ゆで卵2個","ヨーグルト"],cal:1150,p:70,c:162,f:28,note:"試合翌日は脂質控えめ・高タンパクで傷ついた筋肉を修復。",bento:true,bentoItems:["サバ缶1個","小松菜1/2束","卵2個","ヨーグルト1個","白米3杯分"]},
+      {name:"豆腐と野菜の回復弁当",dishes:["白米3杯","豆腐ステーキ","ひじきの煮物","卵焼き","フルーツ"],cal:1100,p:65,c:158,f:24,note:"豆腐の植物性タンパクと消化の良い食材で疲れた消化器官も休める。",bento:true,bentoItems:["絹ごし豆腐1丁","ひじき乾燥10g","卵2個","季節のフルーツ","白米3杯分"]},
+      {name:"鮭フレーク丼弁当(回復)",dishes:["白米3杯(鮭フレークのせ)","ゆで卵2個","ブロッコリー","ヨーグルト","みかん"],cal:1100,p:65,c:160,f:22,note:"鮭のEPAで筋肉炎症を抑制。シンプルな丼スタイルで食欲のない翌日でも食べやすい。",bento:true,bentoItems:["鮭フレーク(市販)大さじ4","卵2個","ブロッコリー4房","ヨーグルト1個","みかん1個","白米3杯分"]},
+      {name:"レバニラ弁当(鉄分強化)",dishes:["白米3杯","レバニラ炒め","ほうれん草のおひたし","卵焼き","みかん"],cal:1130,p:68,c:160,f:25,note:"レバーで鉄分・亜鉛を大量補給。ニラのアリシンでビタミンB1吸収率UP。",bento:true,bentoItems:["豚レバー150g","ニラ1束","卵2個","ほうれん草1/2束","みかん1個","白米3杯分"]},
+      {name:"鶏むねときのこの回復弁当",dishes:["白米3杯","鶏むねときのこの炒め物","小松菜の卵とじ","ヨーグルト","キウイ"],cal:1090,p:68,c:158,f:20,note:"キノコのβ-グルカンで免疫力UP。ビタミンCのキウイで鉄分吸収率を高める。",bento:true,bentoItems:["鶏むね肉180g","しめじ・えのき各1袋","小松菜1/2束","卵2個","ヨーグルト・キウイ","白米3杯分"]},
+    ],
+    snack:[
+      {name:"回復補食(ヨーグルト系)",dishes:["ギリシャヨーグルト100g","バナナ2本","アーモンド20粒","ハチミツ小さじ1"],cal:520,p:25,c:88,f:18,note:"アーモンドのビタミンEで酸化ストレスを軽減。良質な脂肪酸で抗炎症効果も。"},
+      {name:"回復補食(フルーツ中心)",dishes:["バナナ2本","みかん3個","ヨーグルト","牛乳200ml"],cal:480,p:22,c:82,f:10,note:"ビタミンCたっぷりのフルーツで疲労物質を除去。乳酸菌で腸内環境も整える。"},
+      {name:"回復補食(タンパク強化)",dishes:["プロテインバー1本","牛乳200ml","バナナ2本"],cal:500,p:30,c:80,f:12,note:"集中的にタンパク質を補給したい時の補食。練習翌日の筋肉修復に特化したセット。"},
+      {name:"甘酒＆おにぎり補食",dishes:["甘酒1杯","おにぎり2個","バナナ1本"],cal:480,p:15,c:88,f:4,note:"甘酒は「飲む点滴」と呼ばれるほど栄養豊富。疲労回復と腸内環境改善に効果的。"},
+      {name:"豆乳バナナ補食",dishes:["豆乳200ml","バナナ2本","アーモンド15粒","はちみつ"],cal:490,p:22,c:82,f:16,note:"豆乳のイソフラボンで筋肉疲労を軽減。植物性タンパクで胃に負担をかけずに回復。"},
+    ],
+    dinner:[
+      {name:"回復夕食(鉄分重視)",dishes:["白米4杯","豚レバーの生姜炒め","ほうれん草ごま和え","あさりの味噌汁","牛乳2杯","みかん"],cal:1650,p:82,c:242,f:30,note:"レバーの鉄分・亜鉛で造血と筋肉修復を促進。みかんのビタミンCで鉄の吸収率UP。"},
+      {name:"回復夕食(サバ・青魚中心)",dishes:["白米4杯","サバの塩焼き","ひじきの煮物","小松菜の炒め物","豆腐の味噌汁","牛乳200ml"],cal:1600,p:80,c:238,f:28,note:"青魚のオメガ3で炎症を抑えながら回復を促進。和食の組み合わせで疲れた消化器にも優しい。"},
+      {name:"回復夕食(豆腐中心)",dishes:["白米4杯","麻婆豆腐","ほうれん草炒め","わかめスープ","牛乳200ml","みかん"],cal:1580,p:76,c:238,f:30,note:"豆腐の植物性タンパクでゆっくり筋肉修復。翌日の練習再開に向けてしっかり回復。"},
+      {name:"回復夕食(鶏肉中心)",dishes:["白米4杯","鶏むね肉のポトフ(野菜たっぷり)","サラダ","牛乳200ml"],cal:1560,p:82,c:235,f:26,note:"ポトフで野菜の栄養を全部スープに溶かして吸収。鶏むねで高タンパクで脂質控えめ。"},
+      {name:"回復夕食(鮭＋きのこ)",dishes:["白米4杯","鮭のホイル焼き(きのこたっぷり)","ほうれん草のお浸し","けんちん汁","牛乳200ml"],cal:1580,p:79,c:236,f:28,note:"鮭とキノコの組み合わせはビタミンDの吸収を高め、骨と筋肉の回復を同時に促進。"},
+    ]
+  },
+  off:{
+    breakfast:[
+      {name:"休養日の軽め朝食",dishes:["白米2杯","卵焼き","納豆","豆腐の味噌汁","牛乳200ml","バナナ1本"],cal:820,p:45,c:120,f:18,note:"休養日はカロリーを少し控えめに。ただし栄養は落とさず体の回復を優先。"},
+      {name:"休養日和食セット",dishes:["白米2杯","焼き鮭","温泉卵","ほうれん草おひたし","味噌汁","牛乳200ml"],cal:790,p:48,c:115,f:16,note:"質の高い食材でしっかり栄養補給。週に1〜2回の休養日の基本朝食パターン。"},
+      {name:"ゆったり洋食朝食",dishes:["フレンチトースト3枚","スクランブルエッグ","グリーンサラダ","牛乳200ml","フルーツ"],cal:800,p:42,c:115,f:20,note:"休養日はゆっくりおいしい朝食を。心と体のリフレッシュで翌日の練習効率UP。"},
+      {name:"雑炊朝食",dishes:["鶏雑炊(白米2杯分)","納豆","卵焼き","牛乳200ml","みかん"],cal:780,p:44,c:112,f:16,note:"胃に優しい雑炊で休養日の朝を開始。消化器を休ませながら必要な栄養は確保。"},
+      {name:"休養日パン朝食",dishes:["全粒粉トースト2枚","目玉焼き2個","野菜スープ","牛乳200ml","バナナ"],cal:810,p:44,c:114,f:20,note:"全粒粉で食物繊維を補給。腸の活性化は免疫力とパフォーマンスに直結する。"},
+      {name:"豆腐と味噌のヘルシー朝食",dishes:["白米2杯","豆腐の味噌汁(大)","卵焼き","ほうれん草おひたし","牛乳200ml","キウイ"],cal:770,p:46,c:110,f:15,note:"豆腐で消化しやすいタンパク質補給。ビタミンCで免疫力を高める休養日の朝。"},
+      {name:"オートミール朝食",dishes:["オートミール(80g)","牛乳300ml","バナナ2本","ゆで卵2個","アーモンド15粒"],cal:820,p:46,c:118,f:20,note:"食物繊維豊富なオートミールで腸活。休養日こそ腸内環境を整えて全体的な回復を。"},
+    ],
+    lunch:[
+      {name:"休養日弁当(バランス重視)",dishes:["白米2杯","鮭の塩焼き","ひじき煮","小松菜炒め","季節のフルーツ"],cal:1000,p:52,c:148,f:20,note:"試合・練習のない日はビタミン・ミネラルを重視した栄養バランス弁当。",bento:true,bentoItems:["鮭切り身1枚","ひじき乾燥10g","小松菜1/2束","季節のフルーツ","白米2杯分"]},
+      {name:"休養日サバ弁当",dishes:["白米2杯","サバの味噌煮","ほうれん草おひたし","卵焼き","みかん"],cal:980,p:55,c:145,f:22,note:"DHAで脳の疲労回復。休養日だからこそゆっくり栄養を吸収させる時間がある。",bento:true,bentoItems:["サバ缶1個","ほうれん草1/2束","卵2個","みかん1個","白米2杯分"]},
+      {name:"休養日ヘルシー丼弁当",dishes:["白米2杯(おかかのせ)","豆腐のそぼろ煮","ほうれん草のごま和え","卵焼き","りんご"],cal:950,p:50,c:142,f:18,note:"豆腐ベースのそぼろでヘルシーにタンパク質補給。休養日らしいバランス重視の弁当。",bento:true,bentoItems:["絹ごし豆腐1丁","鶏ひき肉100g","ほうれん草1/2束","卵2個","りんご1/2個","白米2杯分"]},
+      {name:"休養日サラダチキン弁当",dishes:["白米2杯","サラダチキン","ひじきの煮物","小松菜の卵とじ","キウイ"],cal:960,p:58,c:140,f:16,note:"サラダチキンで超低脂質・高タンパクの昼食。休養日の筋肉修復にも効果的。",bento:true,bentoItems:["サラダチキン1袋","ひじき乾燥10g","小松菜1/2束","卵2個","キウイ1個","白米2杯分"]},
+      {name:"休養日野菜たっぷり弁当",dishes:["白米2杯","鶏むね野菜炒め","ひじきの煮物","ゆで卵","フルーツ"],cal:970,p:55,c:143,f:18,note:"野菜を多めに摂って体内をリセット。休養日は普段不足しがちなビタミン・ミネラルを補う。",bento:true,bentoItems:["鶏むね肉150g","にんじん・ピーマン・もやし","ひじき乾燥10g","卵1個","季節フルーツ","白米2杯分"]},
+      {name:"休養日おにぎり弁当",dishes:["おにぎり3個(各種)","ゆで卵2個","野菜スープ","ヨーグルト","みかん"],cal:940,p:48,c:140,f:16,note:"手軽なおにぎり弁当で休養日を楽しく。スープで水分と塩分をバランスよく補給。",bento:true,bentoItems:["おにぎり用米3杯分","卵2個","野菜スープの素","ヨーグルト1個","みかん1個"]},
+      {name:"休養日麺弁当(そうめん)",dishes:["そうめん(3束)","鶏むねサラダ","卵焼き","フルーツ","牛乳200ml"],cal:920,p:50,c:138,f:14,note:"暑い日の休養日には冷たいそうめん。消化に良く腸を休ませながら必要な栄養を補給。",bento:true,bentoItems:["そうめん3束","鶏むね肉150g","卵2個","季節フルーツ","めんつゆ(希釈)","白米不要"]},
+    ],
+    snack:[
+      {name:"軽め補食",dishes:["バナナ1本","牛乳200ml","アーモンド15粒"],cal:380,p:15,c:58,f:14,note:"休養日の補食は少なめに。腸を休ませながら翌日のための回復を優先。"},
+      {name:"ヨーグルト補食",dishes:["ヨーグルト200g","バナナ1本","ハチミツ","アーモンド10粒"],cal:360,p:16,c:55,f:12,note:"乳酸菌で腸内環境を整える。休養日の腸活で翌日の栄養吸収率を高める。"},
+      {name:"フルーツ牛乳補食",dishes:["バナナ2本","みかん2個","牛乳200ml"],cal:370,p:14,c:62,f:6,note:"ビタミンC豊富なフルーツで抗酸化作用。休養日はシンプルに体のリセットを優先。"},
+      {name:"豆乳と小豆のおやつ",dishes:["豆乳200ml","ぜんざい(小)","バナナ1本"],cal:390,p:16,c:65,f:8,note:"豆乳の植物性タンパクと小豆の鉄分で栄養補給。心身のリフレッシュにもなる和のおやつ。"},
+      {name:"牛乳＆カカオ補食",dishes:["牛乳300ml","チョコレート(高カカオ)2片","バナナ1本"],cal:380,p:16,c:58,f:12,note:"高カカオチョコのポリフェノールで抗酸化作用。気分転換にもなる休養日のご褒美補食。"},
+    ],
+    dinner:[
+      {name:"休養日定食(修復重視)",dishes:["白米3杯","豆腐ハンバーグ","ひじきサラダ","あおさ味噌汁","牛乳200ml","ヨーグルト"],cal:1400,p:72,c:198,f:28,note:"休養日こそ質の高い栄養補給。豆腐で消化しやすいタンパク質を摂り体の修復を。"},
+      {name:"休養日鍋料理",dishes:["白米3杯","豆乳鍋(鶏肉・豆腐・野菜たっぷり)","雑炊追加","牛乳200ml"],cal:1380,p:70,c:196,f:26,note:"豆乳鍋で植物性・動物性タンパクを同時補給。野菜もたくさん食べられて休養日に最適。"},
+      {name:"休養日焼き魚定食",dishes:["白米3杯","鯛の塩焼き","ひじきの煮物","長ねぎの味噌汁","牛乳200ml","みかん"],cal:1360,p:72,c:195,f:24,note:"上品な鯛でDHAを補給。ひじきで鉄分・カルシウムも確保できる栄養豊富な休養日の夕食。"},
+      {name:"休養日パスタ定食",dishes:["全粒粉パスタ(200g)","野菜たっぷりトマトソース","サラダ","スープ","牛乳200ml"],cal:1370,p:65,c:198,f:24,note:"全粒粉パスタで食物繊維を補給。休養日は消化管の活動を促し翌日に備える。"},
+      {name:"休養日そば定食",dishes:["白米2杯","ざるそば2人前","鶏むねの冷しゃぶ","野菜サラダ","牛乳200ml"],cal:1340,p:68,c:190,f:22,note:"そばのルチンで毛細血管を強化。鶏むねの冷しゃぶとの組み合わせで高タンパク・低脂質。"},
+      {name:"休養日スープカレー",dishes:["白米3杯","スープカレー(鶏肉・野菜たっぷり)","サラダ","牛乳200ml"],cal:1400,p:70,c:200,f:28,note:"スパイスで代謝を上げながら大量の野菜を摂取。休養日のタンパク質補給にも最適。"},
+      {name:"休養日和食定食(魚中心)",dishes:["白米3杯","カレイの煮付け","ひじき煮","小松菜のごま和え","あさり汁","牛乳200ml"],cal:1350,p:70,c:194,f:22,note:"カレイの良質なタンパクと脂質で体の修復をサポート。あさりのタウリンで疲労回復。"},
+      {name:"休養日ロール白菜鍋",dishes:["白米3杯","ロール白菜鍋(鶏ひき)","ひじき煮","牛乳200ml"],cal:1320,p:68,c:192,f:22,note:"白菜のビタミンCと鶏ひき肉のタンパクで免疫力UP。柔らかく消化に優しい休養日の鍋料理。"},
+      {name:"休養日豆乳スープ定食",dishes:["白米3杯","豆乳鶏肉スープ","小松菜炒め","卵焼き","牛乳200ml"],cal:1330,p:72,c:190,f:24,note:"豆乳のイソフラボンで身体の炎症を抑制。まろやかなスープで心身ともにリラックスできる。"},
+      {name:"休養日さば缶定食",dishes:["白米3杯","さば缶のトマト煮","ほうれん草炒め","わかめ汁","牛乳200ml"],cal:1340,p:72,c:192,f:24,note:"缶詰を活用した時短メニュー。DHAとビタミンDで骨と筋肉の回復を同時にサポート。"},
+    ]
+  }
+};
+
+// ========== 通常練習日 追加メニュー ==========
+// 朝食追加
+DB.normal.breakfast.push(
+  {name:"サーモン丼セット",dishes:["サーモン丼(大盛)","わかめ味噌汁","卵焼き","牛乳200ml","バナナ"],cal:1010,p:52,c:152,f:24,note:"DHA豊富なサーモンで脳と筋肉を同時ケア。丼スタイルで大量のご飯が食べやすい。"},
+  {name:"豚キムチ丼セット",dishes:["豚キムチ丼(大盛)","豆腐の味噌汁","ゆで卵2個","牛乳200ml"],cal:1070,p:56,c:155,f:26,note:"キムチの乳酸菌で腸内環境UP。豚肉のビタミンB1で糖質代謝を促進する朝食。"},
+  {name:"鶏ごぼう炊き込みご飯",dishes:["炊き込みご飯(3杯分)","卵焼き","ひじきの煮物","味噌汁","牛乳200ml"],cal:1020,p:50,c:153,f:20,note:"炊き込みご飯は前夜に炊いておけば朝はレンジで温めるだけ。ごぼうの食物繊維で腸活。"},
+  {name:"サバ缶丼朝食",dishes:["サバ缶丼(大盛)","豆腐の冷奴","わかめ汁","牛乳200ml","みかん"],cal:990,p:54,c:148,f:22,note:"缶詰活用の時短朝食。DHAを手軽に大量補給。サバ缶はそのままご飯にのせるだけでOK。"},
+  {name:"スパゲッティ朝食",dishes:["ナポリタン(大盛)","ゆで卵2個","野菜スープ","牛乳200ml"],cal:1030,p:48,c:156,f:24,note:"洋食系で気分転換。パスタの低GI糖質で持続的なエネルギーを供給できる朝食。"},
+  {name:"豆腐丼朝食",dishes:["麻婆豆腐丼(大盛)","わかめ汁","卵焼き","牛乳200ml","バナナ"],cal:1000,p:52,c:150,f:22,note:"豆腐の植物性タンパクと動物性タンパクを組み合わせてアミノ酸バランス抜群の朝食。"},
+  {name:"高菜チャーハン朝食",dishes:["高菜チャーハン(大盛)","卵スープ","冷奴","牛乳200ml"],cal:1040,p:46,c:155,f:26,note:"高菜の食物繊維と発酵成分で腸活。チャーハンは前夜の残りご飯で手軽に作れる。"}
+);
+
+// 昼食追加
+DB.normal.lunch.push(
+  {name:"豚丼弁当",dishes:["白米3杯(豚丼)","温泉卵","ほうれん草おひたし","みかん"],cal:1210,p:62,c:172,f:30,note:"豚バラの脂でカロリーUP。甘辛タレが食欲を刺激。前日に仕込んでおける作り置き向けメニュー。",bento:true,bentoItems:["豚バラ薄切り150g","玉ねぎ1/2個","卵1個","ほうれん草1/2束","みかん1個","醤油・みりん・砂糖","白米3杯分"]},
+  {name:"鶏の塩から揚げ弁当",dishes:["白米3杯","鶏塩から揚げ(200g)","きゅうりの浅漬け","卵焼き","ブロッコリー"],cal:1220,p:67,c:170,f:28,note:"塩味の唐揚げはさっぱり食べやすく、冷めても美味しいのでお弁当に最適。",bento:true,bentoItems:["鶏もも肉200g","卵2個","きゅうり1本","ブロッコリー4房","塩・にんにく・生姜・片栗粉","白米3杯分"]},
+  {name:"サーモンフレーク弁当",dishes:["白米3杯(サーモンフレーク)","ひじきの煮物","卵焼き","ミニトマト","ヨーグルト"],cal:1140,p:62,c:166,f:24,note:"サーモンフレークをのせるだけの時短弁当。DHAで脳の疲れもケアできる。",bento:true,bentoItems:["サーモンフレーク(市販)大さじ4","ひじき乾燥10g","卵2個","ミニトマト5個","ヨーグルト1個","白米3杯分"]},
+  {name:"焼き鳥風弁当",dishes:["白米3杯","焼き鳥串(もも・ねぎま各2本)","きんぴらごぼう","卵焼き","バナナ"],cal:1190,p:64,c:169,f:28,note:"焼き鳥スタイルで食欲増進。串から外してご飯に乗せると食べやすい丼弁当に。",bento:true,bentoItems:["鶏もも肉200g","長ねぎ1本","ごぼう1/2本","卵2個","バナナ1本","醤油・みりん・砂糖","白米3杯分"]},
+  {name:"ツナそぼろ弁当",dishes:["白米3杯(ツナそぼろ)","炒り卵","小松菜炒め","みかん"],cal:1130,p:60,c:166,f:24,note:"ツナ缶を使った手軽なそぼろ弁当。前日仕込みでも美味しく、冷めても食べやすい。",bento:true,bentoItems:["ツナ缶1缶","卵2個","小松菜1/2束","みかん1個","醤油・砂糖・みりん","白米3杯分"]},
+  {name:"豚キムチ炒め弁当",dishes:["白米3杯","豚キムチ炒め","ゆで卵","ほうれん草おひたし","バナナ"],cal:1240,p:64,c:170,f:32,note:"キムチの乳酸菌で腸活しながら高カロリー補給。辛さで食欲増進、夏場も食べやすい。",bento:true,bentoItems:["豚こま切れ150g","キムチ100g","卵1個","ほうれん草1/2束","バナナ1本","白米3杯分"]},
+  {name:"鶏と野菜の甘酢炒め弁当",dishes:["白米3杯","鶏と野菜の甘酢炒め","ひじきの煮物","卵焼き","みかん"],cal:1170,p:63,c:168,f:26,note:"酢の効果で疲労回復をサポート。甘酸っぱい味付けで食欲がない日も食べやすい。",bento:true,bentoItems:["鶏もも肉180g","ピーマン2個","にんじん1/2本","卵2個","みかん1個","酢・砂糖・醤油","白米3杯分"]}
+);
+
+// 試合前日追加
+DB.game_pre.breakfast.push(
+  {name:"もちもちパンケーキ朝食",dishes:["パンケーキ5枚","バナナ2本","ヨーグルト","牛乳200ml"],cal:1070,p:44,c:176,f:18,note:"甘くて食べやすく炭水化物が豊富。試合前日の朝に食欲がない時でも無理なく食べられる。"},
+  {name:"炊き込みご飯朝食(試合前)",dishes:["炊き込みご飯4杯分","卵焼き","バナナ2本","牛乳200ml"],cal:1090,p:46,c:178,f:16,note:"具入りで食べやすく大量の炭水化物を確保。前夜に炊いておけば朝は温めるだけ。"},
+  {name:"そうめん朝食(試合前日)",dishes:["そうめん3束","おにぎり3個","温泉卵2個","バナナ","牛乳200ml"],cal:1060,p:48,c:176,f:14,note:"消化が良いそうめんで試合前日のカーボローディング開始。おにぎりで炭水化物をさらに追加。"}
+);
+DB.game_pre.lunch.push(
+  {name:"うどん丼弁当(試合前日)",dishes:["うどん2玉(丼仕立て)","鶏むね照り焼き","バナナ2本","スポーツドリンク"],cal:1280,p:64,c:198,f:18,note:"うどんを丼スタイルで大盛りに。消化が早く試合前日の昼食に最適。",bento:true,bentoItems:["うどん2玉","鶏むね肉150g","バナナ2本","めんつゆ・醤油"]},
+  {name:"おにぎりタワー弁当",dishes:["おにぎり6個(各種)","ゆで卵","バナナ","スポーツドリンク"],cal:1300,p:62,c:202,f:16,note:"とにかく炭水化物を増やす試合前日戦略。シンプルでお腹への負担も少ない。",bento:true,bentoItems:["白米6杯分","卵1個","バナナ1本","塩・海苔・各種具材"]},
+  {name:"パスタサラダ弁当(試合前日)",dishes:["パスタ200g(サラダ仕立て)","鶏むねハム","バナナ2本","スポーツドリンク"],cal:1260,p:60,c:196,f:18,note:"冷製パスタで食べやすく炭水化物をしっかり補給。鶏むねハムで脂質を抑えたままタンパクも確保。",bento:true,bentoItems:["パスタ200g","鶏むねハム4枚","バナナ2本","マヨネーズ少量・塩こしょう"]}
+);
+DB.game_pre.snack.push(
+  {name:"大福＆バナナ補食",dishes:["大福2個","バナナ2本","スポーツドリンク500ml"],cal:660,p:16,c:134,f:4,note:"大福のもちもち食感で糖質を高密度に補給。消化が良く胃腸にも優しい試合前日補食。"},
+  {name:"おにぎり＆チーズ補食",dishes:["おにぎり4個","プロセスチーズ2個","スポーツドリンク500ml"],cal:680,p:24,c:130,f:10,note:"チーズのカルシウムとタンパク質でおにぎりの糖質を補完。バランスの良い試合前日補食。"},
+  {name:"バナナホットケーキ補食",dishes:["ホットケーキ3枚","バナナ2本","牛乳200ml"],cal:670,p:22,c:128,f:12,note:"甘くて食べやすいホットケーキで糖質補給。市販のミックスで手軽に作れる試合前日の補食。"}
+);
+DB.game_pre.dinner.push(
+  {name:"試合前日まぐろ丼定食",dishes:["まぐろ丼(ご飯5杯分)","わかめ汁","バナナ","牛乳200ml"],cal:1800,p:78,c:280,f:22,note:"マグロのDHAで頭を冷静に保ちながら大量のご飯でグリコーゲンを最大貯蔵。"},
+  {name:"試合前日うどんすき",dishes:["うどんすき(3玉)","おにぎり3個","バナナ","牛乳200ml"],cal:1820,p:72,c:282,f:26,note:"鍋仕立てで野菜もとれる炭水化物ローディングメニュー。消化が良く翌朝スッキリ。"},
+  {name:"試合前日チキンライス",dishes:["チキンライス(5杯分)","コーンスープ","バナナ","牛乳200ml"],cal:1810,p:70,c:278,f:30,note:"ケチャップ味で食欲UP。大量に炊けるので家族みんなで食べられる試合前日の定番。"}
+);
+
+// 試合当日追加
+DB.game_day.breakfast.push(
+  {name:"試合朝バナナご飯",dishes:["白米3杯","バナナ3本","スポーツゼリー","スポーツドリンク500ml"],cal:970,p:28,c:192,f:6,note:"最もシンプルな試合当日朝食。消化器官に一切負担をかけない究極の試合朝食。"},
+  {name:"試合朝和食(軽め)",dishes:["白米2杯","鶏そぼろ","バナナ2本","スポーツドリンク500ml"],cal:950,p:36,c:182,f:8,note:"ご飯を少し控えめにして消化優先。鶏そぼろで必要最小限のタンパク質も確保。"},
+  {name:"試合朝パンセット",dishes:["ロールパン5個","バナナ2本","スポーツゼリー","スポーツドリンク"],cal:980,p:28,c:188,f:12,note:"パンは食べやすく移動中でも消化しやすい。揚げ物・バター多めのパンは試合前は避ける。"}
+);
+DB.game_day.lunch.push(
+  {name:"試合当日おにぎり&鶏そぼろ弁当",dishes:["おにぎり4個","鶏そぼろ","バナナ","スポーツドリンク"],cal:1070,p:52,c:170,f:14,note:"そぼろをご飯に混ぜて食べやすくした試合当日弁当。揚げ物ゼロで胃腸に優しい。",bento:true,bentoItems:["白米4杯分","鶏ひき肉100g","バナナ1本","醤油・砂糖・みりん"]},
+  {name:"試合当日スパゲッティ弁当",dishes:["スパゲッティ(200g)","鶏むねトマトソース","バナナ","スポーツドリンク"],cal:1050,p:54,c:166,f:12,note:"低GIのパスタで試合中もエネルギーが持続。トマトのリコピンで抗酸化効果も期待できる。",bento:true,bentoItems:["スパゲッティ200g","鶏むね肉100g","トマト缶1/2","バナナ1本","オリーブ油少量"]},
+  {name:"試合当日ふりかけ丼弁当",dishes:["白米3杯(ふりかけ丼)","鶏むね塩焼き","バナナ","スポーツドリンク"],cal:1040,p:54,c:162,f:14,note:"食欲がなくてもふりかけのおかげで食べやすい。消化が良くシンプルで確実な試合前食。",bento:true,bentoItems:["白米3杯分","鶏むね肉150g","バナナ1本","お好みふりかけ"]}
+);
+DB.game_day.snack.push(
+  {name:"塩おにぎり補食",dishes:["塩おにぎり3個","スポーツドリンク500ml","塩飴3粒"],cal:470,p:10,c:100,f:2,note:"最もシンプルな試合中補食。塩分と糖質を同時補給できる最強の補食スタイル。"},
+  {name:"シリアルバー補食",dishes:["シリアルバー3本","バナナ1本","スポーツドリンク500ml"],cal:480,p:10,c:102,f:8,note:"持ち運びに最も便利な補食。個包装で衛生的、素早く食べられる試合中の強い味方。"},
+  {name:"スポーツゼリー多め補食",dishes:["スポーツゼリー4個","バナナ2本","経口補水液500ml"],cal:460,p:6,c:104,f:1,note:"暑い日の試合に特におすすめ。水分と糖質を同時に補給できるゼリー中心の補食セット。"}
+);
+DB.game_day.dinner.push(
+  {name:"試合後鍋焼きうどん定食",dishes:["鍋焼きうどん(大)","白米2杯","鶏むね炒め","牛乳200ml"],cal:1680,p:78,c:248,f:26,note:"温かい鍋焼きうどんで疲れた身体を芯から温める。スープで電解質補給も同時に。"},
+  {name:"試合後豚丼定食",dishes:["豚丼(特盛)","温泉卵","ほうれん草おひたし","豆腐汁","牛乳200ml"],cal:1720,p:76,c:250,f:36,note:"豚肉のビタミンB1で試合後の疲労を素早く回復。特盛で消耗したカロリーを一気に補充。"},
+  {name:"試合後親子丼定食",dishes:["親子丼(特盛)","わかめ汁","ほうれん草ごま和え","牛乳200ml"],cal:1700,p:80,c:248,f:30,note:"卵と鶏肉のW使いで高タンパク。試合後30分以内の摂取で筋肉合成効果が最大化。"}
+);
+
+// 回復日追加
+DB.recovery.breakfast.push(
+  {name:"回復朝食(豚汁定食)",dishes:["白米3杯","具だくさん豚汁","焼き鮭","牛乳200ml","みかん"],cal:990,p:56,c:148,f:22,note:"豚汁の豚肉で鉄分とビタミンB1を同時補給。野菜たっぷりで抗酸化物質を大量摂取。"},
+  {name:"回復朝食(卵納豆定食)",dishes:["白米3杯","納豆2パック","温泉卵2個","ほうれん草のおひたし","牛乳200ml","キウイ"],cal:960,p:56,c:145,f:20,note:"納豆のナットウキナーゼで血流改善。卵の完全栄養で疲れた細胞を修復する。"},
+  {name:"回復朝食(さんま定食)",dishes:["白米3杯","さんまの塩焼き","大根おろし","ひじきの煮物","味噌汁","牛乳200ml"],cal:970,p:54,c:147,f:22,note:"さんまのDHA・EPAで全身の炎症を抑制。大根おろしの消化酵素で疲れた消化器もサポート。"}
+);
+DB.recovery.lunch.push(
+  {name:"回復弁当(まぐろ中心)",dishes:["白米3杯(まぐろフレーク)","ゆで卵2個","小松菜炒め","ヨーグルト","みかん"],cal:1120,p:68,c:160,f:22,note:"まぐろのDHAとタウリンで神経系の回復をサポート。疲れた目にも良い回復弁当。",bento:true,bentoItems:["まぐろフレーク(市販)大さじ4","卵2個","小松菜1/2束","ヨーグルト・みかん","白米3杯分"]},
+  {name:"回復弁当(豆腐ハンバーグ)",dishes:["白米3杯","豆腐ハンバーグ","ひじきの煮物","小松菜炒め","フルーツ"],cal:1100,p:66,c:158,f:22,note:"豆腐ハンバーグは消化に優しく疲れた消化器官を休めながらタンパク補給ができる。",bento:true,bentoItems:["木綿豆腐1/2丁","鶏ひき肉100g","ひじき乾燥10g","小松菜1/2束","卵1個","季節フルーツ","白米3杯分"]},
+  {name:"回復サーモン弁当",dishes:["白米3杯(サーモンフレーク)","卵焼き","ブロッコリー","ヨーグルト","キウイ"],cal:1110,p:66,c:160,f:22,note:"サーモンのアスタキサンチンで強力な抗酸化。ビタミンCのキウイと組み合わせて回復を加速。",bento:true,bentoItems:["サーモンフレーク大さじ4","卵2個","ブロッコリー4房","ヨーグルト・キウイ","白米3杯分"]}
+);
+DB.recovery.snack.push(
+  {name:"回復補食(温かい甘酒)",dishes:["甘酒300ml(温)","バナナ2本","くるみ10粒"],cal:510,p:20,c:90,f:16,note:"温かい甘酒で胃腸を温めながら疲労回復。くるみのオメガ3で炎症をさらに抑制。"},
+  {name:"回復補食(さつまいも)",dishes:["蒸しさつまいも200g","牛乳200ml","バナナ1本"],cal:490,p:18,c:86,f:6,note:"さつまいものビタミンCと食物繊維で腸内環境を整えながら回復。牛乳でカルシウムも補給。"},
+  {name:"回復補食(フルーツヨーグルト)",dishes:["ヨーグルト200g","いちご・キウイ各適量","はちみつ","牛乳200ml"],cal:480,p:20,c:82,f:8,note:"ビタミンCたっぷりのフルーツで疲労物質を除去。ヨーグルトの乳酸菌で腸内環境も回復。"}
+);
+DB.recovery.dinner.push(
+  {name:"回復夕食(鮭ちゃんちゃん焼き)",dishes:["白米4杯","鮭のちゃんちゃん焼き(野菜たっぷり)","わかめ汁","牛乳200ml"],cal:1620,p:80,c:238,f:30,note:"味噌とバターで旨みが増した鮭料理。野菜も一緒にとれる北海道発の回復食。"},
+  {name:"回復夕食(あじ定食)",dishes:["白米4杯","アジの塩焼き","ひじきの煮物","なす炒め","味噌汁","牛乳200ml"],cal:1580,p:76,c:236,f:28,note:"アジのDHA・EPA・タウリンで筋肉と神経の回復を促進。和食でゆっくり休む回復夕食。"},
+  {name:"回復夕食(親子鍋)",dishes:["白米4杯","親子鍋(鶏もも・卵・野菜)","ほうれん草おひたし","牛乳200ml"],cal:1600,p:82,c:237,f:28,note:"鶏肉と卵のW高タンパクで筋肉修復を最大化。鍋のスープで水分・電解質補給も同時に。"}
+);
+
+// ========== 価格マップ（献立名→目安価格） ==========
+const PRICE_MAP = {
+  // 通常練習日・朝食
+  "がっつり和食セット":380,"鯖みそ定食":350,"洋食朝食セット":420,"親子丼セット":360,
+  "おにぎり4個セット":340,"チャーハン朝食":280,"豚丼朝食":370,"ハムエッグトースト朝食":390,
+  "納豆ご飯定食":260,"鶏雑炊セット":310,"ツナマヨ丼セット":300,"肉うどん朝食":330,"焼きそばパン朝食":350,
+  // 通常練習日・昼食
+  "チキン南蛮弁当":520,"牛肉炒め弁当":620,"鮭弁当(定番)":480,"豚ロース生姜焼き弁当":540,
+  "鶏そぼろ丼弁当":460,"和風ハンバーグ弁当":580,"鶏むね照り焼き弁当":490,"豚バラ白菜炒め弁当":500,
+  "サバ竜田揚げ弁当":470,"豚みそ漬け弁当":520,"牛すき焼き風弁当":660,"鶏むね蒸しチキン弁当":440,"メンチカツ弁当":560,
+  // 通常練習日・補食
+  "おにぎり3個＋バナナセット":280,"あんぱん＋バナナ":240,"カステラ＆スポーツゼリー":290,
+  "おにぎり＆ヨーグルト":270,"焼きもち3個セット":220,"肉まん補食":300,
+  "バナナ＆プロテインミルク":250,"おむすびころりんセット":260,"カップ麺＋プラスα補食":310,
+  "クリームパン補食":260,"スイートポテト補食":230,"おにぎり＆サラダチキン":350,
+  // 通常練習日・夕食
+  "唐揚げ定食":680,"豚カツ定食":750,"牛丼(特盛)定食":820,"さんま塩焼き定食":600,
+  "麻婆豆腐定食":580,"カレーライス":550,"鶏もも肉ステーキ定食":640,"豚しゃぶ定食":700,
+  "ラーメン定食":620,"スタミナ焼き肉定食":980,"回鍋肉定食":620,"鮭ムニエル定食":680,
+  "豚の角煮定食":720,"天ぷら定食":780,"鶏鍋定食":760,"エビチリ定食":720,
+  "すき焼き定食":920,"マーボーナス定食":560,"豚骨風ラーメン定食":640,"チキンカツ定食":680,
+  "ぶり照り焼き定食":660,"ガパオライス定食":580,"ミックスフライ定食":700,"肉じゃが定食":580,"豚バラ大根定食":600,
+  // 試合前日
+  "試合前日の炭水化物朝食":400,"うどん朝食(カーボローディング)":350,"フレンチトースト朝食":360,
+  "もち入り雑炊":290,"パスタ朝食":380,
+  "試合前日高炭水化物弁当":520,"おにぎり多めのお弁当":420,"うどん弁当(炭水化物重視)":380,
+  "混ぜご飯弁当":450,"ロールパン＆パスタ弁当":480,
+  "カーボローディング補食":350,"あんこ系補食":280,"もち補食":240,"カステラ＆バナナ":260,"くず湯&おにぎり補食":280,
+  "試合前日パスタ定食":680,"試合前日カレー":600,"試合前日うどん定食":580,
+  "試合前日中華丼定食":580,"試合前日チャーハン定食":560,
+  // 試合当日
+  "試合当日の朝食(3時間前)":350,"試合朝おにぎりセット":380,"試合日うどん朝食":330,
+  "試合朝パン食":320,"試合当日ふりかけご飯":260,
+  "試合当日弁当(消化重視)":420,"おにぎり弁当(試合当日)":400,"試合当日シンプル弁当":400,
+  "パスタ弁当(試合当日)":430,"うどん弁当(試合当日)":370,
+  "イニング間補食":280,"試合前最終補食":220,"試合中チャージ":320,"ベンチ待機中の補食":260,"延長試合対策補食":360,
+  "試合後リカバリー夕食":680,"試合後ガッツリ定食":720,"試合後勝利ご褒美飯":980,
+  "試合後サバ味噌定食":580,"試合後中華定食":580,
+  // 回復日
+  "回復朝食(炎症抑制)":420,"鮭とキノコの朝食":380,"回復朝食(鉄分補給)":450,
+  "豆腐と卵の朝食":360,"回復スープ朝食":370,
+  "回復弁当(高タンパク)":480,"豆腐と野菜の回復弁当":420,"鮭フレーク丼弁当(回復)":440,
+  "レバニラ弁当(鉄分強化)":500,"鶏むねときのこの回復弁当":460,
+  "回復補食(ヨーグルト系)":280,"回復補食(フルーツ中心)":260,"回復補食(タンパク強化)":380,
+  "甘酒＆おにぎり補食":280,"豆乳バナナ補食":270,
+  "回復夕食(鉄分重視)":680,"回復夕食(サバ・青魚中心)":620,"回復夕食(豆腐中心)":540,
+  "回復夕食(鶏肉中心)":620,"回復夕食(鮭＋きのこ)":640,
+  // 休養日
+  "休養日の軽め朝食":280,"休養日和食セット":320,"ゆったり洋食朝食":350,"雑炊朝食":260,
+  "休養日パン朝食":300,"豆腐と味噌のヘルシー朝食":280,"オートミール朝食":340,
+  "休養日弁当(バランス重視)":420,"休養日サバ弁当":400,"休養日ヘルシー丼弁当":380,
+  "休養日サラダチキン弁当":380,"休養日野菜たっぷり弁当":400,"休養日おにぎり弁当":350,"休養日麺弁当(そうめん)":360,
+  "軽め補食":180,"ヨーグルト補食":200,"フルーツ牛乳補食":160,
+  "豆乳と小豆のおやつ":220,"牛乳＆カカオ補食":200,
+  "休養日定食(修復重視)":560,"休養日鍋料理":640,"休養日焼き魚定食":580,
+  "休養日パスタ定食":520,"休養日そば定食":560,"休養日スープカレー":580,"休養日和食定食(魚中心)":560,
+  // 休養日追加
+  "休養日ロール白菜鍋":580,"休養日豆乳スープ定食":520,"休養日さば缶定食":460,
+  // 通常練習日朝食追加
+  "サーモン丼セット":420,"豚キムチ丼セット":380,"鶏ごぼう炊き込みご飯":310,
+  "サバ缶丼朝食":280,"スパゲッティ朝食":360,"豆腐丼朝食":340,"高菜チャーハン朝食":290,
+  // 通常練習日昼食追加
+  "豚丼弁当":480,"鶏の塩から揚げ弁当":500,"サーモンフレーク弁当":420,
+  "焼き鳥風弁当":520,"ツナそぼろ弁当":420,"豚キムチ炒め弁当":480,"鶏と野菜の甘酢炒め弁当":480,
+  // 試合前日追加
+  "もちもちパンケーキ朝食":380,"炊き込みご飯朝食(試合前)":320,"そうめん朝食(試合前日)":340,
+  "うどん丼弁当(試合前日)":400,"おにぎりタワー弁当":420,"パスタサラダ弁当(試合前日)":460,
+  "大福＆バナナ補食":260,"おにぎり＆チーズ補食":300,"バナナホットケーキ補食":280,
+  "試合前日まぐろ丼定食":720,"試合前日うどんすき":620,"試合前日チキンライス":560,
+  // 試合当日追加
+  "試合朝バナナご飯":240,"試合朝和食(軽め)":300,"試合朝パンセット":320,
+  "試合当日おにぎり&鶏そぼろ弁当":400,"試合当日スパゲッティ弁当":440,"試合当日ふりかけ丼弁当":380,
+  "塩おにぎり補食":220,"シリアルバー補食":350,"スポーツゼリー多め補食":380,
+  "試合後鍋焼きうどん定食":620,"試合後豚丼定食":680,"試合後親子丼定食":640,
+  // 回復日追加
+  "回復朝食(豚汁定食)":380,"回復朝食(卵納豆定食)":300,"回復朝食(さんま定食)":420,
+  "回復弁当(まぐろ中心)":500,"回復弁当(豆腐ハンバーグ)":440,"回復サーモン弁当":460,
+  "回復補食(温かい甘酒)":280,"回復補食(さつまいも)":240,"回復補食(フルーツヨーグルト)":300,
+  "回復夕食(鮭ちゃんちゃん焼き)":640,"回復夕食(あじ定食)":560,"回復夕食(親子鍋)":600,
+};
+
+// 全DBエントリにpriceを注入
+Object.values(DB).forEach(sched=>{
+  Object.values(sched).forEach(meals=>{
+    meals.forEach(m=>{
+      if(!m.price) m.price = PRICE_MAP[m.name] || 0;
+    });
+  });
+});
+
+// ========== 状態 ==========
+// ========== タブ ==========
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',function(){
+    document.querySelectorAll('.tab,.page').forEach(x=>x.classList.remove('on'));
+    this.classList.add('on');
+    document.getElementById('page-'+this.dataset.tab).classList.add('on');
+  });
+});
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on')));
+
+// ========== 献立生成 ==========
+function generatePlan(){
+  const sched=document.getElementById('sched').value;
+  const allergySet=new Set([...document.querySelectorAll('#allergy-chips .chip.on')].map(c=>c.dataset.v));
+  const pool=DB[sched]||DB.normal;
+  const bf=pool.breakfast||DB.normal.breakfast;
+  const lu=pool.lunch||DB.normal.lunch;
+  const sn=pool.snack||DB.normal.snack;
+  const di=pool.dinner||DB.normal.dinner;
+
+  function filter(arr){
+    if(!allergySet.size) return arr;
+    return arr.filter(m=>{
+      const all=[m.name,...m.dishes,...(m.bentoItems||[])].join(' ');
+      return ![...allergySet].some(a=>all.includes(a));
+    });
+  }
+  function shuffle(arr){return[...arr].sort(()=>Math.random()-.5);}
+
+  const bfList=shuffle(filter(bf)).slice(0,Math.min(5,filter(bf).length));
+  const luList=shuffle(filter(lu)).slice(0,Math.min(5,filter(lu).length));
+  const snList=shuffle(filter(sn)).slice(0,Math.min(4,filter(sn).length));
+  const diList=shuffle(filter(di)).slice(0,Math.min(5,filter(di).length));
+
+  if(!bfList.length&&!luList.length){alert('条件に合う献立が見つかりませんでした。アレルギー設定を減らしてお試しください。');return;}
+
+  const rep={b:bfList[0],l:luList[0],s:snList[0],d:diList[0]};
+  const total=(rep.b?.cal||0)+(rep.l?.cal||0)+(rep.s?.cal||0)+(rep.d?.cal||0);
+  const totalP=(rep.b?.p||0)+(rep.l?.p||0)+(rep.s?.p||0)+(rep.d?.p||0);
+  const totalC=(rep.b?.c||0)+(rep.l?.c||0)+(rep.s?.c||0)+(rep.d?.c||0);
+  const totalF=(rep.b?.f||0)+(rep.l?.f||0)+(rep.s?.f||0)+(rep.d?.f||0);
+  const totalPrice=(rep.b?.price||0)+(rep.l?.price||0)+(rep.s?.price||0)+(rep.d?.price||0);
+
+  const schedLabels={normal:'通常練習日',game_pre:'試合前日',game_day:'試合当日',recovery:'試合翌日(回復)',off:'休養日'};
+  const badgeClass={normal:'normal',game_pre:'game-pre',game_day:'game-day',recovery:'recovery',off:'normal'};
+  const badgeText={normal:'練習日',game_pre:'試合前日',game_day:'試合当日',recovery:'回復重視',off:'休養日'};
+
+  const el=document.getElementById('plan-result');
+  var html='<div class="day-pkg">';
+  html+='<div class="pkg-header">';
+  html+='<div class="pkg-title">⚾ '+schedLabels[sched]+' 1日献立</div>';
+  html+='<div class="pkg-badge '+badgeClass[sched]+'">'+badgeText[sched]+'</div>';
+  html+='</div>';
+  html+='<div class="kcal-summary">';
+  html+='<div class="kcal-cell"><div class="kc-label">タンパク質</div><div class="kc-val">'+totalP+'</div><div class="kc-unit">g</div></div>';
+  html+='<div class="kcal-cell"><div class="kc-label">炭水化物</div><div class="kc-val">'+totalC+'</div><div class="kc-unit">g</div></div>';
+  html+='<div class="kcal-cell"><div class="kc-label">脂質</div><div class="kc-val">'+totalF+'</div><div class="kc-unit">g</div></div>';
+  html+='<div class="kcal-cell kc-total"><div class="kc-label">🔥 合計</div><div class="kc-val">'+total.toLocaleString()+'</div><div class="kc-unit">kcal</div></div>';
+  html+='</div>';
+  html+='<div style="display:flex;align-items:center;justify-content:flex-end;padding:8px 14px;background:rgba(62,201,122,.06);border-bottom:1px solid var(--border);">';
+  html+='<span style="font-size:.7rem;color:var(--gray);margin-right:6px;">💴 1日の目安費用（案①）</span>';
+  html+='<span style="font-family:\'Bebas Neue\',sans-serif;font-size:1.2rem;color:var(--green);letter-spacing:1px;">¥'+totalPrice.toLocaleString()+'</span>';
+  html+='<span style="font-size:.62rem;color:var(--gray);margin-left:4px;">〜</span>';
+  html+='</div>';
+  html+=renderGroup('🌅','朝食',bfList,'朝食');
+  html+=renderGroup('🍱','昼食(弁当)',luList,'昼食');
+  html+=renderGroup('⚡','補食',snList,'補食');
+  html+=renderGroup('🌙','夕食',diList,'夕食');
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+function renderGroup(icon,label,list,timing){
+  if(!list||!list.length)return'';
+  var html='';
+  html+='<div class="slot-group-header">';
+  html+='<span class="sg-icon">'+icon+'</span>';
+  html+='<span class="sg-label">'+label+'</span>';
+  html+='<span class="sg-count">'+list.length+'件の候補</span>';
+  html+='</div>';
+  html+='<div class="meal-options">';
+  list.forEach(function(m,i){
+    var isOpen=i===0?'open':'';
+    var safeName=m.name.replace(/"/g,'&quot;');
+    html+='<div class="opt-card">';
+    html+='<div class="opt-card-header '+isOpen+'" onclick="toggleOpt(this)">';
+    html+='<div class="opt-num">'+(i+1)+'</div>';
+    html+='<div class="opt-name">'+m.name+(m.bento?'&nbsp;<span class="bento-tag">🍱弁当</span>':'')+'</div>';
+    if(m.price) html+='<div class="price-tag">¥'+m.price.toLocaleString()+'</div>';
+    html+='<div class="opt-kcal">'+m.cal+'kcal</div>';
+    html+='<div class="opt-arrow">▼</div>';
+    html+='</div>';
+    html+='<div class="opt-body '+isOpen+'" data-name="'+safeName+'" data-timing="'+timing+'">';
+    html+='<div class="dish-list">';
+    m.dishes.forEach(function(d){ html+='<span class="dish-tag">'+d+'</span>'; });
+    html+='</div>';
+    html+='<div class="nut-row">';
+    html+='<div class="nut-box"><div class="nb-lbl">カロリー</div><div class="nb-val">'+m.cal+'</div><div class="nb-unit">kcal</div></div>';
+    html+='<div class="nut-box"><div class="nb-lbl">タンパク質</div><div class="nb-val">'+m.p+'</div><div class="nb-unit">g</div></div>';
+    html+='<div class="nut-box"><div class="nb-lbl">炭水化物</div><div class="nb-val">'+m.c+'</div><div class="nb-unit">g</div></div>';
+    html+='<div class="nut-box"><div class="nb-lbl">脂質</div><div class="nb-val">'+m.f+'</div><div class="nb-unit">g</div></div>';
+    html+='</div>';
+    if(m.note) html+='<div class="meal-note">💡 '+m.note+'</div>';
+    if(m.bento&&m.bentoItems){
+      html+='<div class="bento-section"><div class="bento-title">🍱 お弁当の食材リスト</div><div class="bento-items">';
+      m.bentoItems.forEach(function(x){ html+='・'+x+'<br>'; });
+      html+='</div></div>';
+    }
+    html+='<div style="margin-top:8px;">';
+    html+='<button class="btn-recipe" style="width:100%;" onclick="showRecipeByBtn(this)">📖 レシピを見る</button>';
+    html+='</div>';
+    html+='</div></div>';
+  });
+  html+='</div>';
+  return html;
+}
+
+function toggleOpt(h){h.classList.toggle('open');h.nextElementSibling.classList.toggle('open');}
+
+function showRecipeByBtn(btn){
+  const body=btn.closest('.opt-body');
+  showRecipe(body.dataset.name);
+}
+
+// ========== 栄養知識アコーディオン ==========
+function toggleN(card){card.classList.toggle('open');}
+
+// ========== レシピデータベース ==========
+const RECIPES = {
+  "がっつり和食セット":{serves:"1人分",ingredients:["白米 3杯分(450g)","鮭切り身 1枚(100g)","卵 2個","納豆 1パック","わかめ(乾) 5g","味噌 大さじ1","牛乳 200ml","塩・しょうゆ 適量"],steps:["鮭に塩を振り、魚焼きグリルで中火8〜10分焼く。","卵を溶いてだし汁で薄め、甘塩っぱく味付けして卵焼きを作る。","わかめを水で戻し、味噌汁を作る。","白米を炊いて盛り付け、納豆と一緒に並べる。","牛乳を添えて完成。"],point:"鮭は皮もしっかり食べると脂溶性ビタミンが摂れる。前日夜に白米を炊いておくと朝の準備が楽。"},
+  "鯖みそ定食":{serves:"1人分",ingredients:["白米 3杯分","鯖切り身 2切れ(200g)","味噌 大さじ1.5","みりん 大さじ1","砂糖 小さじ1","生姜 薄切り3枚","ほうれん草 1/2束","卵 1個","牛乳 200ml"],steps:["鯖は熱湯をかけて臭みを取る。","鍋に水100ml・味噌・みりん・砂糖・生姜を入れ、鯖を加えて中火で10分煮る。","ほうれん草を塩茹でし、水を絞ってごま和えにする。","卵スープを作り、全体を盛り付けて完成。"],point:"鯖の煮汁は多めに作ってご飯にかけると食欲増進。鯖缶を使えばさらに時短できる。"},
+  "洋食朝食セット":{serves:"1人分",ingredients:["食パン(厚切り) 3枚","卵 3個","ソーセージ 3本","キャベツ・トマト 各適量","バター 10g","牛乳 400ml(コップ2杯)","塩こしょう 適量"],steps:["食パンをトースターで3〜4分焼く。","フライパンにバターを溶かし、溶き卵を流し込んでスクランブルエッグを作る。","ソーセージを同じフライパンで焼く。","キャベツとトマトをカットしてサラダにする。","全て盛り付けて牛乳を添えて完成。"],point:"卵は半熟のうちに火を止めると柔らかく仕上がる。前日夜にサラダ野菜を切っておくと朝がスムーズ。"},
+  "親子丼セット":{serves:"1人分",ingredients:["白米 3杯分","鶏もも肉 150g","卵 3個","玉ねぎ 1/2個","だし汁 100ml","醤油 大さじ2","みりん 大さじ2","砂糖 小さじ1","バナナ 2本","牛乳 200ml"],steps:["鶏もも肉を一口大に切り、玉ねぎを薄切りにする。","だし汁・醤油・みりん・砂糖を小鍋に入れ、玉ねぎ→鶏肉の順に加えて中火で煮る。","鶏肉に火が通ったら溶き卵を回しかけ、半熟で火を止めてご飯に盛る。","豆腐の味噌汁を別で作り、バナナ・牛乳を添えて完成。"],point:"卵は2回に分けて入れると外はしっかり・中は半熟の二層に仕上がる。"},
+  "おにぎり4個セット":{serves:"1人分",ingredients:["白米 4杯分","鮭フレーク 大さじ2","ツナ缶 1/2缶","梅干し 2個","おかかしょうゆ 適量","卵 2個","塩 少々","バナナ 2本","ヨーグルト 1個"],steps:["白米を4等分にしてラップに乗せ、各種具材を中心に入れておにぎりを握る。","卵を目玉焼きにする（白身はしっかり・黄身は半熟が目標）。","野菜スープを作る（市販スープの素でもOK）。","バナナとヨーグルトを添えて完成。"],point:"前夜に炊いておにぎりを握って冷蔵保管すると朝はレンジで1分温めるだけ。"},
+  "チャーハン朝食":{serves:"1人分",ingredients:["白米(冷や飯) 3杯分","卵 2個","ハム or ソーセージ 50g","ネギ 適量","醤油 大さじ1","塩こしょう 適量","ごま油 小さじ1","牛乳 200ml"],steps:["フライパンを強火で熱し、溶き卵を先に炒める。","半熟のうちにご飯を加えてパラパラになるまで炒める。","ハムとネギを加えてさらに炒め、醤油・塩こしょうで味付け。","ごま油を回しかけ、わかめスープと冷奴を添えて完成。"],point:"強火・短時間が美味しいチャーハンのコツ。前日の残りご飯活用でフードロス削減にも。"},
+  "豚丼朝食":{serves:"1人分",ingredients:["白米 3杯分","豚こま切れ肉 150g","玉ねぎ 1/2個","醤油 大さじ2","みりん 大さじ1.5","砂糖 小さじ1","生姜チューブ 2cm","卵 2個","牛乳 200ml"],steps:["玉ねぎを薄切りにしてフライパンで炒める。","豚肉を加えて色が変わるまで炒め、醤油・みりん・砂糖・生姜で味付け。","ご飯の上に盛り付け、ゆで卵を添える。","きのこの味噌汁と牛乳を添えて完成。"],point:"豚肉は色が変わったらすぐ調味料を加えると柔らかく仕上がる。"},
+  "ハムエッグトースト朝食":{serves:"1人分",ingredients:["食パン(厚切り) 3枚","卵 2個","ロースハム 2枚","じゃがいも 1個","マヨネーズ 大さじ2","コーンスープ素 1袋","牛乳 200ml","塩こしょう 適量"],steps:["じゃがいもをレンジで4分加熱し、マッシュしてマヨネーズと塩こしょうでポテトサラダを作る。","食パンをトーストし、ハムと目玉焼きをのせる。","コーンスープを袋の表示通りに作る。","牛乳と一緒に盛り付けて完成。"],point:"じゃがいものレンジ加熱は竹串がスッと通ればOK。ポテトサラダは多めに作って翌日の弁当に活用できる。"},
+  "納豆ご飯定食":{serves:"1人分",ingredients:["白米 3杯分","納豆 2パック","卵 2個(生・目玉焼き各1)","焼き海苔 2枚","味噌 大さじ1","わかめ・豆腐 適量","バナナ 2本"],steps:["白米を炊く。","納豆に付属のタレとからしを混ぜる。","目玉焼きを作る。","味噌汁を作る（わかめ・豆腐）。","白米に納豆・卵かけご飯・焼き海苔を並べて完成。バナナ添え。"],point:"卵かけご飯と納豆を同じ茶碗で混ぜて食べると消化吸収がよくなる。"},
+  "鶏雑炊セット":{serves:"1人分",ingredients:["白米(冷や飯) 3杯分","鶏むね肉 100g","卵 2個","ほうれん草 1/3束","だし汁 500ml","醤油 大さじ1","塩 少々","バナナ 2本","牛乳 200ml"],steps:["鍋にだし汁を沸かし、薄切りにした鶏むね肉を加えて煮る。","冷や飯を加えてほぐれるまで煮込む。","溶き卵を回しかけて半熟で火を止める。","別鍋でほうれん草を茹でてごま和えにする。","盛り付けてバナナ・牛乳を添えて完成。"],point:"雑炊は消化が非常に良く、胃腸が弱っている練習後にも食べやすい。"},
+  "ツナマヨ丼セット":{serves:"1人分",ingredients:["白米 3杯分","ツナ缶 1缶(70g)","マヨネーズ 大さじ2","醤油 小さじ1","絹ごし豆腐 1/2丁","わかめ 3g","味噌 大さじ1","牛乳 200ml","みかん 1個"],steps:["ツナ缶の油を切り、マヨネーズ・醤油と和える。","白米の上にツナマヨをのせる。","豆腐とわかめで味噌汁を作る。","牛乳・みかんを添えて完成。"],point:"ツナ缶はノンオイルタイプでも美味しくできる。マヨネーズの量を調整してカロリーをコントロールできる。"},
+  "肉うどん朝食":{serves:"1人分",ingredients:["うどん 2玉","牛こま切れ肉 or 豚肉 80g","白だし 大さじ3","醤油 大さじ1","みりん 大さじ1","卵 2個","おにぎり用米 2杯分","牛乳 200ml"],steps:["鍋に水500mlと白だし・醤油・みりんを入れて沸かす。","肉を加えて煮立てたらうどんを加えて2〜3分煮る。","温泉卵を別鍋で作る（70℃で12分）。","おにぎりを握る。","うどんに温泉卵をのせ、おにぎり・牛乳と一緒に盛り付けて完成。"],point:"うどんは消化が早く朝食に最適。前夜に肉を醤油・みりんで下味をつけておくと朝がスムーズ。"},
+  "焼きそばパン朝食":{serves:"1人分",ingredients:["コッペパン 2個","焼きそば(ソース付き) 1玉","キャベツ 1/8個","豚肉 50g","卵 2個","野菜スープ素 1袋","牛乳 200ml","ソース 大さじ1"],steps:["フライパンに油を熱し、豚肉・キャベツを炒める。","焼きそばを加えてソースで味付けし、麺がほぐれるまで炒める。","焼きそばをコッペパンに挟む。","卵を目玉焼きにする。","野菜スープを作り、牛乳・バナナと一緒に盛り付けて完成。"],point:"キャベツは多めに入れると甘みが出て美味しくなる。焼きそばは前夜の残りでもOK。"},
+
+  // 昼食（弁当）
+  "チキン南蛮弁当":{serves:"1人分",ingredients:["鶏むね肉 200g","卵 2個","ブロッコリー 4房","ミニトマト 3個","酢 大さじ2","砂糖 大さじ1","醤油 大さじ1","マヨネーズ 大さじ2","白米 3杯分","塩こしょう・片栗粉 適量"],steps:["鶏むね肉を一口大に切り、塩こしょう→片栗粉の順にまぶす。","170℃の油で4〜5分揚げる（または多めの油でフライパン揚げ）。","酢・砂糖・醤油を混ぜて南蛮酢を作り、揚げた鶏肉を漬ける。","卵を茹でてマヨネーズと和えてタルタルソースを作る。","ブロッコリーを塩茹でし、全てを弁当箱に詰める。"],point:"揚げた直後に南蛮酢に漬けると味がよく染みる。鶏むね肉は薄く叩くと火が通りやすく柔らかくなる。"},
+  "牛肉炒め弁当":{serves:"1人分",ingredients:["牛こま切れ 150g","ピーマン 1個","にんじん 1/2本","ごぼう 1/2本","卵 1個","みかん 1個","醤油・砂糖・みりん 各大さじ1","ごま油 小さじ1","白米 3杯分"],steps:["ごぼうをささがきにして水にさらす。","フライパンにごま油を熱し、牛肉・にんじん・ごぼうを炒める。","ピーマンを加えてさらに炒め、醤油・砂糖・みりんで甘辛く味付け。","卵をゆで卵にする（沸騰後7分）。","きんぴらごぼうは別に作り、全て弁当箱に詰める。"],point:"牛肉は火を通しすぎると硬くなるので、色が変わったら調味料を加えて手早く仕上げる。"},
+  "鮭弁当(定番)":{serves:"1人分",ingredients:["鮭切り身 1枚","乾燥ひじき 10g","卵 2個","きゅうり 1/2本","白米 3杯分","塩 少々","醤油・みりん・砂糖 各大さじ1","ごま 適量"],steps:["鮭に薄く塩を振り、グリルまたはフライパンで焼く（片面5分ずつ）。","ひじきを水で戻し、だし汁・醤油・みりん・砂糖で煮て煮物を作る。","卵を卵焼き用フライパンで甘い卵焼きに仕上げる。","きゅうりを薄切りにして塩もみし、漬物にする。","全て弁当箱に詰めて完成。"],point:"鮭は皮がパリッとなるまでしっかり焼くのがコツ。ひじきの煮物は多めに作って常備菜として活用できる。"},
+  "豚ロース生姜焼き弁当":{serves:"1人分",ingredients:["豚ロース薄切り 180g","生姜(すりおろし) 小さじ2","醤油 大さじ2","みりん 大さじ1.5","酒 大さじ1","もやし 1/2袋","枝豆(冷凍) 50g","卵 1個","白米 3杯分"],steps:["豚肉を醤油・みりん・酒・生姜に10分漬け込む。","フライパンを中強火で熱し、豚肉を並べて両面焼く。","残った漬けダレをフライパンに加えて照りが出るまで絡める。","もやしを塩茹でしてナムルにする。枝豆は解凍しておく。","卵をゆでて弁当箱に全て詰める。"],point:"漬け込み時間が長いほど味が染みる。前夜に漬けておけば朝は焼くだけで時短。"},
+  "鶏そぼろ丼弁当":{serves:"1人分",ingredients:["鶏ひき肉 200g","卵 2個","ほうれん草 1/2束","みかん 1個","醤油 大さじ2","砂糖 大さじ1","みりん 大さじ1","酒 大さじ1","白米 3杯分"],steps:["フライパンに鶏ひき肉・醤油・砂糖・みりん・酒を入れて中火で炒り煮にする。","卵を割りほぐし、同じ要領で甘く炒り卵を作る。","ほうれん草を塩茹でし、水を絞ってめんつゆで和える。","ご飯の上に鶏そぼろ・炒り卵を彩りよく盛り付ける。","みかんとともに弁当箱に詰めて完成。"],point:"そぼろは汁気がなくなるまでしっかり炒り煮にすると傷みにくく前夜の仕込みに最適。"},
+  "和風ハンバーグ弁当":{serves:"1人分",ingredients:["合いびき肉 200g","玉ねぎ 1/2個","卵 1個","じゃがいも 1個","ブロッコリー 3房","パン粉 大さじ2","醤油・みりん 各大さじ1","大根おろし 適量","塩こしょう 適量","白米 3杯分"],steps:["玉ねぎをみじん切りにしてレンジで2分加熱し、冷ます。","合いびき肉・玉ねぎ・卵・パン粉・塩こしょうを混ぜてこね、楕円形に成形する。","フライパンで両面を焼き（各3分）、蓋をして蒸し焼き5分。","醤油・みりんで和風ソースを作りかける。","ブロッコリーを塩茹で、ポテトサラダを作って弁当に詰める。"],point:"空気を抜きながら成形すると焼いたときに割れにくくなる。多めに作って冷凍保存しておくと便利。"},
+  "鶏むね照り焼き弁当":{serves:"1人分",ingredients:["鶏もも肉 200g","醤油 大さじ2","みりん 大さじ2","砂糖 大さじ1","酒 大さじ1","卵 2個","きゅうり 1本","ブロッコリー 4房","白米 3杯分"],steps:["鶏もも肉に数か所フォークで穴を開け、醤油・みりん・砂糖・酒を揉み込む。","フライパンで皮目から焼き、蓋をして弱中火で8分蒸し焼きにする。","返して2分焼き、残ったタレを絡めながら照りを出す。","ブロッコリーを塩茹で、卵焼きを作る。","きゅうりを斜め薄切りにして浅漬けにし、全て弁当箱に詰める。"],point:"鶏もも肉は皮目から焼くと皮がパリッと仕上がる。タレに漬けた状態で冷凍可能なので多めに仕込める。"},
+  "豚バラ白菜炒め弁当":{serves:"1人分",ingredients:["豚バラ薄切り 150g","白菜 1/4個","ほうれん草 1/2束","卵 1個","バナナ 1本","醤油 大さじ1.5","酒 大さじ1","ごま油 小さじ1","白米 3杯分","塩こしょう 適量"],steps:["白菜を3cm幅に切る。豚バラを食べやすい大きさに切る。","フライパンにごま油を熱し、豚バラを炒める。","白菜を加えてしんなりするまで炒め、醤油・酒・塩こしょうで味付け。","ほうれん草を塩茹でし、ごまと醤油で和える。","卵を茹でて全て弁当箱に詰め、バナナを添える。"],point:"白菜の芯と葉を分けて入れ時間差で炒めると均一に火が通る。豚バラの脂が白菜に染みて甘くなる。"},
+  "サバ竜田揚げ弁当":{serves:"1人分",ingredients:["サバ切り身 2切れ","乾燥ひじき 10g","小松菜 1/2束","片栗粉 大さじ3","醤油 大さじ1.5","酒 大さじ1","生姜チューブ 2cm","白米 3杯分","揚げ油 適量"],steps:["サバを一口大に切り、醤油・酒・生姜で10分下味をつける。","水気を軽く拭き取り、片栗粉をしっかりまぶす。","170℃の油で3〜4分揚げる（フライパン揚げでもOK）。","ひじきを煮て、小松菜を塩炒めにする。","全て弁当箱に詰めて完成。"],point:"サバは骨に注意。片栗粉は均一にまぶすとカリッと仕上がる。揚げたては美味しいが冷めても美味しい。"},
+  "豚みそ漬け弁当":{serves:"1人分",ingredients:["豚ロース厚切り 2枚(160g)","ごぼう 1/2本","卵 2個","みそ 大さじ2","みりん 大さじ1","酒 大さじ1","砂糖 小さじ1","白米 3杯分","ごま油 少量"],steps:["みそ・みりん・酒・砂糖を混ぜ、豚ロースに塗って一晩冷蔵庫で漬け込む。","翌朝、表面のみそを軽く拭き取りフライパンで両面を中火で焼く（各3〜4分）。","ごぼうをささがきにし、ごま油で炒めてきんぴらごぼうを作る。","卵を卵焼きにする。","全て弁当箱に詰めて完成。"],point:"みそ漬けは前日仕込みが必須。漬け時間が長いほど味が濃く旨みが増す。冷凍保存も可能。"},
+  "牛すき焼き風弁当":{serves:"1人分",ingredients:["牛こま切れ 180g","玉ねぎ 1/2個","ほうれん草 1/2束","卵 1個","みかん 1個","醤油 大さじ2","砂糖 大さじ1","みりん 大さじ1.5","白米 3杯分"],steps:["玉ねぎを薄切りにしてフライパンで炒める。","牛肉を加えて炒め、醤油・砂糖・みりんで甘辛く味付けする。","温泉卵またはゆで卵を準備する。","ほうれん草を茹でてごま和えにする。","ご飯に乗せ卵を絡めながら食べる弁当として詰める。"],point:"甘辛の割り下はご飯が最高に進む味。多めに作って冷凍しておくとすき焼き丼が瞬時に作れる。"},
+  "鶏むね蒸しチキン弁当":{serves:"1人分",ingredients:["鶏むね肉 200g","キャベツ 1/4個","塩昆布 10g","卵 2個","ミニトマト 5個","酒 大さじ1","塩 少々","白米 3杯分","ポン酢 適量"],steps:["鶏むね肉に塩・酒を揉み込み、耐熱袋に入れて沸騰したお湯に15分浸ける（低温調理）。","または電子レンジ600Wで4分加熱し、アルミホイルで包んで5分蒸らす。","キャベツを千切りにして塩昆布と和える。","卵焼きを作る。","冷ました鶏むねを薄切りにして弁当箱に詰め、ポン酢を添える。"],point:"低温調理した鶏むね肉はしっとり柔らかく、冷めても硬くなりにくい。多めに作って3日間保存可能。"},
+  "メンチカツ弁当":{serves:"1人分",ingredients:["合いびき肉 200g","キャベツ 1/4個","玉ねぎ 1/4個","卵 2個","パン粉 1/2カップ","小麦粉 大さじ2","塩こしょう 適量","マヨネーズ 大さじ1","揚げ油 適量","白米 3杯分"],steps:["玉ねぎをみじん切りにしてレンジで1分加熱し、冷ます。","合いびき肉・玉ねぎ・卵1個・塩こしょう・マヨネーズを混ぜてよくこねる。","小判形に成形し、小麦粉→溶き卵→パン粉の順に衣をつける。","170℃で4〜5分揚げる。","キャベツをコールスローにして弁当に詰める。"],point:"メンチカツは揚げたてを食べたい場合は冷凍しておいて朝に揚げるのが最も美味しい。"},
+
+  // 補食
+  "おにぎり3個＋バナナセット":{serves:"1人分",ingredients:["白米 3杯分(450g)","鮭フレーク 大さじ2","昆布の佃煮 大さじ1","おかかしょうゆ 適量","塩 少々","バナナ 2本","スポーツドリンク 500ml"],steps:["温かいご飯を3等分にし、塩を手に付けて握る。","各おにぎりに鮭・昆布・おかかを入れて成形する。","海苔を巻いてラップで包む。","バナナとスポーツドリンクと一緒に保冷バッグに入れる。","練習開始30分前〜直後に食べる。"],point:"おにぎりは塩を少し多めにすると電解質補給にもなる。バナナは皮ごと持参すれば傷みにくい。"},
+  "あんぱん＋バナナ":{serves:"1人分",ingredients:["あんぱん 2個","バナナ 2本","牛乳 200ml"],steps:["市販のあんぱんをそのまま持参する。","バナナは皮ごと持参し、食べる直前に剥く。","牛乳は練習後に飲む（タンパク質補給）。","練習前：あんぱん＋バナナ","練習後：牛乳を追加で飲む。"],point:"あんこの糖質は吸収が適度で持続的なエネルギーを供給。牛乳は練習後30分以内に飲むと筋肉回復効果が高い。"},
+  "焼きもち3個セット":{serves:"1人分",ingredients:["切り餅 3個","醤油 大さじ1","バナナ 2本","牛乳 200ml","海苔(あれば) 適量"],steps:["切り餅をトースターで3〜4分焼き、ふくらんで焦げ目がついたら醤油を塗る。","海苔を巻いて磯辺焼きにしてもOK。","ラップで包んで保冷バッグに入れる。","バナナ・牛乳と一緒に持参する。","練習後すぐに食べてエネルギー補給。"],point:"もちは白米の約1.5倍の糖質密度。少量でも高エネルギーを補給できる練習後の定番補食。"},
+  "おにぎり＆ヨーグルト":{serves:"1人分",ingredients:["白米 3杯分","鮭・昆布・梅など 各適量","ギリシャヨーグルト 100g","バナナ 1本","はちみつ 小さじ1","麦茶 500ml"],steps:["おにぎりを3個握る（各種具材）。","ギリシャヨーグルトにはちみつを混ぜておく。","保冷バッグにおにぎり・ヨーグルト・バナナ・麦茶を入れる。","練習後30分以内に食べる（タンパク質ゴールデンタイム）。"],point:"ギリシャヨーグルトは普通のヨーグルトの約2倍のタンパク質を含む。消化も良く練習後の補食に最適。"},
+  "肉まん補食":{serves:"1人分",ingredients:["市販の肉まん 3個","バナナ 1本","牛乳 200ml"],steps:["肉まんをコンビニや冷凍品を活用する。","寒い時期は温めて持参（保温バッグに入れる）。","バナナ・牛乳と組み合わせて食べる。","練習後は牛乳でタンパク質を追加補給。"],point:"肉まんは糖質（皮）とタンパク質（具）の両方を一度に摂れる優秀補食。寒い時期の練習後に特に嬉しい温かい食べ物。"},
+  "おにぎり＆サラダチキン":{serves:"1人分",ingredients:["白米 3杯分 or コンビニおにぎり3個","サラダチキン 1袋(110g)","スポーツドリンク 500ml"],steps:["コンビニで購入するか、自作おにぎりを持参する。","サラダチキンはそのまま食べられる（コンビニ品推奨）。","スポーツドリンクで水分・電解質補給。","練習後30分以内に食べる。"],point:"コンビニで完結できる高タンパク補食の組み合わせ。遠征時や急な補食が必要な時に特に活躍する。"},
+
+  // 夕食
+  "唐揚げ定食":{serves:"1人分",ingredients:["鶏もも肉 300g","白米 4杯分","豆腐 1/2丁","油揚げ 1枚","キャベツ 1/4個","醤油 大さじ2","酒 大さじ1","にんにく・生姜 各1かけ","片栗粉 大さじ3","揚げ油 適量","牛乳 200ml"],steps:["鶏もも肉を一口大に切り、醤油・酒・にんにく・生姜で15分以上漬ける。","水気を拭き取り片栗粉をまぶす。","180℃の油で4〜5分揚げる。途中で返して均一に揚げる。","豆腐・油揚げで味噌汁を作る。","キャベツを千切りにして全て盛り付け、牛乳を添えて完成。"],point:"二度揚げ（一度目170℃3分→休ませる→二度目180℃1分）でカリッと仕上がる。多めに作って翌日の弁当にも活用できる。"},
+  "豚カツ定食":{serves:"1人分",ingredients:["豚ロース 1枚(150g)","白米 4杯分","じゃがいも 1個","玉ねぎ 1個","キャベツ 1/4個","卵 1個","パン粉 1/2カップ","小麦粉 大さじ2","揚げ油 適量","豚肉（豚汁用）50g","牛乳 200ml"],steps:["豚ロースの端に切り込みを入れて筋を切り、塩こしょうで下味をつける。","小麦粉→溶き卵→パン粉の順に衣をつける。","170℃で4〜5分揚げ、一度取り出して1分休ませてから再び180℃で1分揚げる。","具だくさん豚汁を作る（豚肉・じゃがいも・にんじん・玉ねぎ・みそ）。","キャベツを千切りにして全て盛り付ける。"],point:"豚ロースの筋切りをしっかりやると揚げたときに反り返らず均一に仕上がる。"},
+  "さんま塩焼き定食":{serves:"1人分",ingredients:["さんま 1尾","白米 4杯分","乾燥ひじき 10g","大根 1/4本","里芋・にんじん・ごぼう 各適量","醤油・みりん・砂糖 各適量","塩 適量","牛乳 200ml"],steps:["さんまに塩を振って10分おき、水気を拭いてグリルで10分焼く。","大根をすりおろして添え物にする。","ひじきを水で戻し、だし・醤油・みりん・砂糖で煮る。","けんちん汁を作る（里芋・にんじん・ごぼう・豆腐・醤油ベース）。","全て盛り付けて完成。"],point:"さんまは内臓ごと食べると脂溶性ビタミンが摂れる。大根おろしは消化酵素が含まれ、油っこさを中和してくれる。"},
+  "麻婆豆腐定食":{serves:"1〜2人分",ingredients:["木綿豆腐 1丁","豚ひき肉 150g","ほうれん草 1束","白米 4杯分","豆板醤 小さじ1","にんにく・生姜 各1かけ","醤油 大さじ1","鶏がらスープ 200ml","片栗粉 大さじ1","ごま油 小さじ1","牛乳 200ml"],steps:["にんにく・生姜をみじん切りにしてごま油で炒める。","豆板醤を加えて香りを出し、豚ひき肉を炒める。","鶏がらスープ・醤油を加えて煮立て、豆腐を加えて3分煮る。","水溶き片栗粉でとろみをつけてごま油で香りを足す。","ほうれん草を塩炒めにして添え、牛乳を添えて完成。"],point:"豆腐は木綿を使うと崩れにくく食べ応えがある。豆板醤の量で辛さを調整できる。"},
+  "カレーライス":{serves:"4〜5人分（作り置き）",ingredients:["牛こま切れ or 鶏もも肉 300g","じゃがいも 3個","にんじん 2本","玉ねぎ 2個","カレールー 1箱","白米 4杯分×人数分","サラダ油 大さじ1","水 1L","福神漬け 適量","牛乳 200ml"],steps:["玉ねぎを薄切りにして飴色になるまで炒める（10〜15分）。","にんじん・じゃがいもを一口大に切り、肉を加えてさらに炒める。","水1Lを加えて15分煮込み、アクを取る。","火を止めてカレールーを溶かし、再び弱火で5分煮る。","ご飯に盛り付け、福神漬け・牛乳を添えて完成。"],point:"玉ねぎを飴色になるまで炒めるのが美味しいカレーの最大のポイント。大量に作って冷凍保存が可能。4〜5日分まとめて作れるので保護者の負担が最も少ないメニュー。"},
+  "豚しゃぶ定食":{serves:"1〜2人分",ingredients:["豚ロースしゃぶしゃぶ用 200g","白米 4杯分","絹ごし豆腐 1丁","キャベツ・レタス 各適量","ポン酢 大さじ3","ごま油 小さじ1","ゆず(あれば) 少量","牛乳 200ml"],steps:["鍋に昆布だしを沸かし、豚ロースを一枚ずつさっとくぐらせる。","ポン酢でたれを作る（ポン酢+ごま油+お好みで薬味）。","豆腐を冷奴にする（醤油・ネギ・生姜）。","キャベツ・レタスを千切りにして添える。","ご飯・牛乳と一緒に盛り付けて完成。"],point:"豚肉は色が変わったらすぐ食べると柔らかい。しゃぶしゃぶの〆にうどんを入れると炭水化物も追加できる。"},
+  "スタミナ焼き肉定食":{serves:"1人分",ingredients:["牛カルビ 200g","白米 4杯分","もやし 1袋","にんじん・ほうれん草 各適量","コチュジャン or 焼き肉のたれ 大さじ3","ごま油 小さじ1","わかめ 3g","牛乳 200ml"],steps:["もやし・にんじんを茹でて塩・ごま油でナムルにする。","ほうれん草を茹でてナムルにする。","牛カルビに焼き肉のたれを揉み込んで下味をつける。","フライパン又は七輪でカルビを焼く。","わかめスープを作り、全て盛り付けて完成。"],point:"焼き肉のたれに漬け込んだ肉は冷凍保存可能。解凍して焼くだけなので平日の夕食に便利。"},
+  "鮭ムニエル定食":{serves:"1人分",ingredients:["鮭切り身 2切れ","白米 4杯分","ほうれん草 1束","コーン缶 1/2缶","バター 20g","小麦粉 大さじ2","牛乳 400ml","コンソメ 1個","塩こしょう 適量"],steps:["鮭に塩こしょうをして小麦粉をまぶす。","フライパンにバターを熱し、鮭を両面きつね色になるまで焼く（各3分）。","ほうれん草をバターソテーにする。","牛乳・コンソメ・コーン缶でコーンポタージュを作る。","全て盛り付けて完成。"],point:"鮭は皮目から焼くと皮がパリッと仕上がる。バターを多めに使うことでカロリーがUPし4500kcalの目標に近づく。"},
+  "鶏もも肉ステーキ定食":{serves:"1人分",ingredients:["鶏もも肉 200g","じゃがいも 2個","白米 4杯分","牛乳 200ml","マヨネーズ 大さじ1","にんにく 1かけ","塩こしょう 適量","バター 10g","コンソメ 1個","玉ねぎ 1/2個"],steps:["鶏もも肉を常温に戻し、にんにくを擦り込んで塩こしょうする。","フライパンを熱しバターで皮目から焼く（5分）→返して蓋をして弱火5分。","じゃがいもを茹でてマッシュし、バター・牛乳・マヨネーズでポテトサラダにする。","玉ねぎのスープを作る（玉ねぎ薄切りをバターで炒め→水・コンソメ）。","全て盛り付けて完成。"],point:"鶏もも肉は焼く前に常温に戻すことで中まで均一に火が通る。皮目を焼く際は押しつけながら焼くと皮がパリッと仕上がる。"},
+  "ラーメン定食":{serves:"1人分",ingredients:["醤油ラーメン(市販) 1袋","白米 2杯分","鶏の唐揚げ 2個（冷凍品でもOK）","ほうれん草 1/2束","卵 1個","ねぎ 適量","牛乳 200ml"],steps:["鍋に湯を沸かし、ラーメンを袋の表示通りに調理する。","ほうれん草を茹でて水を絞り、ラーメンのトッピングにする。","煮卵を作る（ゆで卵を醤油・みりん・水に30分漬ける）。","唐揚げをレンジやトースターで温める。","ラーメンにトッピングし、ご飯・牛乳と一緒に食べる。"],point:"ラーメン+ご飯の炭水化物ダブル攻撃で4500kcal達成に大きく貢献。スープは塩分が多いので飲み干しすぎに注意。"},
+  "回鍋肉定食":{serves:"1〜2人分",ingredients:["豚バラ薄切り 200g","キャベツ 1/4個","ピーマン 2個","白米 4杯分","テンメンジャン 大さじ2","豆板醤 小さじ1","醤油 小さじ1","砂糖 小さじ1","にんにく 1かけ","ごま油 適量","牛乳 200ml"],steps:["豚バラを一口大に切り、キャベツはざく切り、ピーマンは乱切りにする。","フライパンでにんにくを炒め、豚バラを炒める。","キャベツ・ピーマンを加えてさらに炒める。","テンメンジャン・豆板醤・醤油・砂糖を混ぜたたれを加えて全体に絡める。","ごま油を回しかけて盛り付け、卵スープ・冷奴・牛乳を添えて完成。"],point:"テンメンジャンが回鍋肉の味の決め手。ない場合は甜面醤の代わりに味噌+砂糖で代用できる。"},
+  "すき焼き定食":{serves:"2人分",ingredients:["牛薄切り肉 300g","豆腐 1丁","白菜 1/4個","長ねぎ 1本","しらたき 1袋","えのき 1袋","卵 2個","砂糖 大さじ2","醤油 大さじ3","みりん 大さじ2","酒 大さじ2","白米 4杯分","牛乳 200ml"],steps:["牛脂（または少量のサラダ油）で鍋を熱し、牛肉を炒める。","砂糖を振りかけ、醤油・みりん・酒の割り下を加える。","豆腐・白菜・ねぎ・しらたき・えのきを加えて煮る。","溶き卵につけながら食べる。","ご飯に乗せてすき焼き丼にしてもボリューム満点。"],point:"割り下は醤油2:みりん2:砂糖1:酒1の比率が基本。最後の〆にうどんを入れると炭水化物追加補給になる。"},
+
+  // 試合前日・特殊メニュー
+  "試合前日パスタ定食":{serves:"2人分（大盛り作成）",ingredients:["スパゲッティ 300g","合いびき肉 200g","玉ねぎ 1個","にんじん 1/2本","トマト缶 1缶","にんにく 2かけ","オリーブ油 大さじ2","塩・砂糖・コンソメ 適量","食パン 1枚","サラダ 適量","牛乳 400ml"],steps:["にんにく・玉ねぎ・にんじんをみじん切りにしてオリーブ油で炒める。","合いびき肉を加えて炒め、トマト缶・コンソメ・砂糖・塩を加えて20分煮込む。","大量の湯に塩を入れてパスタを表示より1分短めに茹でる。","パスタとソースを和えて大盛りに盛り付ける。","食パン・サラダ・牛乳を添えて完成。"],point:"試合前日のカーボローディング定番メニュー。パスタの炭水化物は消化が良くグリコーゲン補充に最適。多めに作って翌朝の朝食にも。"},
+  "試合前日カレー":{serves:"4〜5人分（作り置き）",ingredients:["鶏もも肉 400g","じゃがいも 4個","にんじん 2本","玉ねぎ 3個","カレールー 1.5箱","白米 5杯分","水 1.2L","ヨーグルト（隠し味） 100g","サラダ 適量","牛乳 200ml"],steps:["玉ねぎを飴色になるまで30分炒める（時間をかけるほど甘くなる）。","肉・野菜を加えてさらに炒め、水を加えて20分煮込む。","アクを取りカレールーを溶かし、ヨーグルトを加えて5分煮る。","5杯分の大盛りご飯に盛り付ける。","翌日の試合に向けてしっかり食べる。"],point:"試合前日は特にご飯の量を増やす。ヨーグルトの隠し味でコクとまろやかさが増す。グリコーゲン最大化が目的なので量を重視。"},
+  "試合後リカバリー夕食":{serves:"1人分",ingredients:["鶏むね肉 200g","白米 4杯分","木綿豆腐 1/2丁","ほうれん草 1束","里芋・にんじん・ごぼう 各適量","酒 大さじ1","塩 少々","醤油・みりん 適量","牛乳 400ml"],steps:["鶏むね肉に酒・塩を揉み込み、電子レンジ600Wで4分加熱→5分蒸らす。","ほうれん草を茹でてごま和えにする。","豆腐を冷奴に（醤油・ショウガのせ）。","里芋・にんじん・ごぼうでけんちん汁を作る。","全て盛り付けて牛乳2杯を添えて完成。"],point:"試合後30分以内がゴールデンタイム。できるだけ早く食べ始めることが筋肉回復の鍵。鶏むね肉の蒸し料理は時短で作れる。"},
+
+  // 回復・休養メニュー（代表的なもの）
+  "回復朝食(炎症抑制)":{serves:"1人分",ingredients:["白米 3杯分","サバ切り身 1枚","ほうれん草 1/2束","木綿豆腐 1/3丁","わかめ 3g","牛乳 200ml","キウイ 1個","味噌 大さじ1","ごま 適量"],steps:["サバに塩を振ってグリルで焼く（中火で片面5分ずつ）。","ほうれん草を茹でて水を絞り、ごまと醤油で和える。","豆腐とわかめで味噌汁を作る。","全て盛り付けてキウイ・牛乳を添えて完成。"],point:"試合翌日はサバのEPA/DHAで炎症を抑えることが最優先。ビタミンCのキウイを一緒に摂ると疲労物質の除去が促進される。"},
+  "回復夕食(鉄分重視)":{serves:"1人分",ingredients:["豚レバー 150g","白米 4杯分","ほうれん草 1束","あさり（冷凍でも可） 100g","みかん 2個","生姜 1かけ","醤油 大さじ2","みりん 大さじ1","ごま 大さじ1","牛乳 400ml"],steps:["レバーを牛乳（または水）に15分浸けて臭みを抜く。","生姜を千切りにしてごま油で炒め、レバーを加えて炒める。","醤油・みりんで甘辛く炒め煮にする。","ほうれん草を茹でてごまと醤油で和える。","あさりの味噌汁を作り、全て盛り付けてみかんを添える。"],point:"レバーは牛乳に漬けると臭みが大幅に軽減される。みかんのビタミンCと組み合わせることでレバーの鉄分吸収率が2〜3倍になる。"},
+  "休養日定食(修復重視)":{serves:"1人分",ingredients:["豆腐 1丁","合いびき肉 100g","ひじき（乾） 10g","白米 3杯分","卵 1個","醤油・砂糖・みりん 各大さじ1","あおさ 5g","味噌 大さじ1","牛乳 200ml","ヨーグルト 1個"],steps:["ひじきを水で戻し、だし・醤油・みりんで煮て常備菜にする。","豆腐ハンバーグを作る：水切りした豆腐+合いびき肉+卵を混ぜて成形し、フライパンで焼く。","醤油・砂糖・みりんで和風ソースを作ってかける。","あおさの味噌汁を作る。","全て盛り付けてヨーグルト・牛乳を添えて完成。"],point:"豆腐ハンバーグは通常のハンバーグよりカロリーが低く消化に優しい。休養日の身体を内側からケアするメニュー。"},
+
+  // 補食（追加）
+  "カステラ＆スポーツゼリー":{serves:"1人分",ingredients:["カステラ 2切れ","スポーツゼリー 2個","バナナ 1本","牛乳 200ml"],steps:["カステラを個包装のまま持参する。","スポーツゼリーは練習中に飲みやすいようバッグのポケットに入れる。","バナナは皮ごと持参。","練習前：カステラ＋バナナ。練習後：スポーツゼリー＋牛乳で回復。"],point:"素早く吸収できる糖質が中心の軽量補食セット。荷物が多い遠征時にも持参しやすい。"},
+  "バナナ＆プロテインミルク":{serves:"1人分",ingredients:["バナナ 3本","プロテイン配合牛乳 300ml（またはプロテインパウダー10g＋牛乳300ml）","チーズ 2個"],steps:["バナナは皮ごと持参し食べる直前に剥く。","プロテイン牛乳はよく振ってから飲む。","チーズは個包装タイプが持参しやすい。","練習後30分以内にセットで食べる。"],point:"牛乳のホエイタンパクは吸収が速く筋肉合成に最適。バナナの糖質と組み合わせることで筋肉分解を防ぐ。"},
+  "おむすびころりんセット":{serves:"1人分",ingredients:["白米 4杯分","塩 少々","海苔 4枚","卵 2個","麦茶 500ml"],steps:["白米をしっかり握って大きめのおにぎりを4個作る。","塩は多めにして電解質補給も兼ねる。","卵を固ゆでにする（沸騰後9分）。","海苔を巻いてラップで包み、卵と一緒に保冷バッグに入れる。","麦茶で水分補給しながら食べる。"],point:"シンプルながら糖質とタンパク質のバランスが良い。卵は固ゆでにすると持ち運びやすく傷みにくい。"},
+  "カップ麺＋プラスα補食":{serves:"1人分",ingredients:["カップヌードル（大） 1個","おにぎり 2個","バナナ 1本","お湯 適量"],steps:["カップ麺にお湯を注いで3分待つ。","おにぎりは前もって握って持参する。","バナナは皮ごと持参。","疲れた日の帰宅後にまず食べる。"],point:"疲れた日でも食べやすいご褒美系補食。塩分補給にもなる。週1〜2回ならOK。たまにはこういう日があっていい。"},
+  "クリームパン補食":{serves:"1人分",ingredients:["クリームパン 2個","バナナ 2本","牛乳 200ml","ゆで卵 1個"],steps:["クリームパンは市販品を活用。","バナナは皮ごと持参。","ゆで卵は前日夜に茹でておく（沸騰後9分）。","練習後に全てセットで食べる。"],point:"卵クリームにはタンパク質が含まれ甘いパンの中でも栄養バランスが良い。甘さで疲れた心身を同時に回復できる。"},
+  "スイートポテト補食":{serves:"1人分",ingredients:["さつまいも 200g","バター 10g","砂糖 大さじ1","牛乳 大さじ2","バナナ 2本","牛乳 200ml"],steps:["さつまいもをレンジで4〜5分加熱する。","熱いうちに皮を剥き、バター・砂糖・牛乳と混ぜてスイートポテト形に成形。","トースターで5分焼いて表面を固める。","バナナ・牛乳と一緒に補食として食べる。"],point:"さつまいもの食物繊維で腸内環境を整えながら糖質補給。市販のスイートポテトを使えばより手軽に作れる。"},
+
+  // 夕食（追加）
+  "牛丼(特盛)定食":{serves:"1人分",ingredients:["牛薄切り肉 200g","白米 4杯分","玉ねぎ 1個","卵 1個","ほうれん草 1/2束","わかめ 3g","だし汁 150ml","醤油 大さじ2","みりん 大さじ2","砂糖 大さじ1","味噌 大さじ1","牛乳 200ml"],steps:["玉ねぎを薄切りにする。だし汁・醤油・みりん・砂糖を鍋で煮立てる。","玉ねぎを加えて2〜3分煮たら牛肉を加えてさっと煮る。","特盛ご飯の上に盛り付け、温泉卵をのせる。","ほうれん草を茹でてごまと醤油で和える。","わかめ味噌汁と牛乳を添えて完成。"],point:"牛丼の煮汁は汁だくにするとご飯が進み量を食べやすくなる。コンビニや牛丼チェーンでの外食版も高カロリー確保に使える。"},
+  "豚の角煮定食":{serves:"2人分",ingredients:["豚バラ塊肉 400g","白米 4杯分","小松菜 1束","醤油 大さじ3","砂糖 大さじ2","みりん 大さじ2","酒 大さじ2","生姜 1かけ","味噌 大さじ1","牛乳 200ml"],steps:["豚バラを5cm角に切り、熱湯で10分下茹でしてアクを取る。","水に醤油・砂糖・みりん・酒・生姜を加え、豚肉を入れて弱火で40〜50分煮込む。","小松菜を塩炒めにする。","味噌汁を作る。","全て盛り付けて牛乳を添えて完成。"],point:"前日に作り置きして翌日温め直すとさらに味が染みて美味しくなる。圧力鍋を使えば20分で完成。"},
+  "天ぷら定食":{serves:"1人分",ingredients:["海老 4尾","かぼちゃ・なす・ピーマン 各適量","白米 4杯分","薄力粉 100g","卵 1個","冷水 150ml","揚げ油 適量","大根 1/4本","めんつゆ 大さじ3","牛乳 200ml"],steps:["野菜を食べやすい大きさに切り、海老の背ワタを取る。","衣（薄力粉・卵・冷水）を混ぜすぎないようにさっと合わせる。","170℃の油で天ぷらを揚げる（野菜2〜3分・海老1〜2分）。","大根おろしとめんつゆで天つゆを作る。","味噌汁と牛乳を添えて完成。"],point:"衣を混ぜすぎないことがサクサク天ぷらのコツ。冷水を使うと衣がより軽くなる。"},
+  "鶏鍋定食":{serves:"2人分",ingredients:["鶏もも肉 300g","白菜 1/4個","長ねぎ 1本","えのき 1袋","豆腐 1丁","白米 4杯分","昆布だし 600ml","醤油 大さじ2","みりん 大さじ1","塩 少々","牛乳 200ml"],steps:["鍋に昆布だしを沸かし、醤油・みりん・塩でスープを作る。","鶏もも肉を一口大に切り、白菜・長ねぎ・えのき・豆腐を加えて煮る。","アクを取りながら10〜15分煮込む。","〆に残ったスープでご飯を雑炊にする（炭水化物追加補給）。","牛乳を添えて完成。"],point:"鍋は野菜をたくさん食べられる最強の健康メニュー。〆の雑炊まで食べることで炭水化物も補充できる。"},
+  "エビチリ定食":{serves:"1〜2人分",ingredients:["むきエビ 200g","白米 4杯分","長ねぎ 1/2本","にんにく・生姜 各1かけ","ケチャップ 大さじ3","豆板醤 小さじ1","酒 大さじ1","片栗粉 大さじ1","ごま油 小さじ1","鶏がらスープ 100ml","牛乳 200ml"],steps:["エビの背ワタを取り、片栗粉と塩で揉み洗いして水気を拭く。","油でにんにく・生姜・豆板醤を炒めて香りを出す。","エビを加えて炒め、ケチャップ・酒・鶏がらスープを加えて煮絡める。","ねぎを加えてごま油で仕上げる。","わかめスープ・冷奴・牛乳を添えて完成。"],point:"エビは高タンパク低脂質の優秀食材。タウリン豊富で疲労回復にも効果的。辛さは豆板醤の量で調整できる。"},
+  "マーボーナス定食":{serves:"1〜2人分",ingredients:["なす 3本","豚ひき肉 150g","白米 4杯分","豆板醤 小さじ1","甜麺醤 大さじ1","にんにく・生姜 各1かけ","醤油 大さじ1","鶏がらスープ 150ml","片栗粉 大さじ1","ごま油 小さじ1","牛乳 200ml"],steps:["なすを乱切りにし、水に5分さらしてアクを抜く。","フライパンになすを素揚げ（または多めの油で炒め）する。","豚ひき肉・にんにく・生姜・豆板醤を炒め、なすを戻し入れる。","鶏がらスープ・醤油・甜麺醤を加えて煮込み、水溶き片栗粉でとろみをつける。","ごま油で仕上げて牛乳を添えて完成。"],point:"なすのポリフェノール（ナスニン）で疲労回復と抗酸化効果。甜麺醤が甘辛の決め手。"},
+  "豚骨風ラーメン定食":{serves:"1人分",ingredients:["豚骨ラーメン（市販） 1袋","白米 2杯分","卵 2個","野菜（もやし・ほうれん草）各適量","チャーシュー（市販）50g","牛乳 200ml"],steps:["卵を沸騰後7分でゆで、殻を剥いて醤油・みりん・水に30分漬けて煮卵にする。","もやし・ほうれん草を茹でておく。","豚骨ラーメンを袋の表示通りに作る。","煮卵・チャーシュー・野菜をトッピング。","白米と牛乳を添えて完成。"],point:"豚骨スープはコラーゲン豊富で関節ケアにも効果的。濃い味でご飯が進み大量の炭水化物確保に向いている。"},
+  "チキンカツ定食":{serves:"1人分",ingredients:["鶏むね肉 200g","白米 4杯分","キャベツ 1/4個","卵 1個","パン粉 1/2カップ","小麦粉 大さじ2","揚げ油 適量","豚肉50g・野菜","味噌 大さじ1.5","牛乳 200ml"],steps:["鶏むね肉を薄くそぎ切りにして塩こしょうで下味をつける。","小麦粉→溶き卵→パン粉の順に衣をつける。","170℃で3〜4分揚げる（むね肉は火が通りやすい）。","豚汁を作る（豚肉・じゃがいも・にんじん・味噌）。","キャベツを千切りにして全て盛り付ける。"],point:"鶏むね肉は薄く均一にそぐと揚げ時間が短く済みジューシーに仕上がる。揚げたてが最もやわらかいので食べる直前に揚げるのがベスト。"},
+  "ぶり照り焼き定食":{serves:"1人分",ingredients:["ぶり切り身 2切れ","白米 4杯分","大根 1/3本","乾燥ひじき 10g","醤油 大さじ2","みりん 大さじ2","酒 大さじ1","砂糖 小さじ1","きのこ 1袋","味噌 大さじ1","牛乳 200ml"],steps:["ぶりに塩を振って10分おき、水気を拭く。","フライパンで両面を焼き（各3〜4分）、醤油・みりん・酒・砂糖を加えて照りが出るまで絡める。","ひじきを煮て副菜にする。","大根と根菜のそぼろ煮を作る。","きのこの味噌汁と牛乳を添えて完成。"],point:"ぶりは冬が旬で脂がのってDHA・EPAが豊富。照り焼きは甘辛でご飯が進む。タレを多めに作って翌日の弁当にも活用できる。"},
+  "ガパオライス定食":{serves:"1〜2人分",ingredients:["鶏ひき肉 200g","バジル（生またはドライ）","パプリカ 1個","玉ねぎ 1/2個","卵 2個","白米 4杯分","ナンプラー 大さじ1","オイスターソース 大さじ1","醤油 小さじ1","にんにく 1かけ","牛乳 200ml"],steps:["にんにくをみじん切りにして油で炒める。","玉ねぎ・パプリカを加えて炒め、鶏ひき肉を加えてほぐしながら炒める。","ナンプラー・オイスターソース・醤油で味付けし、バジルを加える。","目玉焼きを作る（黄身半熟が本場スタイル）。","ご飯の上に盛り付けて目玉焼きをのせ、牛乳を添えて完成。"],point:"エスニック風で気分転換になる。ナンプラーがなければ醤油だけでも作れる。鶏ひき肉で高タンパク低脂質。"},
+  "ミックスフライ定食":{serves:"1人分",ingredients:["海老 2尾","白身魚（タラなど） 1切れ","コロッケ用じゃがいも 1個","白米 4杯分","キャベツ 1/4個","卵 2個","パン粉・小麦粉・揚げ油 各適量","味噌 大さじ1","牛乳 200ml"],steps:["じゃがいもを茹でてマッシュし、コロッケ形に成形して衣をつけて揚げる。","海老と白身魚にも衣をつけて揚げる（170℃で2〜3分）。","キャベツを千切りにする。","味噌汁を作る。","全て盛り付けて牛乳を添えて完成。"],point:"揚げ物3種でカロリーをしっかり確保。前日に仕込んでおけば朝は揚げるだけ。冷凍惣菜を活用すれば手間をさらに省ける。"},
+  "肉じゃが定食":{serves:"2人分",ingredients:["牛こま切れ 150g","じゃがいも 3個","にんじん 1本","玉ねぎ 1個","白米 4杯分","醤油 大さじ2","砂糖 大さじ1","みりん 大さじ2","だし汁 200ml","ほうれん草 1/2束","牛乳 200ml"],steps:["じゃがいも・にんじん・玉ねぎを一口大に切る。","鍋にだし汁・醤油・砂糖・みりんを入れて沸かし、野菜を加えて5分煮る。","牛肉を加えてアクを取りながらじゃがいもが柔らかくなるまで10〜15分煮る。","ほうれん草を茹でて副菜にする。","全て盛り付けて牛乳を添えて完成。"],point:"大量に作り置きできる家庭の定番。翌日の弁当のおかずにも使える。じゃがいもとご飯でW炭水化物補給。"},
+  "豚バラ大根定食":{serves:"2人分",ingredients:["豚バラ薄切り 200g","大根 1/2本","白米 4杯分","小松菜 1束","醤油 大さじ2","みりん 大さじ1","砂糖 小さじ1","酒 大さじ1","生姜 1かけ","味噌 大さじ1","牛乳 200ml"],steps:["大根を2cm厚の輪切りにして面取りする。レンジで3分下処理。","豚バラを食べやすい大きさに切る。","鍋に豚バラ・大根・醤油・みりん・砂糖・酒・生姜・水300mlを入れて中弱火で20分煮込む。","小松菜を炒める。","味噌汁と牛乳を添えて完成。"],point:"大根は煮込むほど柔らかく甘みが増す。豚バラの脂が大根に染みて絶品に。前日に作り置きすると翌日さらに美味しい。"},
+
+  // 試合前日（追加）
+  "試合前日の炭水化物朝食":{serves:"1人分",ingredients:["白米 4杯分","卵 2個","鮭切り身 1枚","わかめ 3g","バナナ 2本","牛乳 200ml","味噌 大さじ1"],steps:["白米をいつもより1杯多く炊く。","鮭をグリルで焼く（中火で片面5分）。","卵焼きを作る（甘め・だし入り）。","わかめ味噌汁を作る。","全てを盛り付け、バナナ・牛乳を添えて完成。"],point:"試合前日はとにかく炭水化物を多めに。脂質は控えめ・消化の良い食材を選ぶ。"},
+  "うどん朝食(カーボローディング)":{serves:"1人分",ingredients:["うどん 2玉","卵 2個","鮭 1切れ（おにぎり用）","白米 2杯分","牛乳 200ml","バナナ 1本","白だし 大さじ3","ねぎ 適量"],steps:["うどんを袋の表示通りに茹でる。","白だしで温かいつゆを作る。","温泉卵を作る（70℃のお湯に12分）。","鮭おにぎりを握る。","うどん・おにぎり・バナナ・牛乳を並べて完成。"],point:"うどんは消化が最も速い炭水化物。胃に優しく試合前日朝から始めるカーボローディングに最適。"},
+  "フレンチトースト朝食":{serves:"1人分",ingredients:["食パン（厚切り） 4枚","卵 2個","牛乳 150ml","砂糖 大さじ1","バター 20g","ヨーグルト 1個","バナナ 2本","牛乳 200ml（飲用）"],steps:["卵・牛乳・砂糖を混ぜた卵液に食パンを15分浸す。","バターを熱したフライパンで両面をこんがり焼く（各2〜3分）。","ヨーグルトを添える。","バナナと牛乳と一緒に盛り付けて完成。"],point:"甘くて食べやすく炭水化物が豊富。試合前日の朝に食欲がない時もサクサク食べられる。"},
+  "もち入り雑炊":{serves:"1人分",ingredients:["白米（冷や飯） 3杯分","切り餅 2個","卵 2個","鶏むね肉 80g","だし汁 500ml","醤油 大さじ1","塩 少々","バナナ 2本","牛乳 200ml"],steps:["鍋にだし汁を沸かし、鶏肉を薄切りにして加える。","冷や飯を加えてほぐれるまで煮る。","切り餅を小さく切って加えてさらに煮る。","溶き卵を回しかけて半熟で火を止める。","バナナ・牛乳を添えて完成。"],point:"もちを加えることで糖質密度がアップ。消化が良く胃に優しい試合前日の最強朝食。"},
+  "パスタ朝食":{serves:"1人分",ingredients:["パスタ 200g","ツナ缶 1缶","トマト缶 1/2缶","にんにく 1かけ","オリーブ油 大さじ1","食パン 1枚","バナナ 2本","牛乳 200ml","塩こしょう 適量"],steps:["パスタを袋の表示通りに茹でる。","フライパンでにんにくをオリーブ油で炒め、ツナ・トマト缶を加えて煮詰める。","パスタとソースを和えて盛り付ける。","食パンをトーストする。","バナナ・牛乳を添えて完成。"],point:"パスタは低GIで持続的なエネルギーを供給。試合前日朝から炭水化物ローディングを開始する意識で。"},
+  "試合前日高炭水化物弁当":{serves:"1人分",ingredients:["白米 4杯分","鶏むね肉 200g","卵 2個","ブロッコリー 4房","バナナ 1本","醤油・みりん・砂糖 各大さじ1"],steps:["鶏むね肉に醤油・みりん・砂糖を揉み込んで照り焼きにする（フライパンで両面各4分）。","卵焼きを作る。","ブロッコリーを塩茹でする。","白米4杯分を多めに炊いて弁当箱に詰める。","バナナを添えて完成。"],point:"試合前日弁当は炭水化物を普段より1杯増やすのがポイント。脂質は控えめに。"},
+  "おにぎり多めのお弁当":{serves:"1人分",ingredients:["白米 5杯分","サラダチキン 1袋","卵 1個","バナナ 1本","塩 少々","海苔 5枚"],steps:["白米を5杯分炊いて5個のおにぎりを握る（シンプルな塩むすびでOK）。","サラダチキンはそのまま持参。","ゆで卵を作る。","バナナと一緒に保冷バッグに入れる。","試合前2時間前までに食べきる。"],point:"試合前日はシンプルなおかずで胃に負担をかけない。とにかくご飯の量を増やすことが最優先。"},
+  "うどん弁当(炭水化物重視)":{serves:"1人分",ingredients:["うどん 2玉","鶏むね肉 150g","卵 2個","バナナ 2本","めんつゆ 大さじ3","塩こしょう 適量"],steps:["うどんを茹でて水で締め、弁当箱に入れる。","めんつゆを小瓶に入れて別添えにする。","鶏むね肉に塩こしょうをして焼く。","卵焼きを作る。","バナナと一緒に弁当箱に詰めて完成。"],point:"うどんは消化が早く試合前日の炭水化物補給に最適。冷めても食べやすいつけ麺スタイルで持参できる。"},
+  "混ぜご飯弁当":{serves:"1人分",ingredients:["白米 4杯分","鶏ひき肉 150g","にんじん 1/2本","卵 2個","ブロッコリー 4房","白だし 大さじ2","醤油 大さじ1","みりん 大さじ1","バナナ 1本"],steps:["にんじんをみじん切りにして鶏ひき肉と一緒に白だし・醤油・みりんで炒め煮にする。","白米と具を混ぜて混ぜご飯を作る。","卵焼きを作る。","ブロッコリーを塩茹でする。","全て弁当箱に詰めてバナナを添えて完成。"],point:"具が混ざったご飯は食べやすく大量の炭水化物を摂取しやすい。前日夜に仕込んでおける。"},
+  "ロールパン＆パスタ弁当":{serves:"1人分",ingredients:["ロールパン 4個","パスタ 150g","鶏むねハム 3枚","マヨネーズ 大さじ1","塩こしょう 適量","バナナ 2本","スポーツドリンク 500ml"],steps:["パスタを茹でて水で締め、マヨネーズ・塩こしょうと和えてパスタサラダにする。","ロールパンはそのまま持参。","鶏むねハムは食べやすい大きさに切る。","全て弁当箱に詰めてバナナ・スポーツドリンクと一緒に持参する。","試合2時間前までに食べきる。"],point:"炭水化物を2種類（パン＋パスタ）で補給する試合前日昼食。洋食スタイルで気分も上がる。"},
+
+  // 試合前日補食（追加）
+  "カーボローディング補食":{serves:"1人分",ingredients:["白米 4杯分（おにぎり4個）","バナナ 2本","スポーツゼリー 1個","スポーツドリンク 500ml"],steps:["前日夜に炊いたご飯でおにぎりを4個握る。","塩をしっかり振って電解質も補給。","バナナは皮ごと保冷バッグへ。","スポーツゼリーとドリンクも一緒に持参。","夕方〜夜の補食として食べる。"],point:"試合前日夕方の補食がグリコーゲン貯蔵の最後のチャンス。量を多めに。水分もしっかり摂る。"},
+  "あんこ系補食":{serves:"1人分",ingredients:["あんぱん 3個","バナナ 2本","牛乳 200ml"],steps:["市販のあんぱんを購入or手作りする。","バナナは皮ごと持参。","牛乳は練習後のタンパク質補給として活用。","練習前〜試合前日の夕方補食として食べる。"],point:"あんこの糖質はブドウ糖と果糖の混合でグリコーゲン補充に効果的。消化も良く胃に負担をかけない。"},
+  "もち補食":{serves:"1人分",ingredients:["切り餅 4個","醤油 大さじ1","海苔 4枚","バナナ 2本","スポーツドリンク 500ml"],steps:["切り餅をトースターで3〜4分焼く。","ふくらんで焦げ目がついたら醤油を塗り、海苔を巻く。","ラップで包んで保冷バッグに入れる。","バナナとスポーツドリンクと一緒に持参。","夕方の補食として食べる。"],point:"もちは糖質密度最高の食品の一つ。少ない量で多くのグリコーゲンを貯蔵できる試合前日の最強補食。"},
+  "カステラ＆バナナ":{serves:"1人分",ingredients:["カステラ 3切れ","バナナ 3本","牛乳 200ml"],steps:["カステラを個包装に入れて持参。","バナナは皮ごと。","牛乳は練習後のタンパク質補給に使う。","練習前：カステラ＋バナナ。練習後：牛乳追加で飲む。"],point:"カステラとバナナの組み合わせで素早く大量の糖質を補給できる。食べやすく胃に優しいのが特徴。"},
+  "くず湯&おにぎり補食":{serves:"1人分",ingredients:["片栗粉（または本くず粉） 大さじ2","砂糖 大さじ1","水 200ml","おにぎり 3個","バナナ 2本","スポーツドリンク 500ml"],steps:["鍋に水・片栗粉・砂糖を入れてよく混ぜ、中火で透明になるまでかき混ぜながら加熱する。","器に盛り付けて冷ます。","おにぎりはラップに包んで持参。","全てセットで食べる。"],point:"くずゆは温かく消化が非常に良い。夜遅い時間の補食や翌日試合がある夜に最適。胃に優しく睡眠も妨げない。"},
+
+  // 試合前日夕食（追加）
+  "試合前日うどん定食":{serves:"1人分",ingredients:["うどん 3玉","鶏むね肉 100g","温泉卵 2個","おにぎり 3個","牛乳 200ml","白だし 大さじ4","塩こしょう 適量"],steps:["うどんを茹でて温かいつゆを作る（白だし＋水）。","鶏むね肉を薄切りにして塩こしょうで焼く。","温泉卵を作る（70℃で12分）。","うどんに鶏肉・温泉卵をのせる。","おにぎり・牛乳を添えて完成。"],point:"うどん3玉＋おにぎり3個でグリコーゲンを最大限に貯蔵。消化が早いので翌朝の胃も軽い。"},
+  "試合前日中華丼定食":{serves:"1人分",ingredients:["白米 5杯分","豚こま切れ 100g","白菜 1/4個","うずら卵 5個","にんじん・きくらげ 各適量","鶏がらスープ 200ml","醤油 大さじ1","片栗粉 大さじ1","ごま油 小さじ1","バナナ 2本","牛乳 200ml"],steps:["野菜を食べやすく切り、豚肉も小さく切る。","フライパンで豚肉・野菜を炒め、鶏がらスープ・醤油を加えて煮る。","水溶き片栗粉でとろみをつけてごま油で仕上げる。","5杯分の白米に中華丼あんをかける。","バナナ・牛乳を添えて完成。"],point:"とろみのある中華丼は消化しやすく大量ご飯と一緒に食べやすい。試合前日の最大炭水化物補給メニュー。"},
+  "試合前日チャーハン定食":{serves:"1人分",ingredients:["白米 6杯分（チャーハン4杯＋白米2杯）","卵 3個","ハム 60g","ねぎ 適量","醤油 大さじ1","塩こしょう 適量","ごま油 小さじ1","鶏むね肉 100g","スープ適量","牛乳 200ml"],steps:["白米4杯でチャーハンを作る（卵・ハム・ねぎ・醤油）。","鶏むね肉を塩こしょうで焼く。","白米2杯を別に盛る。","スープを作る。","全て合わせて牛乳を添えて完成。"],point:"チャーハン＋白米の炭水化物ダブル盛りで試合前日の最大グリコーゲン貯蔵を実現。食欲がある日に活用する。"},
+
+  // 試合当日（追加）
+  "試合当日の朝食(3時間前)":{serves:"1人分",ingredients:["白米 3杯分","うどん 1玉","卵 1個","バナナ 2本","スポーツドリンク 500ml","だし汁・醤油 少々"],steps:["白米を炊く（少なめ・柔らかめで消化しやすく）。","うどんをつゆで温める。","卵焼きを作る（甘め・消化良好）。","全て盛り付けてバナナ・スポーツドリンクを添えて完成。","試合開始3時間前までに食べきる。"],point:"脂質・食物繊維を徹底的に排除。消化の良いものだけ選ぶことで試合中の消化器官トラブルを防ぐ。"},
+  "試合朝おにぎりセット":{serves:"1人分",ingredients:["白米 5杯分","塩 少々","海苔 5枚","バナナ 2本","スポーツゼリー 1個","スポーツドリンク 500ml"],steps:["前日夜にシンプルな塩おにぎりを5個握っておく。","ラップで包んで冷蔵保管。","当日朝にレンジで1〜2分温める。","バナナ・スポーツゼリー・スポーツドリンクと一緒に持参。","試合開始2〜3時間前に食べきる。"],point:"移動の多い試合当日に最適な携帯食。前日に仕込んでおけば朝の準備ゼロ。食べやすく消化も抜群。"},
+  "試合日うどん朝食":{serves:"1人分",ingredients:["うどん 2玉","白米 2杯分","温泉卵 2個","バナナ 2本","スポーツドリンク 500ml","白だし 大さじ3","塩少々"],steps:["うどんを白だしつゆで温める。","温泉卵を作る（70℃で12分）またはコンビニで購入。","白米でシンプルな塩おにぎりを2個握る。","バナナ・スポーツドリンクを添えて完成。","試合開始3時間前までに食べる。"],point:"うどん最優先の試合当日朝食。消化吸収が最速でエネルギー変換効率が最も高い。胃腸への負担ゼロ。"},
+  "試合朝パン食":{serves:"1人分",ingredients:["ロールパン 4個","バナナ 2本","ヨーグルト 1個","スポーツゼリー 1個","スポーツドリンク 500ml"],steps:["ロールパンはシンプルなものを選ぶ（バターロール・コッペパン等）。","揚げパンやクリームパンは脂質が多いので避ける。","バナナは皮ごと持参。","ヨーグルトは小さいカップタイプが持参しやすい。","車内や移動中でも食べやすい手軽なセット。"],point:"遠征バス・電車での移動時に最も食べやすいスタイル。脂質少なめのシンプルなパンを選ぶことが重要。"},
+  "試合当日ふりかけご飯":{serves:"1人分",ingredients:["白米 3杯分","ふりかけ（鮭・のりたま等） 適量","卵スープの素 1袋","バナナ 2本","スポーツドリンク 500ml","お湯 150ml"],steps:["白米を炊いてふりかけをかけ、シンプルなご飯を3杯分食べる。","卵スープの素をお湯で溶いてスープを作る。","バナナを食べる。","スポーツドリンクで水分補給。","試合開始3時間前に完食する。"],point:"ふりかけご飯は食べやすく消化も早い。シンプルに「ご飯を食べる」ことを最優先にした試合当日メニュー。"},
+  "試合当日弁当(消化重視)":{serves:"1人分",ingredients:["白米 3杯分","鶏むね肉 200g","卵 2個","バナナ 1本","塩こうじ 大さじ1","スポーツドリンク 500ml"],steps:["鶏むね肉に塩こうじを揉み込んで一晩漬ける。","フライパンで両面を焼く（各4〜5分）。","卵焼きを甘めに作る。","白米を多めに炊いて弁当箱に詰める。","バナナ・スポーツドリンクを添えて完成。"],point:"揚げ物・生もの・乳製品・食物繊維の多い野菜を徹底排除。試合2時間前までに食べきること。"},
+  "おにぎり弁当(試合当日)":{serves:"1人分",ingredients:["白米 5杯分","塩 少々","海苔 5枚","サラダチキン 1袋","バナナ 2本","スポーツドリンク 500ml"],steps:["白米5杯分で塩おにぎりを5個握る。","サラダチキンは市販品をそのまま持参。","バナナは皮ごと。","全て保冷バッグに入れて持参。","試合前2時間から逆算して少しずつ食べる。"],point:"試合当日は食べやすいおにぎり形式が最適。少しずつ食べて消化器官に負担をかけないようにする。"},
+  "試合当日シンプル弁当":{serves:"1人分",ingredients:["白米 3杯分","鮭切り身 1枚","卵 2個","バナナ 1本","塩 少々","スポーツドリンク 500ml"],steps:["鮭を塩焼きにする（グリルで片面5分ずつ）。","卵焼きを作る。","白米3杯分を弁当箱に詰める。","バナナ・スポーツドリンクを添えて完成。"],point:"試合前は食べ慣れたものが一番。シンプルな和食弁当で胃腸を安定させる。"},
+  "パスタ弁当(試合当日)":{serves:"1人分",ingredients:["パスタ 200g","鶏むね肉 150g","トマト缶 1/2缶","バナナ 2本","スポーツドリンク 500ml","オリーブ油 小さじ1","塩こしょう 適量"],steps:["パスタを茹でて水で締める。","鶏むね肉を塩こしょうで焼いてスライスする。","トマトソースを作りパスタと和える。","弁当箱に詰めて冷ます。","バナナ・スポーツドリンクと一緒に持参。"],point:"消化が良いパスタで試合前の糖質補給。トマトのリコピンで抗酸化効果も期待できる。"},
+  "うどん弁当(試合当日)":{serves:"1人分",ingredients:["うどん 2玉","鶏むね肉 150g","バナナ 2本","スポーツドリンク 500ml","めんつゆ 大さじ3","塩こしょう 適量"],steps:["うどんを茹でて水で締めて弁当箱に入れる。","めんつゆを希釈して小瓶に入れる（別添え）。","鶏むね肉を塩こしょうで焼いてスライスする。","バナナ・スポーツドリンクと一緒に持参。","試合2時間前までに食べきる。"],point:"試合当日の最も消化が良い弁当スタイル。冷やしうどんは夏場も食べやすい。"},
+
+  // 試合当日補食（追加）
+  "イニング間補食":{serves:"1人分",ingredients:["バナナ 2本","スポーツゼリー 2個","スポーツドリンク 500ml","塩飴 3〜4粒"],steps:["バナナは皮ごとバッグに入れて持参。","スポーツゼリーはチームのバッグに常備しておく。","塩飴はポケットに入れておくと取り出しやすい。","ベンチでイニング間に少しずつ補給する。","熱中症予防に塩飴を特に意識的に摂る。"],point:"試合中は固形物を少なめに。ゼリーとドリンクを中心に糖質と電解質を補給し続けることがパフォーマンス維持の鍵。"},
+  "試合前最終補食":{serves:"1人分",ingredients:["おにぎり 2個","バナナ 1本","スポーツドリンク 500ml"],steps:["試合1〜1.5時間前に食べる。","おにぎりは小さめに握って食べやすくする。","バナナは半分だけでもOK。","スポーツドリンクで水分補給。","量は少なめを徹底する。"],point:"試合直前の最終エネルギーチャージ。量は少なく消化しやすいものだけ。胃に重たいものは絶対に避ける。"},
+  "試合中チャージ":{serves:"1人分",ingredients:["スポーツゼリー 3個","塩飴 5粒","スポーツドリンク 1L"],steps:["スポーツゼリーをバッグに常備する。","塩飴はユニフォームのポケットに入れておく。","スポーツドリンクは小まめに飲む（150〜200mlを15〜20分ごと）。","固形物は試合中は極力避ける。","脱水のサイン（口の渇き・尿量減少）に注意。"],point:"試合中は消化器官をできるだけ使わないことが重要。ゼリーと飲料で糖質と電解質を効率よく補給する。"},
+  "ベンチ待機中の補食":{serves:"1人分",ingredients:["バナナ 3本","スポーツドリンク 500ml","塩タブレット 3粒"],steps:["バナナをベンチに置いておく。","試合の合間に1本ずつ食べる。","スポーツドリンクを小まめに飲む。","塩タブレットを試合中に2〜3粒舐める。","体が冷えた場合は温かい飲み物も検討する。"],point:"バナナはカリウム補給で筋肉けいれん予防に効果的。試合が長引いても最後までパフォーマンスを保つ。"},
+  "延長試合対策補食":{serves:"1人分",ingredients:["おにぎり 3個","スポーツゼリー 2個","スポーツドリンク 1L","塩飴 適量"],steps:["予備のおにぎりを多めに用意して保冷バッグに入れておく。","スポーツゼリーは複数個備蓄する。","スポーツドリンクは1L以上持参する。","延長に入ったらおにぎりを少量ずつ食べて補給。","電解質（塩飴・スポーツドリンク）を切らさない。"],point:"延長を想定して補食を多めに準備する習慣をつける。エネルギーと電解質が切れると突然パフォーマンスが落ちる。"},
+
+  // 試合後夕食（追加）
+  "試合後ガッツリ定食":{serves:"1人分",ingredients:["鶏もも肉 300g","白米 4杯分","豚肉50g・野菜","キャベツ 1/4個","醤油・酒・にんにく・生姜","片栗粉 大さじ3","揚げ油 適量","ほうれん草 1/2束","牛乳 200ml","味噌 大さじ1.5"],steps:["鶏もも肉を唐揚げにする（醤油・酒・にんにく・生姜で下味→片栗粉→180℃で揚げる）。","具だくさん豚汁を作る。","ほうれん草をおひたしにする。","キャベツを千切りにする。","全て大盛りで盛り付けて牛乳を添えて完成。"],point:"試合で消耗したカロリーを一気に補充する。好物の唐揚げを思いっきり食べてモチベーションと体力を同時に回復。"},
+  "試合後勝利ご褒美飯":{serves:"2人分",ingredients:["牛カルビ 200g","豚バラ 150g","白米 4杯分","もやし・にんじん・ほうれん草 各1袋","焼き肉のたれ 適量","ごま油 小さじ1","わかめ 3g","牛乳 200ml"],steps:["もやし・にんじんを茹でてごま油でナムルにする。","ほうれん草を茹でてナムルにする。","牛カルビと豚バラを焼き肉のたれで焼く。","わかめスープを作る。","大盛りご飯に全てを並べて牛乳を添えて完成。"],point:"勝利の喜びを食事で盛大にお祝い。焼き肉で鉄分・亜鉛を大量補給し、次の試合に向けた回復も同時に実現。"},
+  "試合後サバ味噌定食":{serves:"1人分",ingredients:["サバ切り身 2切れ","白米 4杯分","ほうれん草 1束","乾燥ひじき 10g","なめこ 1袋","味噌 大さじ2","みりん 大さじ1","砂糖 小さじ1","牛乳 200ml"],steps:["サバを下茹でしてから、味噌・みりん・砂糖・水で10分煮る（鯖の味噌煮）。","ほうれん草を茹でてごまと醤油で和える。","ひじきを煮て副菜にする。","なめこの味噌汁を作る。","全て盛り付けて牛乳を添えて完成。"],point:"サバのEPA/DHAで試合で蓄積した炎症を翌日に向けて素早く抑制。鉄分も豊富で試合後の造血を促進。"},
+  "試合後中華定食":{serves:"1〜2人分",ingredients:["豚こま切れ 100g","白米 4杯分","卵 2個","野菜（ニンジン・たけのこ・きくらげ・白菜）各適量","鶏がらスープ 200ml","醤油 大さじ1","片栗粉 大さじ1","ごま油 小さじ1","豆腐 1/2丁","牛乳 200ml"],steps:["野菜を食べやすく切り、豚肉も小さく切る。","フライパンで豚肉を炒め、野菜を加えて炒める。","鶏がらスープ・醤油を加えて煮立て、水溶き片栗粉でとろみをつける（八宝菜）。","溶き卵を加えてさっとまぜる。","豆腐の冷奴と牛乳を添えて完成。"],point:"たっぷりの野菜でビタミンCを補給し、試合後の疲労物質を除去。豆腐の大豆タンパクで筋肉修復もサポート。"},
+
+  // 回復日（追加）
+  "鮭とキノコの朝食":{serves:"1人分",ingredients:["白米 3杯分","鮭切り身 1枚","えのき・しめじ 各1/2袋","納豆 1パック","ヨーグルト 1個","みかん 1個","味噌 大さじ1","牛乳 200ml"],steps:["鮭をグリルで焼く（片面5分ずつ）。","きのこを味噌汁に入れて作る。","納豆に付属のタレを混ぜる。","全て盛り付けてヨーグルト・みかん・牛乳を添えて完成。"],point:"鮭のアスタキサンチンで強力な抗酸化作用。キノコのビタミンDで骨と筋肉の回復を同時にサポートする。"},
+  "回復朝食(鉄分補給)":{serves:"1人分",ingredients:["白米 3杯分","豚レバー 80g","ほうれん草 1/2束","あさり水煮缶 1/2缶","牛乳 200ml","生姜 1かけ","醤油 大さじ1","みりん 大さじ0.5","味噌 大さじ1"],steps:["レバーを牛乳（または水）に10分浸けて臭みを取る。","生姜と一緒にレバーを醤油・みりんで炒め煮にする。","ほうれん草を茹でて水を絞り、おひたしにする。","あさりの味噌汁を作る。","全て盛り付けて牛乳を添えて完成。"],point:"試合翌日の朝から鉄分を積極的に補給。あさりのタウリンで疲労回復もサポート。みかんと一緒に食べると鉄の吸収率が上がる。"},
+  "豆腐と卵の朝食":{serves:"1人分",ingredients:["白米 3杯分","絹ごし豆腐 1/2丁","卵 2個","小松菜 1/2束","乾燥ひじき 10g","だし汁 200ml","醤油 大さじ1.5","みりん 大さじ1","牛乳 200ml"],steps:["だし汁を温めて醤油・みりんを加え、豆腐を入れて5分煮る（揚げ出し豆腐風）。","溶き卵を回しかけて半熟で火を止める。","小松菜を塩炒めにする。","ひじきを煮て副菜にする。","全て盛り付けて牛乳を添えて完成。"],point:"豆腐と卵で植物性・動物性タンパクをダブル補給。消化に優しく疲れた消化器官を休めながら修復できる。"},
+  "回復スープ朝食":{serves:"1人分",ingredients:["白米 3杯分","鶏むね肉 100g","にんじん 1/2本","玉ねぎ 1/2個","セロリ 1/3本","卵 2個","牛乳 200ml","コンソメ 1個","塩こしょう 適量","バナナ 1本"],steps:["鶏むね肉と野菜を小さく切る。","鍋に水500ml・コンソメを加えて煮立て、野菜・鶏肉を入れて10〜15分煮込む。","卵焼きを作る。","全て盛り付けてバナナ・牛乳を添えて完成。"],point:"スープで水分と電解質を同時補給。試合翌日は脱水が続いていることが多いので水分補給を特に意識する。"},
+  "回復弁当(高タンパク)":{serves:"1人分",ingredients:["サバ缶 1個","小松菜 1/2束","卵 2個","ヨーグルト 1個","白米 3杯分","醤油 大さじ1","みりん 大さじ0.5"],steps:["サバ缶を汁ごと鍋に入れ、醤油・みりんを加えて5分煮る（サバの味噌煮缶でもOK）。","小松菜を塩炒めにする。","卵焼きを作る（甘め）。","全て弁当箱に詰めてヨーグルトを添えて完成。"],point:"サバ缶は調理不要でDHAを大量補給できる最強の回復弁当食材。脂質控えめ・高タンパクで傷んだ筋肉を修復。"},
+  "豆腐と野菜の回復弁当":{serves:"1人分",ingredients:["絹ごし豆腐 1丁","乾燥ひじき 10g","卵 2個","季節のフルーツ 1個","白米 3杯分","だし・醤油・みりん 各適量"],steps:["豆腐を水切りし、フライパンで両面を焼いてステーキ状にする。","ポン酢やしょうゆで味付け。","ひじきを水で戻してだし・醤油・みりんで煮る。","卵焼きを作る。","全て弁当箱に詰めてフルーツを添えて完成。"],point:"豆腐は消化が最も優しいタンパク源。疲れた消化器官を休ませながら必要な栄養素を補給できる回復日に最適。"},
+  "鮭フレーク丼弁当(回復)":{serves:"1人分",ingredients:["鮭フレーク（市販） 大さじ4","白米 3杯分","卵 2個","ブロッコリー 4房","ヨーグルト 1個","みかん 1個"],steps:["白米を炊いて弁当箱に入れる。","鮭フレークをたっぷりご飯の上にのせる。","卵をゆでて半分に切る。","ブロッコリーを塩茹でする。","弁当箱に詰めてヨーグルト・みかんを添えて完成。"],point:"鮭フレークを使えば調理なしでDHA・EPAを大量補給。食欲がない試合翌日でも食べやすいシンプルな丼スタイル。"},
+  "レバニラ弁当(鉄分強化)":{serves:"1人分",ingredients:["豚レバー 150g","ニラ 1束","ほうれん草 1/2束","卵 2個","みかん 1個","醤油 大さじ1.5","みりん 大さじ1","酒 大さじ1","生姜 1かけ","白米 3杯分"],steps:["レバーを牛乳に10〜15分浸けて臭みを抜き、水気を拭く。","生姜と一緒にレバーを炒め、醤油・みりん・酒で甘辛く味付け。","ニラを加えてさっと炒める。","ほうれん草をおひたしにする。","卵焼きを作り、全て弁当箱に詰めてみかんを添えて完成。"],point:"レバーとニラの組み合わせは鉄分+ビタミンB群の最強コンビ。みかんのビタミンCで鉄の吸収率を最大化。"},
+  "鶏むねときのこの回復弁当":{serves:"1人分",ingredients:["鶏むね肉 180g","しめじ 1袋","えのき 1袋","小松菜 1/2束","卵 2個","ヨーグルト 1個","キウイ 1個","醤油・みりん 各大さじ1","白米 3杯分"],steps:["鶏むね肉を薄くそぎ切りにして塩こしょうする。","フライパンでしめじ・えのきを炒め、鶏むね肉を加えて醤油・みりんで味付け。","小松菜を卵と一緒に炒める。","全て弁当箱に詰めてヨーグルト・キウイを添えて完成。"],point:"キノコのβ-グルカンで免疫力UP。ビタミンCのキウイで鉄分吸収率を高め全身の回復をサポート。"},
+
+  // 回復補食（追加）
+  "回復補食(ヨーグルト系)":{serves:"1人分",ingredients:["ギリシャヨーグルト 100g","バナナ 2本","アーモンド 20粒","ハチミツ 小さじ1"],steps:["ギリシャヨーグルトを器に盛る。","ハチミツをかける。","アーモンドを添える。","バナナを一口大に切って添える。","試合翌日の午後3〜4時頃の補食として食べる。"],point:"アーモンドのビタミンEで運動による酸化ストレスを軽減。ギリシャヨーグルトは通常の2倍のタンパク質で効率的に回復。"},
+  "回復補食(フルーツ中心)":{serves:"1人分",ingredients:["バナナ 2本","みかん 3個","ヨーグルト 1個","牛乳 200ml"],steps:["バナナ・みかんを用意する。","ヨーグルトを器に盛る。","全てをセットで食べる。","牛乳をゆっくり飲む。","試合翌日の午後に食べる。"],point:"ビタミンCたっぷりのフルーツで疲労物質（乳酸）の除去を促進。乳酸菌で腸内環境を整えて全身の回復を底上げ。"},
+  "回復補食(タンパク強化)":{serves:"1人分",ingredients:["プロテインバー 1本（または牛乳＋プロテインパウダー）","牛乳 200ml","バナナ 2本"],steps:["プロテインバーを用意する（市販品でOK）。","バナナを持参。","牛乳と一緒に食べる。","練習後30分以内・または翌日の午後補食として。"],point:"集中的にタンパク質を補給したい時の補食。練習翌日の筋肉修復を最優先にした高タンパクセット。"},
+  "甘酒＆おにぎり補食":{serves:"1人分",ingredients:["甘酒 200ml（市販の甘酒、酒粕タイプでも可）","おにぎり 2個","バナナ 1本"],steps:["甘酒を温めるか、冷蔵品をそのまま飲む。","おにぎりは前日に握って冷蔵保管。","バナナと一緒に食べる。","試合翌日の午後の補食として活用する。"],point:"甘酒はアミノ酸・ビタミンB群が豊富な天然スポーツドリンク。疲労回復と腸内環境改善に同時に効果を発揮。"},
+  "豆乳バナナ補食":{serves:"1人分",ingredients:["豆乳 200ml","バナナ 2本","アーモンド 15粒","はちみつ 小さじ1"],steps:["豆乳をコップに注ぐ（温めてもOK）。","アーモンドを用意する。","バナナを一口大に切る。","はちみつをバナナにかけて食べる。","全てセットで補食として食べる。"],point:"豆乳のイソフラボンで筋肉疲労を軽減。植物性タンパクは動物性タンパクと比べて消化負担が少なく疲れた胃腸にも優しい。"},
+
+  // 回復夕食（追加）
+  "回復夕食(サバ・青魚中心)":{serves:"1人分",ingredients:["サバ切り身 1枚","白米 4杯分","乾燥ひじき 10g","小松菜 1束","木綿豆腐 1/3丁","牛乳 200ml","塩 少々","醤油・みりん・砂糖 各適量","ごま 適量"],steps:["サバをグリルで塩焼きにする（片面5〜6分ずつ）。","ひじきを水で戻して煮物にする。","小松菜を塩炒めにする。","豆腐の味噌汁を作る。","全て盛り付けて牛乳を添えて完成。"],point:"青魚のオメガ3脂肪酸で炎症を抑えながら回復を促進。和食の組み合わせで消化器官の負担も最小限に。"},
+  "回復夕食(豆腐中心)":{serves:"1〜2人分",ingredients:["木綿豆腐 1丁","豚ひき肉 100g","ほうれん草 1束","白米 4杯分","豆板醤 小さじ0.5","鶏がらスープ 200ml","醤油 大さじ1","片栗粉 大さじ1","ごま油 小さじ1","みかん 2個","牛乳 200ml"],steps:["豆腐を木綿で水切りしておく。","豚ひき肉を炒めて、鶏がらスープ・醤油・豆板醤を加えて煮る。","豆腐を加えて3分煮て、水溶き片栗粉でとろみをつける。","ほうれん草を塩炒めにする。","わかめスープ・みかん・牛乳を添えて完成。"],point:"豆腐のタンパクでゆっくり着実に筋肉を修復。辛さを控えめにした麻婆豆腐で消化器官にも優しく翌日の練習再開に備える。"},
+  "回復夕食(鶏肉中心)":{serves:"2人分",ingredients:["鶏むね肉 300g","にんじん 1本","玉ねぎ 1個","セロリ 1/2本","じゃがいも 1個","白米 4杯分","コンソメ 2個","塩こしょう 適量","牛乳 200ml"],steps:["鶏むね肉を一口大に切り、野菜を食べやすく切る。","鍋に水800ml・コンソメを入れて煮立て、野菜を加えて10分煮る。","鶏むね肉を加えてさらに15分煮込む。","塩こしょうで味を調える（ポトフ）。","ご飯と牛乳を添えて完成。"],point:"ポトフで野菜の栄養素をスープに全て溶かし込んで吸収。鶏むね肉の高タンパクで脂質を抑えた回復夕食。"},
+  "回復夕食(鮭＋きのこ)":{serves:"1人分",ingredients:["鮭切り身 2切れ","えのき・しめじ 各1袋","ほうれん草 1/2束","白米 4杯分","醤油 大さじ1","みりん 大さじ1","酒 大さじ1","バター 10g","牛乳 200ml","味噌 大さじ1"],steps:["アルミホイルに鮭・えのき・しめじをのせ、バター・醤油・みりん・酒を加えて包む。","トースターまたはフライパンで15分蒸し焼きにする（ホイル焼き）。","ほうれん草を茹でてごまと醤油で和える。","けんちん汁を作る。","全て盛り付けて牛乳を添えて完成。"],point:"鮭とキノコのホイル焼きはビタミンD吸収を高める組み合わせ。洗い物も少なく忙しい回復日の夕食に最適。"},
+
+  // 休養日（追加）
+  "休養日の軽め朝食":{serves:"1人分",ingredients:["白米 2杯分","卵 1個","納豆 1パック","木綿豆腐 1/4丁","牛乳 200ml","バナナ 1本","味噌 大さじ1"],steps:["白米を2杯分炊く（練習日より1杯少なめ）。","卵焼きを作る（甘め）。","豆腐の味噌汁を作る。","全て盛り付けてバナナ・牛乳を添えて完成。"],point:"休養日はカロリーを少し控えめに。ただし栄養密度は落とさず体の回復を最優先にする。"},
+  "休養日和食セット":{serves:"1人分",ingredients:["白米 2杯分","鮭切り身 1枚","卵 1個","ほうれん草 1/3束","牛乳 200ml","塩 少々","味噌 大さじ1","わかめ 3g"],steps:["鮭をグリルで焼く（片面5分ずつ）。","温泉卵を作る（70℃で12分）またはゆで卵にする。","ほうれん草をおひたしにする。","わかめ味噌汁を作る。","全て盛り付けて牛乳を添えて完成。"],point:"質の高い食材を少量丁寧に食べる休養日の基本スタイル。体の回復に必要な栄養素はしっかり確保する。"},
+  "ゆったり洋食朝食":{serves:"1人分",ingredients:["食パン（厚切り） 3枚","卵 2個","グリーンサラダ（市販）","牛乳 200ml","フルーツ（バナナ・みかん等）","バター 10g","塩こしょう 適量"],steps:["食パンをバターをのせてトースターで焼く。","卵をスクランブルエッグにする。","市販のサラダをそのまま盛り付ける。","フルーツを切って添える。","牛乳と一緒にゆっくり食べる。"],point:"休養日はゆっくり朝食を楽しむことで心のリフレッシュにも。市販サラダを活用して準備の負担を減らす。"},
+  "雑炊朝食":{serves:"1人分",ingredients:["白米（冷や飯） 2杯分","鶏むね肉 70g","卵 1個","納豆 1パック","牛乳 200ml","みかん 1個","だし汁 400ml","醤油 大さじ1","塩少々"],steps:["だし汁を沸かして醤油・塩で味付け。","鶏むね肉を薄切りにして加えて煮る。","冷や飯を加えてほぐれるまで煮込む。","溶き卵を回しかけて半熟で火を止める。","納豆・みかん・牛乳を添えて完成。"],point:"胃に優しい雑炊で休養日の朝を開始。消化器官を休ませながら必要な栄養は確保するバランスが大切。"},
+  "休養日パン朝食":{serves:"1人分",ingredients:["全粒粉食パン 2枚","卵 2個","野菜スープの素 1袋","牛乳 200ml","バナナ 1本","バター 少量","塩こしょう 適量"],steps:["全粒粉食パンをトーストする。","卵を目玉焼きにする。","野菜スープを作る（素をお湯で溶くだけでOK）。","バナナ・牛乳を添えて完成。"],point:"全粒粉パンで食物繊維を補給。腸の活性化は免疫力と翌日のパフォーマンスに直結する。"},
+  "豆腐と味噌のヘルシー朝食":{serves:"1人分",ingredients:["白米 2杯分","絹ごし豆腐 1/2丁","卵 2個","ほうれん草 1/3束","牛乳 200ml","キウイ 1個","味噌 大さじ1","だし汁 200ml"],steps:["豆腐を大きめに切って鍋に入れ、だし汁・味噌で大きな豆腐の味噌汁を作る。","卵焼きを作る。","ほうれん草をおひたしにする。","全て盛り付けてキウイ・牛乳を添えて完成。"],point:"豆腐の消化しやすい植物性タンパクで内臓を休ませながら栄養補給。ビタミンCのキウイで免疫力を底上げ。"},
+  "オートミール朝食":{serves:"1人分",ingredients:["オートミール 80g","牛乳 300ml（温め用）","バナナ 2本","ゆで卵 2個","アーモンド 15粒","はちみつ 小さじ1"],steps:["オートミールをレンジ用容器に入れて牛乳を注ぐ。","レンジ600Wで2〜3分加熱してよく混ぜる。","はちみつをかけてバナナをスライスしてのせる。","アーモンドを添える。","ゆで卵を一緒に食べる。"],point:"オートミールはβグルカン豊富で腸内環境を整える。休養日こそ腸活をして翌日の栄養吸収率を高める。"},
+  "休養日弁当(バランス重視)":{serves:"1人分",ingredients:["白米 2杯分","鮭切り身 1枚","乾燥ひじき 10g","小松菜 1/2束","季節フルーツ 1個","塩 少々","醤油・みりん 適量"],steps:["鮭をグリルで焼く。","ひじきを水で戻して醤油・みりんで煮る。","小松菜を塩炒めにする。","全て弁当箱に詰めてフルーツを添えて完成。"],point:"練習・試合のない日はビタミン・ミネラルを重視した食事に切り替える。炭水化物を少し減らして体型管理も。"},
+  "休養日サバ弁当":{serves:"1人分",ingredients:["白米 2杯分","サバ缶 1個（味噌煮or水煮）","ほうれん草 1/2束","卵 2個","みかん 1個"],steps:["サバ缶を弁当箱に詰める（汁は捨てる）。","ほうれん草を茹でてごまと醤油で和える。","卵焼きを作る。","白米と一緒に弁当箱に詰めてみかんを添えて完成。"],point:"サバ缶は調理不要でDHAを大量補給できる最強食材。休養日だからこそゆっくり栄養を吸収させる時間がある。"},
+  "休養日ヘルシー丼弁当":{serves:"1人分",ingredients:["白米 2杯分","絹ごし豆腐 1丁","鶏ひき肉 100g","ほうれん草 1/2束","卵 2個","りんご 1/2個","醤油・砂糖・みりん 各大さじ1"],steps:["豆腐の水気をキッチンペーパーで取る。","フライパンで鶏ひき肉・豆腐を炒めて醤油・砂糖・みりんで味付けしてそぼろ状にする。","ほうれん草を茹でてごまと醤油で和える。","卵焼きを作る。","ご飯に豆腐そぼろをのせて弁当に詰めてりんごを添える。"],point:"豆腐ベースのそぼろでヘルシーにタンパク質補給。休養日らしいカロリー控えめのバランス弁当。"},
+  "休養日サラダチキン弁当":{serves:"1人分",ingredients:["白米 2杯分","サラダチキン 1袋（市販）","乾燥ひじき 10g","小松菜 1/2束","卵 2個","キウイ 1個","醤油・みりん 各適量"],steps:["サラダチキンは市販品をそのまま使う（時短）。","ひじきを水で戻して煮物にする。","小松菜を卵とじにする。","全て弁当箱に詰めてキウイを添えて完成。"],point:"サラダチキンで超低脂質・高タンパク。市販品を活用すれば調理時間ゼロで栄養満点の弁当が完成。"},
+  "休養日野菜たっぷり弁当":{serves:"1人分",ingredients:["白米 2杯分","鶏むね肉 150g","にんじん 1/2本","ピーマン 2個","もやし 1/2袋","乾燥ひじき 10g","卵 1個","季節フルーツ 1個","塩こしょう・ごま油 適量"],steps:["鶏むね肉を一口大に切り、にんじん・ピーマン・もやしと一緒に塩こしょうで炒める。","最後にごま油を回しかける。","ひじきを煮物にする。","卵を目玉焼きにする。","全て弁当箱に詰めてフルーツを添えて完成。"],point:"野菜を多めに摂って体内をリセット。休養日は普段不足しがちなビタミン・ミネラルを補う絶好のチャンス。"},
+  "休養日おにぎり弁当":{serves:"1人分",ingredients:["白米 3杯分","卵 2個","野菜スープの素 1袋","ヨーグルト 1個","みかん 1個","塩 少々","海苔 3枚"],steps:["白米でおにぎりを3個握る（シンプルな塩むすび）。","ゆで卵を茹でる（沸騰後9分）。","野菜スープの素をお湯で溶く。","ヨーグルト・みかんを添えて完成。"],point:"手軽なおにぎり弁当で休養日をリラックスして過ごす。スープで水分と塩分をバランスよく補給。"},
+  "休養日麺弁当(そうめん)":{serves:"1人分",ingredients:["そうめん 3束（150g）","鶏むね肉 150g","卵 2個","季節フルーツ 1個","牛乳 200ml","めんつゆ（希釈用） 100ml","塩こしょう 適量"],steps:["そうめんを茹でて水で締める。","鶏むね肉を塩こしょうで蒸し焼きにして細く裂く。","卵焼きを作る。","弁当箱にそうめんを詰め、薬味と鶏肉をのせる。","めんつゆを小瓶に入れて別添えにして完成。"],point:"夏の休養日に特におすすめ。消化に良いそうめんで腸を休ませながら必要な栄養を補給する。"},
+
+  // 休養日補食（追加）
+  "軽め補食":{serves:"1人分",ingredients:["バナナ 1本","牛乳 200ml","アーモンド 15粒"],steps:["バナナを一口大に切る。","牛乳をコップに注ぐ。","アーモンドを用意する。","全てセットで食べる。","休養日の午後3〜4時頃に食べる。"],point:"休養日の補食は少なめに。腸を休ませながら翌日のための準備をする。アーモンドの脂肪酸で細胞修復もサポート。"},
+  "ヨーグルト補食":{serves:"1人分",ingredients:["ヨーグルト 200g（プレーン）","バナナ 1本","ハチミツ 小さじ1","アーモンド 10粒"],steps:["ヨーグルトを器に盛ってハチミツをかける。","バナナをスライスしてのせる。","アーモンドをトッピングする。","休養日の午後の補食として食べる。"],point:"乳酸菌で腸内環境を整える。休養日の腸活が翌日の練習での栄養吸収率を高め、パフォーマンス向上につながる。"},
+  "フルーツ牛乳補食":{serves:"1人分",ingredients:["バナナ 2本","みかん 2個","牛乳 200ml"],steps:["バナナを一口大に切る。","みかんを剥く。","牛乳をコップに注ぐ。","全てセットで食べる。"],point:"ビタミンC豊富なフルーツで抗酸化作用。休養日はシンプルに体のリセットを優先して消化器官を休ませる。"},
+  "豆乳と小豆のおやつ":{serves:"1人分",ingredients:["豆乳 200ml","ぜんざい（缶詰）小 1缶","バナナ 1本"],steps:["豆乳をコップに注ぐ（温めても冷たいままでもOK）。","ぜんざいは小鍋で温める（市販缶詰でOK）。","バナナを添える。","ゆっくり味わって食べる。"],point:"豆乳の植物性タンパクと小豆の鉄分・食物繊維で栄養補給。休養日の心身リフレッシュにぴったりな和のおやつ。"},
+  "牛乳＆カカオ補食":{serves:"1人分",ingredients:["牛乳 300ml","高カカオチョコレート（カカオ70%以上） 2片","バナナ 1本"],steps:["牛乳を温めるか、冷たいままコップに注ぐ。","高カカオチョコレートを2片用意する。","バナナを一口大に切る。","全てセットでゆっくり食べる。"],point:"高カカオチョコのポリフェノールで抗酸化作用と気分向上効果。食べすぎに注意しながら休養日のご褒美補食として活用。"},
+
+  // 休養日夕食（追加）
+  "休養日鍋料理":{serves:"2人分",ingredients:["鶏もも肉 200g","絹ごし豆腐 1丁","白菜 1/4個","長ねぎ 1本","えのき 1袋","豆乳 400ml","白米 3杯分","白だし 大さじ3","塩こしょう 少々","牛乳 200ml"],steps:["鍋に白だし・豆乳・水200mlを混ぜてスープを作る。","鶏もも肉を一口大に切って加える。","豆腐・白菜・ねぎ・えのきを加えて煮込む。","アクを取りながら10〜15分煮る。","〆にうどん or 雑炊をして炭水化物も補給。牛乳を添えて完成。"],point:"豆乳鍋で植物性・動物性タンパクを同時補給。野菜もたくさん食べられて体の修復に必要な栄養素を全て摂取できる。"},
+  "休養日焼き魚定食":{serves:"1人分",ingredients:["鯛切り身 2切れ（またはカレイ）","乾燥ひじき 10g","長ねぎ 1/2本","白米 3杯分","牛乳 200ml","みかん 1個","塩 少々","醤油・みりん 各大さじ1","味噌 大さじ1"],steps:["鯛に薄く塩を振って10分おき、水気を拭いてグリルで焼く（各面5〜6分）。","ひじきを水で戻して醤油・みりんで煮る。","長ねぎの味噌汁を作る。","全て盛り付けてみかん・牛乳を添えて完成。"],point:"上品な白身魚で良質な低脂質タンパクを補給。ひじきで鉄分とカルシウムも確保できる栄養豊富な休養日夕食。"},
+  "休養日パスタ定食":{serves:"1〜2人分",ingredients:["全粒粉パスタ 200g","ミニトマト 10個","ほうれん草 1/2束","にんにく 1かけ","オリーブ油 大さじ2","鶏むね肉 100g","コンソメ 1個","牛乳 200ml","塩こしょう 適量"],steps:["パスタを表示通りに茹でる（全粒粉は1〜2分長めに）。","にんにくをオリーブ油で炒め、鶏むね肉・ミニトマト・ほうれん草を加えて炒める。","パスタとソースを和えて塩こしょうで調える。","スープを作る（コンソメ＋お湯）。","牛乳を添えて完成。"],point:"全粒粉パスタで食物繊維を補給。休養日は消化管の活動を促し翌日の栄養吸収を高める準備をする。"},
+  "休養日そば定食":{serves:"1人分",ingredients:["そば（乾） 200g","鶏むね肉 150g","グリーンサラダ（市販）","白米 2杯分","牛乳 200ml","めんつゆ 適量","大根 1/4本","ねぎ・わさび 適量"],steps:["そばを表示通りに茹でて水で締める。","鶏むね肉を塩こしょうで蒸し焼きにしてスライスする（冷しゃぶ風）。","大根をすりおろす。","めんつゆを希釈してつゆを作る。","サラダ・白米・牛乳を添えて完成。"],point:"そばのルチンで毛細血管を強化して血液の流れを改善。鶏むねの冷しゃぶと組み合わせてさっぱり高タンパクな夕食に。"},
+  "休養日スープカレー":{serves:"2人分",ingredients:["鶏もも肉 300g","じゃがいも 2個","にんじん 1本","ナス 1本","パプリカ 1個","玉ねぎ 1個","白米 3杯分","カレー粉 大さじ2","トマト缶 1/2缶","コンソメ 2個","牛乳 200ml","サラダ 適量"],steps:["野菜を食べやすく切り、玉ねぎを飴色になるまで炒める。","鶏もも肉を加えて炒め、カレー粉を加えて香りを出す。","トマト缶・コンソメ・水600mlを加えて野菜が柔らかくなるまで20分煮込む。","スープ状で仕上げる（水分多めにする）。","ご飯に添えてサラダ・牛乳と一緒に盛り付けて完成。"],point:"スープカレーで代謝を上げながら大量の野菜を一気に摂取。鶏もも肉のタンパクで休養日の筋肉修復も促進。"},
+  "休養日和食定食(魚中心)":{serves:"1人分",ingredients:["カレイ切り身 2切れ","乾燥ひじき 10g","小松菜 1束","あさり水煮缶 1缶","白米 3杯分","牛乳 200ml","醤油・みりん・砂糖 各大さじ1","味噌 大さじ1"],steps:["カレイを醤油・みりん・砂糖・水で10〜15分煮付ける。","ひじきを水で戻して煮物にする。","小松菜をごま和えにする。","あさりの味噌汁を作る。","全て盛り付けて牛乳を添えて完成。"],point:"カレイの良質な白身タンパクで体の修復をサポート。あさりのタウリンで疲労回復。完全な和食で心身ともにリセット。"},
+};
+
+function showRecipe(name){
+  const r=RECIPES[name];
+  document.getElementById('recipe-title').textContent='📖 '+name;
+  var html='';
+  if(!r){
+    html='<p style="font-size:.82rem;color:var(--gray);padding:20px 0;text-align:center;">このメニューのレシピは準備中です🙏</p>';
+  } else {
+    html+='<div class="recipe-servings">👨‍🍳 '+r.serves+'</div>';
+    html+='<div class="recipe-section">';
+    html+='<div class="recipe-section-title">🛒 材料</div>';
+    html+='<div class="recipe-ing-list">';
+    r.ingredients.forEach(function(ing){ html+='<span class="recipe-ing">'+ing+'</span>'; });
+    html+='</div></div>';
+    html+='<div class="recipe-section">';
+    html+='<div class="recipe-section-title">👩‍🍳 作り方</div>';
+    html+='<div class="recipe-steps">';
+    r.steps.forEach(function(s,i){
+      html+='<div class="recipe-step"><div class="step-num">'+(i+1)+'</div><div class="step-text">'+s+'</div></div>';
+    });
+    html+='</div></div>';
+    if(r.point) html+='<div class="recipe-point">💡 '+r.point+'</div>';
+  }
+  document.getElementById('recipe-body').innerHTML=html;
+  document.getElementById('recipe-ov').classList.add('open');
+}
+function recipeOvClose(e){if(e.target===document.getElementById('recipe-ov'))recipeOvHide();}
+function recipeOvHide(){document.getElementById('recipe-ov').classList.remove('open');}
+</script>
+</body>
+</html>
